@@ -12,6 +12,8 @@
   --off-white: #f2f2f2;
   --off-black: #0d0d0d;
   --black: #000000;
+  /* The midpoint of the scale: a 50% grey. */
+  --grey: #808080;
 
   /* Dev-only marker for placeholder content (class="todo"). */
   --todo: #c2410c;
@@ -28,6 +30,17 @@
 
   /* ---------- Lines ---------- */
   --outline-todo: 1px dashed var(--todo);
+  /* Test: hairline guides on the website's left column. */
+  --line-width: 0.75px;
+  --line-color: var(--grey);
+  /* How far a guide may run past the element that draws it, before its
+     section clips it: at least the height between a section's top and
+     its title's baseline. */
+  --line-reach: 100svh;
+  /* How far the title lines run left past the content, to reach the
+     screen edge whatever the page width (overflow on the left never
+     scrolls). */
+  --line-bleed: 100vw;
 
   /* ---------- Icons ---------- */
   --icon-size: 0.55em;
@@ -74,6 +87,9 @@
   --content-column: 2;
   --meta-align: right;
   --column-gap: var(--space-3);
+  /* Where the left column ends, measured from a section's padding edge
+     (% = the section's width). Must follow --layout-columns. */
+  --meta-column-end: calc(var(--gutter) + var(--meta-icon-size));
   /* Gap between project metadata rows: as close as lines of one
      paragraph. */
   --details-gap: 0;
@@ -104,6 +120,8 @@
   :root {
     --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
     --column-gap: var(--space-4);
+    /* 1 fr out of 8, after the gap. */
+    --meta-column-end: calc(var(--gutter) + (100% - 2 * var(--gutter) - var(--column-gap)) / 8);
   }
 }
 

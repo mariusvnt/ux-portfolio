@@ -37,13 +37,14 @@
       Arrows are added after links by src/main.js: a top-right arrow
       for links that leave the portfolio (other sites, email, the PDF),
       a left-to-right arrow for links to elsewhere on the portfolio.
-      data-no-arrow opts a link out (the MV monogram).
+      data-no-arrow opts a link out (the MV monogram, the cover's project
+      links). In the cover's project index, each project name has a
+      down arrow in the left column instead (data-arrow="down").
 
       On phones the labels in the left column switch to a compact form.
       A label with data-icon="mail|calendar|tools|link|person" is shown
       as that icon (added by src/main.js). Screen readers always get
-      the full label. The project index labels show the number alone at
-      every size ("Project " is visually hidden).
+      the full label.
     -->
     <header class="site-header screen-only">
       <div class="site-header__inner">
@@ -78,16 +79,16 @@
         <nav aria-label="Projects">
           <ul class="cover__index">
             <li class="row">
-              <p class="row__meta"><span class="visually-hidden">Project </span>2</p>
-              <a class="row__content" href="#emjive"><span class="text-body-strong">em·ji·ve</span></a>
+              <span class="row__meta" data-arrow="down" aria-hidden="true"></span>
+              <a class="row__content" href="#emjive" data-no-arrow><span class="text-body-strong">em·ji·ve</span></a>
             </li>
             <li class="row">
-              <p class="row__meta"><span class="visually-hidden">Project </span>1</p>
-              <a class="row__content" href="#guisarde"><span class="text-body-strong">Guisarde add-on</span></a>
+              <span class="row__meta" data-arrow="down" aria-hidden="true"></span>
+              <a class="row__content" href="#guisarde" data-no-arrow><span class="text-body-strong">Guisarde add-on</span></a>
             </li>
             <li class="row">
-              <p class="row__meta"><span class="visually-hidden">Project </span>0</p>
-              <a class="row__content" href="#ace"><span class="text-body-strong">ACE</span></a>
+              <span class="row__meta" data-arrow="down" aria-hidden="true"></span>
+              <a class="row__content" href="#ace" data-no-arrow><span class="text-body-strong">ACE</span></a>
             </li>
           </ul>
         </nav>

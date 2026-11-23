@@ -252,21 +252,14 @@ video {
   gap: var(--space-3);
 }
 
-/* Plain like the CV's entry names. Each link is as wide as body text
-   (--measure): the name at the start, its arrow pushed to the end, so
-   the arrows line up with the right limit of the paragraphs. */
+/* Plain like the CV's entry names, with no arrow of their own: the
+   down arrow in the left column (added by src/main.js) points to them. */
 .cover__index a {
-  max-width: var(--measure);
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
   text-decoration: none;
 }
 
-/* "Project 2 / 1 / 0": tabular figures give every digit the same
-   width, so the right-aligned labels line up whatever the number. */
-.cover__index .row__meta {
-  font-variant-numeric: tabular-nums;
+.cover__index .arrow {
+  margin-inline-start: 0;
 }
 
 /* ---------- Project ---------- */
@@ -336,6 +329,101 @@ video {
 .tree__caption {
   max-width: var(--measure);
   color: var(--off-black);
+}
+
+/* ---------- Column lines (test, website only) ----------
+   A vertical hairline on the right edge of the left column, one
+   segment per section: from the big title's baseline, where it meets
+   the title's horizontal line, down past the pitch and the metadata to
+   the end of the section's last element.
+   The line sits behind the content: left-column labels' off-white
+   background cuts a hole in it, and the hero visual hides it.
+   A horizontal hairline sits on the baseline of each big title, in the
+   left column only. */
+@media screen {
+  /* Each section clips the masks drawn past its top or bottom. */
+  .cover,
+  .project {
+    position: relative;
+    isolation: isolate;
+    overflow-y: clip;
+  }
+
+  /* The line over the section's full height... */
+  .cover::before,
+  .project::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: calc(var(--meta-column-end) - var(--line-width));
+    width: var(--line-width);
+    background: var(--line-color);
+    z-index: -1;
+  }
+
+  /* ...masked from the section's top down to the title's baseline. The
+     mask is an empty inline-block at the start of the title: its
+     baseline is its bottom edge, so it stands on the title's baseline,
+     and the negative margins keep it from taking room in the line.
+     Shifted left across the column gap, it spans the line with half a
+     gap on each side. Painted with the line, behind the content. */
+  .row__title.main-title::before {
+    content: "";
+    display: inline-block;
+    position: relative;
+    z-index: -1;
+    left: calc(-1.5 * var(--column-gap));
+    width: var(--column-gap);
+    height: var(--line-reach);
+    margin-block-start: calc(-1 * var(--line-reach));
+    margin-inline-end: calc(-1 * var(--column-gap));
+    vertical-align: baseline;
+    background: var(--off-white);
+  }
+
+  /* ...and from the end of the last element to the section's bottom. */
+  .cover > :last-child,
+  .project > :last-child {
+    position: relative;
+  }
+
+  .cover > :last-child::after,
+  .project > :last-child::after {
+    content: "";
+    position: absolute;
+    inset: 100% 0 calc(-1 * var(--line-reach));
+    background: var(--off-white);
+    z-index: -1;
+  }
+
+  /* The background reaches half a gap past the column's edge (the text
+     stays put), so the hole is cut whatever the pixel rounding. */
+  .row__meta {
+    margin-inline-end: calc(-1 * var(--column-gap) / 2);
+    padding-inline-end: calc(var(--column-gap) / 2);
+    background: var(--off-white);
+  }
+
+  /* The cover's down arrows sit in their label's hole with their shaft
+     (the middle of the box) on the line: moved right by half the box,
+     back by half the line. */
+  .cover__index .arrow {
+    position: relative;
+    left: calc(var(--icon-size) / 2 - var(--line-width) / 2);
+  }
+
+  /* A grid item in the title's row, left column. Having no text, its
+     baseline is its bottom edge, so baseline alignment puts the line's
+     bottom on the title's baseline. The negative margin stretches it
+     left out to the screen edge. */
+  .row:has(> .main-title)::before {
+    content: "";
+    grid-column: 1;
+    grid-row: 1;
+    height: var(--line-width);
+    margin-inline-start: calc(-1 * var(--line-bleed));
+    background: var(--line-color);
+  }
 }
 
 /* ---------- PDF-only elements ----------

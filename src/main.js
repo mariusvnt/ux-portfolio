@@ -13,12 +13,20 @@ const svg = (path) =>
   `<svg class="arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="${path}" /></svg>`;
 const ARROW_OUT = svg('M1 11 11 1M3 1h8v8');
 const ARROW_IN = svg('M0 6h11M6.5 1.5 11 6l-4.5 4.5');
+// The same arrow turned to point down, its shaft in the middle of the box.
+const ARROW_DOWN = svg('M6 0v11M1.5 6.5 6 11l4.5-4.5');
 const here = location.origin + location.pathname;
 
 for (const link of document.querySelectorAll('a[href]:not([data-no-arrow])')) {
   const target = new URL(link.href);
   const leaves = target.origin + target.pathname !== here;
   link.insertAdjacentHTML('beforeend', leaves ? ARROW_OUT : ARROW_IN);
+}
+
+// Down arrows in the left column of the cover's project index, in front
+// of each project name (the links themselves have no arrow).
+for (const el of document.querySelectorAll('[data-arrow="down"]')) {
+  el.insertAdjacentHTML('beforeend', ARROW_DOWN);
 }
 
 // Compact labels: on phones, a left-column label with data-icon is shown

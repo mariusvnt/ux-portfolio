@@ -11,7 +11,7 @@ The same page is published as a static website and printed to PDF.
 | `npm run dev`     | Start the dev server on http://localhost:5300 (live reload, opens the browser) |
 | `npm run build`   | Build the static site into `dist/`                                   |
 | `npm run preview` | Serve the built site locally                                         |
-| `npm run pdf`     | Build the site and print it to `output/marius-viennot-portfolio.pdf` |
+| `npm run pdf`     | Build the site and print it to `output/marius-viennot-uxdesign-portfolio.pdf` |
 
 First time only, install the browser used to print the PDF:
 

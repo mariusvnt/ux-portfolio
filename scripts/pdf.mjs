@@ -5,7 +5,7 @@ import path from 'node:path';
 import { build, preview } from 'vite';
 import { chromium } from 'playwright';
 
-const OUT_FILE = path.resolve('output', 'marius-viennot-portfolio.pdf');
+const OUT_FILE = path.resolve('output', 'marius-viennot-uxdesign-portfolio.pdf');
 
 await build({ logLevel: 'warn' });
 
@@ -18,6 +18,10 @@ try {
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
 
+  // Chromium uses the page title as the PDF's Title, which browsers show
+  // on the PDF's tab: use the file name so the tab reads the same.
+  await page.evaluate((title) => (document.title = title), path.basename(OUT_FILE));
+
   await mkdir(path.dirname(OUT_FILE), { recursive: true });
   await page.pdf({
     path: OUT_FILE,
@@ -26,7 +30,7 @@ try {
   });
   console.log(`PDF written to ${path.relative(process.cwd(), OUT_FILE)}`);
 
-  // The site's "PDF version" link points to /marius-viennot-portfolio.pdf:
+  // The site's "PDF version" link points to /marius-viennot-uxdesign-portfolio.pdf:
   // public/ serves it in dev and in future builds, dist/ completes this build.
   for (const dir of ['public', 'dist']) {
     await copyFile(OUT_FILE, path.resolve(dir, path.basename(OUT_FILE)));

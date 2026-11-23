@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Marius Viennot</title>
-    <!-- The header's "MV" in Syne Bold, outlined, on a transparent background. -->
+    <!-- The header's "MV" in Syne Bold, outlined, on a transparent
+         background: black, or white in dark mode. The SVG switches by
+         itself; Safari doesn't use SVG favicons, so it gets the 32px PNGs
+         rendered from it, one per colour scheme. -->
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="description" content="UX portfolio of Marius Viennot: em·ji·ve, the Guisarde Drive add-on, and ACE." />
     <meta name="author" content="Marius Viennot" />
@@ -42,7 +47,7 @@
     <header class="site-header screen-only">
       <div class="site-header__inner">
         <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
-        <a class="secondary-title" href="/marius-viennot-portfolio.pdf" target="_blank" rel="noopener">PDF version</a>
+        <a class="secondary-title" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF version</a>
       </div>
       <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
     </header>

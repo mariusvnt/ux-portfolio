@@ -88,8 +88,18 @@ video {
   justify-content: space-between;
 }
 
+/* Each link stays on one line, its arrow included. */
 .site-header a {
   text-decoration: none;
+  white-space: nowrap;
+}
+
+/* The monogram with the email link beside it, centred like the PDF link
+   so both small links sit on the same line. */
+.site-header__start {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 /* Three stacked layers: each blurs what scrolls beneath it and lays an
@@ -326,6 +336,15 @@ video {
 .tree__caption {
   max-width: var(--measure);
   color: var(--off-black);
+}
+
+/* ---------- PDF-only elements ----------
+   Hidden on screen. Last before the print rules so it wins over the
+   components' own display values (e.g. .details). */
+@media screen {
+  .print-only {
+    display: none;
+  }
 }
 
 /* ---------- Print / PDF pagination ---------- */

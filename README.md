@@ -48,8 +48,17 @@ of the Syne variable font; the DINish files are converted to woff2 unchanged.
 ## Website-only elements
 
 Elements with the `screen-only` class (the fixed site header with the "MV" monogram, the
-"PDF version" link and the blurred fade beneath it) appear on the website only and are hidden in the PDF.
-`npm run pdf` copies the PDF into `public/` and `dist/` so the "PDF version" link works.
+email and "PDF" links and the blurred fade beneath it) appear on the website only and are hidden in the PDF.
+Elements with the `print-only` class appear in the PDF only: the email address on the cover, since the PDF has no header.
+`npm run pdf` copies the PDF into `public/` and `dist/` so the "PDF" link works.
+
+## PDF on push
+
+`.github/workflows/pdf.yml` re-renders the PDF on GitHub whenever a push to `main` changes
+`index.html`, `src/`, `scripts/pdf.mjs`, the Vite config or the dependencies, and commits it to
+`public/` as "Re-render the PDF". Run `git pull` after pushing to get it. The workflow owns that
+file: don't commit a PDF rendered locally, or the two versions will conflict. It can also be run
+by hand from the repository's Actions tab.
 
 ## Placeholders
 

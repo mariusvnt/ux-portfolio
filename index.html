@@ -31,7 +31,8 @@
       spans the full width.
 
       Elements with .screen-only exist on the website only and are
-      not printed in the PDF.
+      not printed in the PDF; elements with .print-only exist in the
+      PDF only (the cover's email, which the site has in its header).
 
       Arrows are added after links by src/main.js: a top-right arrow
       for links that leave the portfolio (other sites, email, the PDF),
@@ -46,8 +47,11 @@
     -->
     <header class="site-header screen-only">
       <div class="site-header__inner">
-        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
-        <a class="secondary-title" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF version</a>
+        <div class="site-header__start">
+          <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
+          <a class="text-body" href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a>
+        </div>
+        <a class="text-body" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF</a>
       </div>
       <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
     </header>
@@ -59,10 +63,11 @@
           <div class="row">
             <h1 id="cover-title" class="row__title main-title">Marius Viennot</h1>
             <div class="row__content">
-              <p>Aiming for frictionless designs, bloatless systems, and unquestionable aesthetics.</p>
+              <p>Designing and building bloatless tools.</p>
             </div>
           </div>
-          <dl class="details">
+          <!-- The PDF has no site header, so it keeps the address here. -->
+          <dl class="details print-only">
             <div class="row">
               <dt class="row__meta" data-icon="mail">Contact</dt>
               <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot<wbr>@essec.edu</a></dd>

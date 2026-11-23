@@ -30,7 +30,7 @@ try {
   });
   console.log(`PDF written to ${path.relative(process.cwd(), OUT_FILE)}`);
 
-  // The site's "PDF version" link points to /marius-viennot-uxdesign-portfolio.pdf:
+  // The site's "PDF" link points to /marius-viennot-uxdesign-portfolio.pdf:
   // public/ serves it in dev and in future builds, dist/ completes this build.
   for (const dir of ['public', 'dist']) {
     await copyFile(OUT_FILE, path.resolve(dir, path.basename(OUT_FILE)));

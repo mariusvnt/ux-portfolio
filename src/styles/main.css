@@ -1,33 +1,9 @@
 /* =========================================================
-   Tokens
+   Components. Every value here references a token from
+   tokens.css; text styles come from the type role classes.
    ========================================================= */
-:root {
-  --bg: #fafaf8;
-  --fg: #141414;
-  --muted: #6b6b6b;
-  --line: #dcdcd6;
-  --accent: #141414;
-  --todo: #c2410c;
 
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-sans);
-
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 1rem;
-  --space-4: 1.5rem;
-  --space-5: 2.5rem;
-  --space-6: 4rem;
-  --space-7: 6rem;
-
-  --measure: 62ch;
-  --page-max: 1200px;
-  --gutter: clamp(1rem, 4vw, 3rem);
-}
-
-/* =========================================================
-   Base
-   ========================================================= */
+/* ---------- Base ---------- */
 *,
 *::before,
 *::after {
@@ -41,24 +17,21 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.55;
+  background: var(--white);
+  color: var(--black);
+  font: var(--text-body);
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
-h3 {
+h3,
+p,
+dl,
+dd,
+figure {
   margin: 0;
-  font-family: var(--font-display);
-  line-height: 1.1;
-}
-
-p {
-  margin: 0;
+  font: inherit;
 }
 
 a {
@@ -73,31 +46,21 @@ video {
   height: auto;
 }
 
-.eyebrow {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-/* Placeholder content still to be written / replaced. */
+/* Placeholder content still to be written or replaced. */
 .todo {
   color: var(--todo);
   font-style: italic;
-  outline: 1px dashed currentColor;
-  outline-offset: 4px;
+  outline: var(--outline-todo);
+  outline-offset: var(--space-1);
 }
 
-/* =========================================================
-   Cover
-   ========================================================= */
+/* ---------- Cover ---------- */
 .cover {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: var(--cover-height);
   display: flex;
   align-items: center;
   padding: var(--space-6) var(--gutter);
-  border-bottom: 1px solid var(--line);
+  border-bottom: var(--rule-soft);
 }
 
 .cover__inner {
@@ -108,75 +71,49 @@ video {
   gap: var(--space-5);
 }
 
-.cover__name {
-  font-size: clamp(2.75rem, 9vw, 7rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
 .cover__pitch {
-  max-width: 40ch;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  max-width: var(--measure);
 }
 
 .cover__index {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line);
+  border-top: var(--rule-strong);
 }
 
 .cover__index li {
-  border-bottom: 1px solid var(--line);
+  border-bottom: var(--rule-soft);
 }
 
 .cover__index a {
   display: grid;
-  grid-template-columns: 3rem 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: baseline;
-  gap: var(--space-3);
+  gap: var(--space-4);
   padding: var(--space-3) 0;
   text-decoration: none;
-  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-  font-weight: 600;
 }
 
-.cover__index a:hover .kind,
-.cover__index a:focus-visible .kind {
-  color: var(--fg);
-}
-
-.cover__index .num {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--muted);
-}
-
+.cover__index .num,
 .cover__index .kind {
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: var(--muted);
+  color: var(--off-black);
 }
 
 .cover__contact {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-4);
-  font-size: 0.9rem;
-  color: var(--muted);
 }
 
-/* =========================================================
-   Project
-   ========================================================= */
+/* ---------- Project ---------- */
 .project {
   max-width: var(--page-max);
   margin: 0 auto;
   padding: var(--space-7) var(--gutter);
   display: grid;
   gap: var(--space-5);
-  border-bottom: 1px solid var(--line);
+  border-bottom: var(--rule-soft);
 }
 
 .project__header {
@@ -185,57 +122,39 @@ video {
 }
 
 .project__num {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.project__title {
-  font-size: clamp(2.25rem, 6vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  color: var(--off-black);
 }
 
 .project__summary {
   max-width: var(--measure);
-  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
 }
 
 .project__meta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min)), 1fr));
   gap: var(--space-3);
-  margin: var(--space-3) 0 0;
+  margin-top: var(--space-3);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--line);
+  border-top: var(--rule-strong);
 }
 
 .project__meta dt {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.project__meta dd {
-  margin: 0;
-}
-
-.media {
-  margin: 0;
+  color: var(--off-black);
 }
 
 .media__frame {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--media-ratio);
+  height: var(--media-height);
   display: grid;
   place-items: center;
   padding: var(--space-4);
   text-align: center;
-  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  background: var(--off-white);
 }
 
 .project__body {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  grid-template-columns: var(--steps-columns);
   gap: var(--space-5) var(--space-4);
 }
 
@@ -246,36 +165,17 @@ video {
 }
 
 .step h3 {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--fg);
+  border-bottom: var(--rule-strong);
 }
 
 .step p {
   max-width: var(--measure);
 }
 
-/* =========================================================
-   Print (used by scripts/pdf.mjs)
-   One landscape A4 page for the cover, each project starts on a new page.
-   ========================================================= */
-@page {
-  size: A4 landscape;
-  margin: 12mm 14mm;
-}
-
+/* ---------- Print / PDF pagination ---------- */
 @media print {
-  :root {
-    --gutter: 0;
-    /* Chromium does not paint the @page margin area, so keep pages white. */
-    --bg: #fff;
-  }
-
   html {
-    font-size: 10.5pt;
     scroll-behavior: auto;
   }
 
@@ -284,36 +184,16 @@ video {
     print-color-adjust: exact;
   }
 
-  .cover {
-    /* A4 landscape height minus the @page vertical margins */
-    min-height: calc(210mm - 24mm);
-    padding: 0;
-    border: 0;
-  }
-
-  .cover__name {
-    font-size: 5.5rem;
-  }
-
+  .cover,
   .project {
     max-width: none;
     padding: 0;
     border: 0;
+  }
+
+  .project {
     break-before: page;
     gap: var(--space-4);
-  }
-
-  .project__title {
-    font-size: 3.5rem;
-  }
-
-  .media__frame {
-    aspect-ratio: auto;
-    height: 80mm;
-  }
-
-  .project__body {
-    grid-template-columns: repeat(5, 1fr);
   }
 
   .project__header,

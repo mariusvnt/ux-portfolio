@@ -21,13 +21,31 @@ npx playwright install chromium
 
 ## Structure
 
-```
+```text
 index.html              The whole portfolio (cover + 3 project sections)
 src/main.js             Entry script
-src/styles/main.css     Styles; the PDF layout lives in the @page / @media print rules
-public/                 Static files copied as-is (images, video, fonts)
+src/styles/tokens.css   Every design decision: colours, type roles, spacing, layout, print overrides
+src/styles/fonts.css    @font-face for Syne Bold and DINish (same fonts as the CV)
+src/styles/main.css     Components; may only reference tokens and type role classes
+src/assets/fonts/       Self-hosted woff2 fonts
+public/                 Static files copied as-is (images, video)
 scripts/pdf.mjs         Builds, serves and prints the site with headless Chromium
 ```
+
+## Design rule
+
+No design value is written locally. Colours (`--white`, `--off-white`, `--off-black`, `--black`),
+type (`--main-title`, `--secondary-title`, `--text-body`), spacing and layout all come from
+`src/styles/tokens.css`. To change the design, change a token; to need a new value, add a token first.
+
+## Fonts
+
+[Syne](https://gitlab.com/bonjour-monde/fonderie/syne-typeface) and [DINish](https://github.com/playbeing/dinish)
+are licensed under the SIL Open Font License 1.1. Their license files sit next to the fonts in
+`src/assets/fonts/` (`OFL-Syne.txt`, `OFL-DINish.txt`). `syne-bold.woff2` is a static Bold instance
+of the Syne variable font; the DINish files are converted to woff2 unchanged.
+
+## Placeholders
 
 Text marked with the `todo` class is placeholder content and is outlined in orange on screen and in the PDF.
 

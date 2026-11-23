@@ -31,8 +31,14 @@
 
   /* ---------- Icons ---------- */
   --icon-size: 0.55em;
-  --icon-stroke: 1.5px;
+  /* Line of the label icons; the link arrows have a heavier one. */
+  --icon-stroke: 0.75px;
+  --arrow-stroke: 1.5px;
   --icon-gap: 0.35em;
+  /* Compact labels on phones (see Layout): the icon's box, and how far
+     it drops below the baseline to sit centred on the text beside it. */
+  --meta-icon-size: 1rem;
+  --meta-icon-offset: -0.15em;
 
   /* ---------- Spacing ---------- */
   --space-1: 0.25rem;
@@ -59,15 +65,18 @@
   --tree-indent: var(--space-4);
 
   /* CV layout: a narrow metadata column on the left, a wide column for
-     titles and content on the right. Single column on small screens. */
-  --layout-columns: minmax(0, 1fr);
-  --content-column: 1;
-  --meta-align: left;
-  --column-gap: var(--space-4);
-  /* Gap between project metadata rows. In two columns they sit as close
-     as lines of one paragraph; stacked on small screens, a small gap
-     keeps each label with its value. */
-  --details-gap: var(--space-2);
+     titles and content on the right, at every screen size. On small
+     screens the labels switch to their compact form (an icon), so the
+     left column is just one icon wide and
+     the text keeps as much room as possible. From the breakpoint below
+     it becomes a proportion of the page, with the full labels. */
+  --layout-columns: var(--meta-icon-size) minmax(0, 1fr);
+  --content-column: 2;
+  --meta-align: right;
+  --column-gap: var(--space-3);
+  /* Gap between project metadata rows: as close as lines of one
+     paragraph. */
+  --details-gap: 0;
 
   /* ---------- Site header (website only, hidden in the PDF) ---------- */
   --header-height: var(--space-6);
@@ -88,14 +97,13 @@
   --fade-3-blur: 8px;
 }
 
-/* Breakpoint for the two-column layout. Media queries cannot read
-   custom properties, so the width is written here. */
+/* Breakpoint for the wide two-column proportions and the full labels.
+   Media queries cannot read custom properties, so the width is written
+   here, and repeated in main.css for the compact labels. */
 @media (min-width: 48rem) {
   :root {
     --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
-    --content-column: 2;
-    --meta-align: right;
-    --details-gap: 0;
+    --column-gap: var(--space-4);
   }
 }
 
@@ -126,11 +134,9 @@
     --media-height: 60mm;
 
     --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
+    --column-gap: var(--space-4);
     /* Centred on the A4 landscape page at the print body size. */
     --measure: 110ch;
-    --content-column: 2;
-    --meta-align: right;
-    --details-gap: 0;
   }
 }
 

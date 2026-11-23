@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Marius Viennot — UX Portfolio</title>
+    <title>Marius Viennot</title>
+    <!-- The header's "MV" in Syne Bold, outlined, on a transparent background. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="description" content="UX portfolio of Marius Viennot: em·ji·ve, the Guisarde Drive add-on, and ACE." />
     <meta name="author" content="Marius Viennot" />
     <script type="module" src="/src/main.js"></script>
@@ -30,6 +32,12 @@
       for links that leave the portfolio (other sites, email, the PDF),
       a left-to-right arrow for links to elsewhere on the portfolio.
       data-no-arrow opts a link out (the MV monogram).
+
+      On phones the labels in the left column switch to a compact form.
+      A label with data-icon="mail|calendar|tools|link|person" is shown
+      as that icon (added by src/main.js). Screen readers always get
+      the full label. The project index labels show the number alone at
+      every size ("Project " is visually hidden).
     -->
     <header class="site-header screen-only">
       <div class="site-header__inner">
@@ -51,8 +59,8 @@
           </div>
           <dl class="details">
             <div class="row">
-              <dt class="row__meta">Contact</dt>
-              <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a></dd>
+              <dt class="row__meta" data-icon="mail">Contact</dt>
+              <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot<wbr>@essec.edu</a></dd>
             </div>
           </dl>
         </div>
@@ -60,15 +68,15 @@
         <nav aria-label="Projects">
           <ul class="cover__index">
             <li class="row">
-              <p class="row__meta">Project 2</p>
+              <p class="row__meta"><span class="visually-hidden">Project </span>2</p>
               <a class="row__content" href="#emjive"><span class="text-body-strong">em·ji·ve</span></a>
             </li>
             <li class="row">
-              <p class="row__meta">Project 1</p>
+              <p class="row__meta"><span class="visually-hidden">Project </span>1</p>
               <a class="row__content" href="#guisarde"><span class="text-body-strong">Guisarde add-on</span></a>
             </li>
             <li class="row">
-              <p class="row__meta">Project 0</p>
+              <p class="row__meta"><span class="visually-hidden">Project </span>0</p>
               <a class="row__content" href="#ace"><span class="text-body-strong">ACE</span></a>
             </li>
           </ul>
@@ -86,15 +94,15 @@
           </div>
           <dl class="details">
             <div class="row">
-              <dt class="row__meta">Dates</dt>
+              <dt class="row__meta" data-icon="calendar">Dates</dt>
               <dd class="row__content">Since July 2026</dd>
             </div>
             <div class="row">
-              <dt class="row__meta">Tools</dt>
+              <dt class="row__meta" data-icon="tools">Tools</dt>
               <dd class="row__content">HTML, CSS, JavaScript, Affinity, Blender</dd>
             </div>
             <div class="row">
-              <dt class="row__meta">Website</dt>
+              <dt class="row__meta" data-icon="link">Website</dt>
               <dd class="row__content"><a href="https://emjive.eu">emjive.eu</a></dd>
             </div>
           </dl>
@@ -137,15 +145,15 @@
           </div>
           <dl class="details">
             <div class="row">
-              <dt class="row__meta">Dates</dt>
+              <dt class="row__meta" data-icon="calendar">Dates</dt>
               <dd class="row__content">April – June 2026</dd>
             </div>
             <div class="row">
-              <dt class="row__meta">Tools</dt>
+              <dt class="row__meta" data-icon="tools">Tools</dt>
               <dd class="row__content">Google Apps Script, Google Drive</dd>
             </div>
             <div class="row">
-              <dt class="row__meta">Users</dt>
+              <dt class="row__meta" data-icon="person">Users</dt>
               <dd class="row__content">The agency's two CEOs</dd>
             </div>
           </dl>
@@ -228,11 +236,11 @@
           </div>
           <dl class="details">
             <div class="row">
-              <dt class="row__meta">Dates</dt>
+              <dt class="row__meta" data-icon="calendar">Dates</dt>
               <dd class="row__content">September – December 2025</dd>
             </div>
             <div class="row">
-              <dt class="row__meta">Tools</dt>
+              <dt class="row__meta" data-icon="tools">Tools</dt>
               <dd class="row__content">Python, Blender API</dd>
             </div>
           </dl>

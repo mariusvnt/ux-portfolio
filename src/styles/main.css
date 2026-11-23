@@ -136,7 +136,7 @@ video {
   margin-inline-start: var(--icon-gap);
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--icon-stroke);
+  stroke-width: var(--arrow-stroke);
   stroke-linecap: square;
   overflow: visible;
 }
@@ -165,6 +165,38 @@ video {
   color: var(--off-black);
 }
 
+/* Compact labels (phones): the icon added by src/main.js replaces the
+   label's text (.row__meta-long), which is hidden but still read by
+   screen readers. Same breakpoint as tokens.css; the PDF always has
+   the full labels. */
+.row__meta-icon {
+  width: var(--meta-icon-size);
+  height: var(--meta-icon-size);
+  vertical-align: var(--meta-icon-offset);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: square;
+  overflow: visible;
+}
+
+@media screen and (width < 48rem) {
+  .row__meta-long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media print, (width >= 48rem) {
+  .row__meta-icon {
+    display: none;
+  }
+}
+
 .row__content {
   grid-column: var(--content-column);
   min-width: 0;
@@ -190,11 +222,6 @@ video {
 .details {
   display: grid;
   gap: var(--details-gap);
-}
-
-/* On small screens the label stacks right above its value. */
-.details .row {
-  row-gap: 0;
 }
 
 /* ---------- Cover ---------- */

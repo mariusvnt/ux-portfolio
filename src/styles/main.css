@@ -13,11 +13,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Anchor jumps land below the fixed header, not under it. */
+  scroll-padding-top: var(--header-height);
 }
 
 body {
   margin: 0;
-  background: var(--white);
+  background: var(--off-white);
   color: var(--black);
   font: var(--text-body);
   -webkit-font-smoothing: antialiased;
@@ -66,15 +68,95 @@ video {
   outline-offset: var(--space-1);
 }
 
+/* ---------- Site header (website only) ----------
+   A fixed off-white band with the monogram on the left and the PDF
+   link on the right, followed by a floating fade (.site-header__fade). */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--header-layer);
+  background: var(--off-white);
+}
+
+.site-header__inner {
+  max-width: var(--page-max);
+  height: var(--header-height);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header a {
+  text-decoration: none;
+}
+
+/* Three stacked layers: each blurs what scrolls beneath it and lays an
+   off-white-to-transparent gradient on top, both fading out downwards. */
+.site-header__fade {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: var(--fade-height);
+  pointer-events: none;
+}
+
+.site-header__fade > span {
+  position: absolute;
+  inset: 0 0 auto;
+  background: var(--fade-gradient);
+  -webkit-mask-image: var(--fade-mask);
+  mask-image: var(--fade-mask);
+  -webkit-backdrop-filter: blur(var(--fade-blur));
+  backdrop-filter: blur(var(--fade-blur));
+}
+
+.site-header__fade > span:nth-child(1) {
+  height: var(--fade-1-height);
+  --fade-blur: var(--fade-1-blur);
+}
+
+.site-header__fade > span:nth-child(2) {
+  height: var(--fade-2-height);
+  --fade-blur: var(--fade-2-blur);
+}
+
+.site-header__fade > span:nth-child(3) {
+  height: var(--fade-3-height);
+  --fade-blur: var(--fade-3-blur);
+}
+
+/* ---------- Link arrows ----------
+   Added by src/main.js after links: a minimal arrow to the top-right
+   corner for links that leave the portfolio, a left-to-right one for
+   links to elsewhere on the portfolio. Sits on the baseline. */
+.arrow {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin-inline-start: var(--icon-gap);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: square;
+  overflow: visible;
+}
+
 /* ---------- Row: the CV's two-column unit ----------
-   .row__meta sits in the narrow left column, .row__content in the
-   wide right one. A row may have only content. */
+   .row__title sits alone on the first line of the wide right column.
+   Below it, .row__meta (narrow left column) lines up on the baseline
+   with .row__content (right column), so metadata only ever sits next
+   to text, never next to a title. A row may have no title or no meta.
+   Grid auto-placement moves .row__meta to the line below the title. */
 .row {
   display: grid;
   grid-template-columns: var(--layout-columns);
   column-gap: var(--column-gap);
-  row-gap: var(--space-1);
+  row-gap: var(--space-3);
   align-items: baseline;
+}
+
+.row__title {
+  grid-column: var(--content-column);
 }
 
 .row__meta {
@@ -95,6 +177,26 @@ video {
   max-width: var(--measure);
 }
 
+/* ---------- Masthead ----------
+   Opens the cover and each project: a title row (title, then the pitch
+   or description alone below it), followed by the details list. */
+.masthead {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Metadata: one .row per item, the label in the left column and the
+   value in the right one. */
+.details {
+  display: grid;
+  gap: var(--details-gap);
+}
+
+/* On small screens the label stacks right above its value. */
+.details .row {
+  row-gap: 0;
+}
+
 /* ---------- Cover ---------- */
 .cover {
   min-height: var(--cover-height);
@@ -113,14 +215,21 @@ video {
   gap: var(--space-3);
 }
 
-/* Plain like the CV's entry names; underline only on hover/focus. */
+/* Plain like the CV's entry names. Each link is as wide as body text
+   (--measure): the name at the start, its arrow pushed to the end, so
+   the arrows line up with the right limit of the paragraphs. */
 .cover__index a {
+  max-width: var(--measure);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   text-decoration: none;
 }
 
-.cover__index a:hover,
-.cover__index a:focus-visible {
-  text-decoration: underline;
+/* "Project 2 / 1 / 0": tabular figures give every digit the same
+   width, so the right-aligned labels line up whatever the number. */
+.cover__index .row__meta {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Project ---------- */
@@ -139,15 +248,15 @@ video {
   place-items: center;
   padding: var(--space-4);
   text-align: center;
-  background: var(--off-white);
+  background: var(--white);
 }
 
-/* Project content (media, steps) spans the full width, outside the
-   two-column rows, to break the rhythm of the header. */
+/* The hero visual spans the full width. The sub-sections below it
+   (Context, Problem, Result) are .rows stacked under one another, each
+   with its section title and text in the right column. */
 .steps {
   display: grid;
-  grid-template-columns: var(--steps-columns);
-  gap: var(--space-5) var(--space-4);
+  gap: var(--space-5);
 }
 
 .step {
@@ -158,6 +267,38 @@ video {
 
 .step p {
   max-width: var(--measure);
+}
+
+/* ---------- Folder tree ----------
+   A nested list of folders and documents. Levels are shown by
+   indentation only (no connector lines). Fields filled in from a form
+   sit in white slots; documents copied from a template get a tag. */
+.tree {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.tree ul {
+  list-style: none;
+}
+
+.tree ul ul {
+  padding-inline-start: var(--tree-indent);
+}
+
+.tree__field {
+  padding: 0 var(--space-1);
+  background: var(--white);
+}
+
+.tree__tag {
+  margin-inline-start: var(--space-2);
+  color: var(--off-black);
+}
+
+.tree__caption {
+  max-width: var(--measure);
+  color: var(--off-black);
 }
 
 /* ---------- Print / PDF pagination ---------- */
@@ -182,12 +323,22 @@ video {
     gap: var(--space-4);
   }
 
+  .steps {
+    gap: var(--space-3);
+  }
+
   .row,
-  .step {
+  .step,
+  .tree {
     break-inside: avoid;
   }
 
   .step h3 {
     break-after: avoid;
+  }
+
+  /* Website-only elements (site header, fade, PDF link). */
+  .screen-only {
+    display: none;
   }
 }

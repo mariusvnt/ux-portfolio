@@ -1,6 +1,6 @@
 // Builds the site, serves the build, and prints it to PDF with headless Chromium.
 // The page layout for the PDF comes from the @media print rules in src/styles/main.css.
-import { mkdir } from 'node:fs/promises';
+import { copyFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { build, preview } from 'vite';
 import { chromium } from 'playwright';
@@ -25,6 +25,12 @@ try {
     preferCSSPageSize: true,
   });
   console.log(`PDF written to ${path.relative(process.cwd(), OUT_FILE)}`);
+
+  // The site's "PDF version" link points to /marius-viennot-portfolio.pdf:
+  // public/ serves it in dev and in future builds, dist/ completes this build.
+  for (const dir of ['public', 'dist']) {
+    await copyFile(OUT_FILE, path.resolve(dir, path.basename(OUT_FILE)));
+  }
 } finally {
   await browser.close();
   await new Promise((resolve) => server.httpServer.close(resolve));

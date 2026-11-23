@@ -5,11 +5,12 @@
    ========================================================= */
 :root {
   /* ---------- Colour ----------
-     Mostly black and white. Off-white and off-black mirror each
-     other on the grey scale (each sits 20 steps from its pure end). */
+     Mostly black and white. Off-white is a 5% grey and off-black a
+     95% grey, so they mirror each other on the grey scale.
+     Off-white is the page background of the website and the PDF. */
   --white: #ffffff;
-  --off-white: #ebebeb;
-  --off-black: #141414;
+  --off-white: #f2f2f2;
+  --off-black: #0d0d0d;
   --black: #000000;
 
   /* Dev-only marker for placeholder content (class="todo"). */
@@ -22,9 +23,16 @@
   --text-body: 400 1.0625rem / 1.55 "DINish", sans-serif;
   /* Body size in SemiBold, like the entry names in the CV. */
   --text-body-strong: 600 1.0625rem / 1.55 "DINish", sans-serif;
+  /* The "MV" monogram in the site header: the title face, smaller. */
+  --logo: 700 1.5rem / 1 "Syne", sans-serif;
 
   /* ---------- Lines ---------- */
   --outline-todo: 1px dashed var(--todo);
+
+  /* ---------- Icons ---------- */
+  --icon-size: 0.55em;
+  --icon-stroke: 1.5px;
+  --icon-gap: 0.35em;
 
   /* ---------- Spacing ---------- */
   --space-1: 0.25rem;
@@ -35,15 +43,20 @@
   --space-6: 4rem;
   --space-7: 6rem;
 
-  /* ---------- Layout ---------- */
-  --measure: 62ch;
+  /* ---------- Layout ----------
+     --measure caps the width of body text in the right column. Set so
+     that, at the full page width (--page-max), the text leaves free on
+     its right as much room as the left column and the gap take on its
+     left, so it feels centred on the page. Narrower screens simply
+     wrap earlier. Recompute if --layout-columns or the body size change. */
+  --measure: 94ch;
   --page-max: 1200px;
   --gutter: clamp(1rem, 4vw, 3rem);
-  --column-min: 12rem;
-  --steps-columns: repeat(auto-fit, minmax(min(100%, var(--column-min)), 1fr));
   --cover-height: 100svh;
   --media-ratio: 16 / 9;
   --media-height: auto;
+  /* Indent of each level in a folder tree. */
+  --tree-indent: var(--space-4);
 
   /* CV layout: a narrow metadata column on the left, a wide column for
      titles and content on the right. Single column on small screens. */
@@ -51,24 +64,50 @@
   --content-column: 1;
   --meta-align: left;
   --column-gap: var(--space-4);
+  /* Gap between project metadata rows. In two columns they sit as close
+     as lines of one paragraph; stacked on small screens, a small gap
+     keeps each label with its value. */
+  --details-gap: var(--space-2);
+
+  /* ---------- Site header (website only, hidden in the PDF) ---------- */
+  --header-height: var(--space-6);
+  --header-layer: 10;
+
+  /* Floating fade under the header: three stacked layers, each an
+     off-white-to-transparent gradient over a Gaussian blur of what
+     scrolls beneath. Layer 1 is the tallest and softest, layer 3 the
+     shortest and strongest, so the blur builds up towards the header. */
+  --fade-height: var(--space-6);
+  --fade-gradient: linear-gradient(to bottom, var(--off-white), transparent);
+  --fade-mask: linear-gradient(to bottom, var(--black), transparent);
+  --fade-1-height: 100%;
+  --fade-1-blur: 2px;
+  --fade-2-height: 66%;
+  --fade-2-blur: 4px;
+  --fade-3-height: 33%;
+  --fade-3-blur: 8px;
 }
 
 /* Breakpoint for the two-column layout. Media queries cannot read
    custom properties, so the width is written here. */
 @media (min-width: 48rem) {
   :root {
-    --layout-columns: minmax(0, 1fr) minmax(0, 3fr);
+    --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
     --content-column: 2;
     --meta-align: right;
+    --details-gap: 0;
   }
 }
 
 /* ---------- Print / PDF ----------
-   Page format. @page cannot read custom properties, so its values
-   live here and are mirrored in the --page-* tokens below. */
+   Page format. The size and margin descriptors cannot read custom
+   properties, so their values live here and are mirrored in the
+   --page-* tokens below. The page box is painted off-white so the
+   margins match the page background. */
 @page {
   size: A4 landscape;
   margin: 12mm 14mm;
+  background: var(--off-white);
 }
 
 @media print {
@@ -83,13 +122,15 @@
 
     --gutter: 0;
     --cover-height: calc(var(--page-height) - 2 * var(--page-margin-y));
-    --steps-columns: repeat(5, 1fr);
     --media-ratio: auto;
-    --media-height: 70mm;
+    --media-height: 60mm;
 
-    --layout-columns: minmax(0, 1fr) minmax(0, 3fr);
+    --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
+    /* Centred on the A4 landscape page at the print body size. */
+    --measure: 110ch;
     --content-column: 2;
     --meta-align: right;
+    --details-gap: 0;
   }
 }
 
@@ -113,4 +154,9 @@
 
 .text-body-strong {
   font: var(--text-body-strong);
+}
+
+.logo {
+  font: var(--logo);
+  letter-spacing: -0.01em;
 }

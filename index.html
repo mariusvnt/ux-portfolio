@@ -11,38 +11,65 @@
   <body>
     <!--
       Layout vocabulary (same as the CV): the cover and each project
-      header are .rows with a narrow left .row__meta column (metadata)
-      and a wider right .row__content column (titles and description).
-      Project content (media, steps) spans the full width.
+      header are .rows. The title (.row__title) sits alone on the first
+      line of the wide right column; below it, the narrow left
+      .row__meta column (metadata) lines up with the text in the right
+      .row__content column. Metadata never sits next to a title.
+      In the cover and each project header (.masthead), the pitch or
+      description sits alone under the title;
+      all metadata (dates included) goes in the .details list below it,
+      one .row each: label on the left, value on the right.
+      Each project sub-section (Context, Problem, Result) is a .row too,
+      its section title and text in the right column. The hero visual
+      spans the full width.
+
+      Elements with .screen-only exist on the website only and are
+      not printed in the PDF.
+
+      Arrows are added after links by src/main.js: a top-right arrow
+      for links that leave the portfolio (other sites, email, the PDF),
+      a left-to-right arrow for links to elsewhere on the portfolio.
+      data-no-arrow opts a link out (the MV monogram).
     -->
+    <header class="site-header screen-only">
+      <div class="site-header__inner">
+        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
+        <a class="secondary-title" href="/marius-viennot-portfolio.pdf" target="_blank" rel="noopener">PDF version</a>
+      </div>
+      <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
+    </header>
+
     <main>
       <!-- ===================== COVER ===================== -->
       <section class="cover" id="cover" aria-labelledby="cover-title">
-        <div class="row">
-          <div class="row__meta">
-            <p>UX Portfolio</p>
-            <p><a href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a></p>
-            <p><a href="https://github.com/mariusvnt">github.com/mariusvnt</a></p>
+        <div class="masthead">
+          <div class="row">
+            <h1 id="cover-title" class="row__title main-title">Marius Viennot</h1>
+            <div class="row__content">
+              <p>Aiming for frictionless designs, bloatless systems, and unquestionable aesthetics.</p>
+            </div>
           </div>
-          <div class="row__content">
-            <h1 id="cover-title" class="main-title">Marius Viennot</h1>
-            <p class="todo">One or two sentences on who you are as a designer and what you're looking for.</p>
-          </div>
+          <dl class="details">
+            <div class="row">
+              <dt class="row__meta">Contact</dt>
+              <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a></dd>
+            </div>
+          </dl>
         </div>
 
         <nav aria-label="Projects">
           <ul class="cover__index">
             <li class="row">
-              <p class="row__meta">Brand website</p>
-              <a class="row__content text-body-strong" href="#emjive">em·ji·ve</a>
+              <p class="row__meta">Project 2</p>
+              <a class="row__content" href="#emjive"><span class="text-body-strong">em·ji·ve</span></a>
             </li>
             <li class="row">
-              <p class="row__meta">Workflow tool</p>
-              <a class="row__content text-body-strong" href="#guisarde">Guisarde add-on</a>
+              <p class="row__meta">Project 1</p>
+              <a class="row__content" href="#guisarde"><span class="text-body-strong">Guisarde add-on</span></a>
             </li>
             <li class="row">
-              <p class="row__meta">Blender add-on</p>
-              <a class="row__content text-body-strong" href="#ace">ACE</a>
+              <p class="row__meta">Project 0</p>
+              <a class="row__content" href="#ace"><span class="text-body-strong">ACE</span></a>
             </li>
           </ul>
         </nav>
@@ -50,17 +77,27 @@
 
       <!-- ===================== EMJIVE ===================== -->
       <article class="project" id="emjive" aria-labelledby="emjive-title">
-        <header class="row">
-          <dl class="row__meta">
-            <div><dt class="visually-hidden">When</dt><dd>Since July 2026</dd></div>
-            <div><dt class="visually-hidden">Role</dt><dd>Co-founder · Designer &amp; developer</dd></div>
-            <div><dt class="visually-hidden">Tools</dt><dd>Affinity</dd></div>
-            <div><dt class="visually-hidden">Live</dt><dd><a href="https://emjive.eu">emjive.eu</a></dd></div>
-          </dl>
-          <div class="row__content">
-            <h2 id="emjive-title" class="main-title">em·ji·ve</h2>
-            <p>Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.</p>
+        <header class="masthead">
+          <div class="row">
+            <h2 id="emjive-title" class="row__title main-title">em·ji·ve</h2>
+            <div class="row__content">
+              <p>Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.</p>
+            </div>
           </div>
+          <dl class="details">
+            <div class="row">
+              <dt class="row__meta">Dates</dt>
+              <dd class="row__content">Since July 2026</dd>
+            </div>
+            <div class="row">
+              <dt class="row__meta">Tools</dt>
+              <dd class="row__content">HTML, CSS, JavaScript, Affinity, Blender</dd>
+            </div>
+            <div class="row">
+              <dt class="row__meta">Website</dt>
+              <dd class="row__content"><a href="https://emjive.eu">emjive.eu</a></dd>
+            </div>
+          </dl>
         </header>
 
         <figure class="media todo">
@@ -68,84 +105,137 @@
         </figure>
 
         <div class="steps">
-          <section class="step">
-            <h3 class="secondary-title">Context</h3>
-            <p class="todo">The brand, its audience, and why the website matters for it.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Context</h3>
+              <p>em·ji·ve is a creative umbrella for every project my brother and I co-lead. Its first study is a collection of a dozen rings. We share one observation: the world is bloated with capitalist solicitations. Our studies are an effort to produce innovative design, stripped of any bloat.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Problem</h3>
-            <p class="todo">What the site had to achieve for visitors and for the brand.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Problem</h3>
+              <p>The website has to be both a gallery showcasing our studies and an e-commerce shop. It must guide each type of visitor to what they are looking for, without compromising the brand's identity.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Process</h3>
-            <p class="todo">From Affinity mockups to the built site.</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Testing &amp; iteration</h3>
-            <p class="todo">What early test users said, and what changed as a result (before / after).</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Outcome</h3>
-            <p class="todo">Where the site stands today and what you learned.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Result</h3>
+              <p>A hybrid website that borrows from laboratories, clinical settings and small gallery exhibitions to form a minimalist home for the brand, with shortcuts for visitors who came to shop and have no interest in the brand itself.</p>
+            </div>
           </section>
         </div>
       </article>
 
       <!-- ===================== GUISARDE ===================== -->
       <article class="project" id="guisarde" aria-labelledby="guisarde-title">
-        <header class="row">
-          <dl class="row__meta">
-            <div><dt class="visually-hidden">When</dt><dd>January – July 2026</dd></div>
-            <div><dt class="visually-hidden">Role</dt><dd>Project manager (intern) · Designer &amp; developer</dd></div>
-            <div><dt class="visually-hidden">Tools</dt><dd>Google Drive</dd></div>
-            <div><dt class="visually-hidden">Users</dt><dd class="todo">Who used it at the agency</dd></div>
-          </dl>
-          <div class="row__content">
-            <h2 id="guisarde-title" class="main-title">Guisarde add-on</h2>
-            <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
+        <header class="masthead">
+          <div class="row">
+            <h2 id="guisarde-title" class="row__title main-title">Guisarde add-on</h2>
+            <div class="row__content">
+              <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
+            </div>
           </div>
+          <dl class="details">
+            <div class="row">
+              <dt class="row__meta">Dates</dt>
+              <dd class="row__content">April – June 2026</dd>
+            </div>
+            <div class="row">
+              <dt class="row__meta">Tools</dt>
+              <dd class="row__content">Google Apps Script, Google Drive</dd>
+            </div>
+            <div class="row">
+              <dt class="row__meta">Users</dt>
+              <dd class="row__content">The agency's two CEOs</dd>
+            </div>
+          </dl>
         </header>
 
         <figure class="media todo">
-          <div class="media__frame">Hero visual: the form and the folder tree it creates (no client data)</div>
+          <div class="media__frame">Hero visual: the add-on's form (no client data)</div>
         </figure>
 
         <div class="steps">
-          <section class="step">
-            <h3 class="secondary-title">Context</h3>
-            <p class="todo">The agency, its production projects, and how project folders were set up before.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Context</h3>
+              <p>The team relied on Google Drive to store live project folders, from sales negotiations through production, and built and moved every project folder by hand.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Problem</h3>
-            <p class="todo">What was slow, inconsistent or error-prone in the manual setup.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Problem</h3>
+              <p>Doing everything by hand caused two issues. First, the team lost time repeating the same tasks every time a project folder was created or moved. Second, inconsistencies crept into the files: naming conventions not followed, missing sub-folders, and so on.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Process</h3>
-            <p class="todo">How you mapped the workflow and decided what the form asks for.</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Key decisions</h3>
-            <p class="todo">Trade-offs in the form design and the folder structure.</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Outcome</h3>
-            <p class="todo">Adoption by the team, time saved, feedback.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Result</h3>
+              <p>An agency-wide Google Drive add-on that builds and moves project folders according to the agency's conventions. It cuts the time spent on project folder admin by about 95%, from roughly 30 hours a year to 1.5, and every folder it creates follows the same naming and structure.</p>
+              <figure class="tree">
+                <ul class="tree__list">
+                  <li>
+                    <span class="tree__field">Project ID</span> <span class="tree__field">Client</span> - <span class="tree__field">Type</span> - <span class="tree__field">Project Name</span>
+                    <ul>
+                      <li>0 - Comptabilité</li>
+                      <li>1 - Devis et factures</li>
+                      <li>2 - Behind the scenes</li>
+                      <li>
+                        <span class="tree__field">Project ID</span> <span class="tree__field">Client</span> x Guisarde - <span class="tree__field">Project Name</span>
+                        <ul>
+                          <li>
+                            0 - Juridique
+                            <ul>
+                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Droit à l'image <span class="tree__tag secondary-title">Template</span></li>
+                            </ul>
+                          </li>
+                          <li>
+                            1 - Gestion du projet
+                            <ul>
+                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Comptes rendus <span class="tree__tag secondary-title">Template</span></li>
+                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Retroplanning <span class="tree__tag secondary-title">Template</span></li>
+                            </ul>
+                          </li>
+                          <li>
+                            2 - Ressources
+                            <ul>
+                              <li>0 - Documents</li>
+                              <li>1 - Images &amp; Videos</li>
+                              <li>2 - Charte graphique</li>
+                            </ul>
+                          </li>
+                          <li>3 - Livrables</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <figcaption class="tree__caption">The folder tree created for every new project. Highlighted fields come from the form; documents tagged Template are copied from the agency's templates.</figcaption>
+              </figure>
+            </div>
           </section>
         </div>
       </article>
 
       <!-- ===================== ACE ===================== -->
       <article class="project" id="ace" aria-labelledby="ace-title">
-        <header class="row">
-          <dl class="row__meta">
-            <div><dt class="visually-hidden">When</dt><dd>September – December 2025</dd></div>
-            <div><dt class="visually-hidden">Role</dt><dd>Personal project · Designer &amp; developer</dd></div>
-            <div><dt class="visually-hidden">Tools</dt><dd>Blender, Python</dd></div>
-          </dl>
-          <div class="row__content">
-            <h2 id="ace-title" class="main-title">ACE</h2>
-            <p>A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.</p>
+        <header class="masthead">
+          <div class="row">
+            <h2 id="ace-title" class="row__title main-title">ACE</h2>
+            <div class="row__content">
+              <p>A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.</p>
+            </div>
           </div>
+          <dl class="details">
+            <div class="row">
+              <dt class="row__meta">Dates</dt>
+              <dd class="row__content">September – December 2025</dd>
+            </div>
+            <div class="row">
+              <dt class="row__meta">Tools</dt>
+              <dd class="row__content">Python, Blender API</dd>
+            </div>
+          </dl>
         </header>
 
         <figure class="media todo">
@@ -153,25 +243,23 @@
         </figure>
 
         <div class="steps">
-          <section class="step">
-            <h3 class="secondary-title">Context</h3>
-            <p class="todo">Audio-reactive animation in Blender, and who it is for.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Context</h3>
+              <p>I make 3D animations and produce music as hobbies, and I wanted to merge the two by making audio-reactive animations for my music.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Problem</h3>
-            <p class="todo">Why Blender's standard add-on panels were limiting for this use.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Problem</h3>
+              <p>Blender, which I use for my 3D animations, is limited for audio-reactive work. The only existing workflow is a tool that bakes an audio file into keyframes. That means I can't test the audio-reactive behaviour in real time, and I'm very limited in how I can split the audio information to drive different parts of the animation.</p>
+            </div>
           </section>
-          <section class="step">
-            <h3 class="secondary-title">Process</h3>
-            <p class="todo">Exploring interface options before settling on nodes.</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Key decisions</h3>
-            <p class="todo">How the node interface is organised and why.</p>
-          </section>
-          <section class="step">
-            <h3 class="secondary-title">Outcome</h3>
-            <p class="todo">What it makes possible, with example animations.</p>
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Result</h3>
+              <p>An audio analysis engine with a set of operators inspired by TouchDesigner, the industry leader, in a node-based interface that integrates cleanly with Blender's Geometry Nodes editor for real-time 3D geometry manipulation.</p>
+            </div>
           </section>
         </div>
       </article>

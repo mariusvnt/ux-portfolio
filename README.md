@@ -8,7 +8,7 @@ The same page is published as a static website and printed to PDF.
 | Command           | What it does                                                         |
 | ----------------- | -------------------------------------------------------------------- |
 | `npm install`     | Install dependencies                                                 |
-| `npm run dev`     | Start the dev server on http://localhost:5173 (live reload, opens the browser) |
+| `npm run dev`     | Start the dev server on http://localhost:5300 (live reload, opens the browser) |
 | `npm run build`   | Build the static site into `dist/`                                   |
 | `npm run preview` | Serve the built site locally                                         |
 | `npm run pdf`     | Build the site and print it to `output/marius-viennot-portfolio.pdf` |
@@ -44,6 +44,12 @@ type (`--main-title`, `--secondary-title`, `--text-body`), spacing and layout al
 are licensed under the SIL Open Font License 1.1. Their license files sit next to the fonts in
 `src/assets/fonts/` (`OFL-Syne.txt`, `OFL-DINish.txt`). `syne-bold.woff2` is a static Bold instance
 of the Syne variable font; the DINish files are converted to woff2 unchanged.
+
+## Website-only elements
+
+Elements with the `screen-only` class (the fixed site header with the "MV" monogram, the
+"PDF version" link and the blurred fade beneath it) appear on the website only and are hidden in the PDF.
+`npm run pdf` copies the PDF into `public/` and `dist/` so the "PDF version" link works.
 
 ## Placeholders
 

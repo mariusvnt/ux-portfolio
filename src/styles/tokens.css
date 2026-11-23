@@ -20,10 +20,10 @@
   --main-title: 700 clamp(2.5rem, 7vw, 5.5rem) / 1 "Syne", sans-serif;
   --secondary-title: 600 0.8125rem / 1.3 "DINish", sans-serif;
   --text-body: 400 1.0625rem / 1.55 "DINish", sans-serif;
+  /* Body size in SemiBold, like the entry names in the CV. */
+  --text-body-strong: 600 1.0625rem / 1.55 "DINish", sans-serif;
 
   /* ---------- Lines ---------- */
-  --rule-strong: 1px solid var(--black);
-  --rule-soft: 1px solid var(--off-white);
   --outline-todo: 1px dashed var(--todo);
 
   /* ---------- Spacing ---------- */
@@ -44,6 +44,23 @@
   --cover-height: 100svh;
   --media-ratio: 16 / 9;
   --media-height: auto;
+
+  /* CV layout: a narrow metadata column on the left, a wide column for
+     titles and content on the right. Single column on small screens. */
+  --layout-columns: minmax(0, 1fr);
+  --content-column: 1;
+  --meta-align: left;
+  --column-gap: var(--space-4);
+}
+
+/* Breakpoint for the two-column layout. Media queries cannot read
+   custom properties, so the width is written here. */
+@media (min-width: 48rem) {
+  :root {
+    --layout-columns: minmax(0, 1fr) minmax(0, 3fr);
+    --content-column: 2;
+    --meta-align: right;
+  }
 }
 
 /* ---------- Print / PDF ----------
@@ -62,12 +79,17 @@
     --main-title: 700 3.5rem / 1 "Syne", sans-serif;
     --secondary-title: 600 7.5pt / 1.3 "DINish", sans-serif;
     --text-body: 400 10pt / 1.5 "DINish", sans-serif;
+    --text-body-strong: 600 10pt / 1.5 "DINish", sans-serif;
 
     --gutter: 0;
     --cover-height: calc(var(--page-height) - 2 * var(--page-margin-y));
     --steps-columns: repeat(5, 1fr);
     --media-ratio: auto;
-    --media-height: 80mm;
+    --media-height: 70mm;
+
+    --layout-columns: minmax(0, 1fr) minmax(0, 3fr);
+    --content-column: 2;
+    --meta-align: right;
   }
 }
 
@@ -87,4 +109,8 @@
 
 .text-body {
   font: var(--text-body);
+}
+
+.text-body-strong {
+  font: var(--text-body-strong);
 }

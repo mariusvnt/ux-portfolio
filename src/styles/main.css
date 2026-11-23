@@ -27,10 +27,12 @@ h1,
 h2,
 h3,
 p,
+ul,
 dl,
 dd,
 figure {
   margin: 0;
+  padding: 0;
   font: inherit;
 }
 
@@ -46,6 +48,16 @@ video {
   height: auto;
 }
 
+/* Hidden on screen and paper, still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Placeholder content still to be written or replaced. */
 .todo {
   color: var(--todo);
@@ -54,56 +66,61 @@ video {
   outline-offset: var(--space-1);
 }
 
+/* ---------- Row: the CV's two-column unit ----------
+   .row__meta sits in the narrow left column, .row__content in the
+   wide right one. A row may have only content. */
+.row {
+  display: grid;
+  grid-template-columns: var(--layout-columns);
+  column-gap: var(--column-gap);
+  row-gap: var(--space-1);
+  align-items: baseline;
+}
+
+.row__meta {
+  grid-column: 1;
+  text-align: var(--meta-align);
+  color: var(--off-black);
+}
+
+.row__content {
+  grid-column: var(--content-column);
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.row__content > p {
+  max-width: var(--measure);
+}
+
 /* ---------- Cover ---------- */
 .cover {
   min-height: var(--cover-height);
-  display: flex;
-  align-items: center;
-  padding: var(--space-6) var(--gutter);
-  border-bottom: var(--rule-soft);
-}
-
-.cover__inner {
-  width: 100%;
   max-width: var(--page-max);
   margin: 0 auto;
-  display: grid;
-  gap: var(--space-5);
-}
-
-.cover__pitch {
-  max-width: var(--measure);
+  padding: var(--space-6) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-6);
 }
 
 .cover__index {
   list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: var(--rule-strong);
-}
-
-.cover__index li {
-  border-bottom: var(--rule-soft);
-}
-
-.cover__index a {
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: baseline;
-  gap: var(--space-4);
-  padding: var(--space-3) 0;
+  gap: var(--space-3);
+}
+
+/* Plain like the CV's entry names; underline only on hover/focus. */
+.cover__index a {
   text-decoration: none;
 }
 
-.cover__index .num,
-.cover__index .kind {
-  color: var(--off-black);
-}
-
-.cover__contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
+.cover__index a:hover,
+.cover__index a:focus-visible {
+  text-decoration: underline;
 }
 
 /* ---------- Project ---------- */
@@ -113,33 +130,6 @@ video {
   padding: var(--space-7) var(--gutter);
   display: grid;
   gap: var(--space-5);
-  border-bottom: var(--rule-soft);
-}
-
-.project__header {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.project__num {
-  color: var(--off-black);
-}
-
-.project__summary {
-  max-width: var(--measure);
-}
-
-.project__meta {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--column-min)), 1fr));
-  gap: var(--space-3);
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: var(--rule-strong);
-}
-
-.project__meta dt {
-  color: var(--off-black);
 }
 
 .media__frame {
@@ -152,7 +142,9 @@ video {
   background: var(--off-white);
 }
 
-.project__body {
+/* Project content (media, steps) spans the full width, outside the
+   two-column rows, to break the rhythm of the header. */
+.steps {
   display: grid;
   grid-template-columns: var(--steps-columns);
   gap: var(--space-5) var(--space-4);
@@ -162,11 +154,6 @@ video {
   display: grid;
   align-content: start;
   gap: var(--space-2);
-}
-
-.step h3 {
-  padding-bottom: var(--space-2);
-  border-bottom: var(--rule-strong);
 }
 
 .step p {
@@ -188,7 +175,6 @@ video {
   .project {
     max-width: none;
     padding: 0;
-    border: 0;
   }
 
   .project {
@@ -196,8 +182,7 @@ video {
     gap: var(--space-4);
   }
 
-  .project__header,
-  .media,
+  .row,
   .step {
     break-inside: avoid;
   }

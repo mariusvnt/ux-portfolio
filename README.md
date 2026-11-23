@@ -8,7 +8,7 @@ The same page is published as a static website and printed to PDF.
 | Command           | What it does                                                         |
 | ----------------- | -------------------------------------------------------------------- |
 | `npm install`     | Install dependencies                                                 |
-| `npm run dev`     | Start the dev server with live reload                                |
+| `npm run dev`     | Start the dev server on http://localhost:5173 (live reload, opens the browser) |
 | `npm run build`   | Build the static site into `dist/`                                   |
 | `npm run preview` | Serve the built site locally                                         |
 | `npm run pdf`     | Build the site and print it to `output/marius-viennot-portfolio.pdf` |

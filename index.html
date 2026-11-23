@@ -9,50 +9,65 @@
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
+    <!--
+      Layout vocabulary (same as the CV): the cover and each project
+      header are .rows with a narrow left .row__meta column (metadata)
+      and a wider right .row__content column (titles and description).
+      Project content (media, steps) spans the full width.
+    -->
     <main>
       <!-- ===================== COVER ===================== -->
       <section class="cover" id="cover" aria-labelledby="cover-title">
-        <div class="cover__inner">
-          <p class="secondary-title">UX Portfolio · 2026</p>
-          <h1 id="cover-title" class="main-title">Marius Viennot</h1>
-          <p class="cover__pitch todo">
-            One or two sentences on who you are as a designer and what you're looking for.
-          </p>
-
-          <ol class="cover__index">
-            <li><a href="#emjive"><span class="num secondary-title">01</span> em·ji·ve <span class="kind secondary-title">Brand website</span></a></li>
-            <li><a href="#guisarde"><span class="num secondary-title">02</span> Guisarde add-on <span class="kind secondary-title">Workflow tool</span></a></li>
-            <li><a href="#ace"><span class="num secondary-title">03</span> ACE <span class="kind secondary-title">Blender add-on</span></a></li>
-          </ol>
-
-          <p class="cover__contact">
-            <a href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a>
-            <a href="https://github.com/mariusvnt">github.com/mariusvnt</a>
-          </p>
+        <div class="row">
+          <div class="row__meta">
+            <p>UX Portfolio</p>
+            <p><a href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a></p>
+            <p><a href="https://github.com/mariusvnt">github.com/mariusvnt</a></p>
+          </div>
+          <div class="row__content">
+            <h1 id="cover-title" class="main-title">Marius Viennot</h1>
+            <p class="todo">One or two sentences on who you are as a designer and what you're looking for.</p>
+          </div>
         </div>
+
+        <nav aria-label="Projects">
+          <ul class="cover__index">
+            <li class="row">
+              <p class="row__meta">Brand website</p>
+              <a class="row__content text-body-strong" href="#emjive">em·ji·ve</a>
+            </li>
+            <li class="row">
+              <p class="row__meta">Workflow tool</p>
+              <a class="row__content text-body-strong" href="#guisarde">Guisarde add-on</a>
+            </li>
+            <li class="row">
+              <p class="row__meta">Blender add-on</p>
+              <a class="row__content text-body-strong" href="#ace">ACE</a>
+            </li>
+          </ul>
+        </nav>
       </section>
 
-      <!-- ===================== 01 · EMJIVE ===================== -->
+      <!-- ===================== EMJIVE ===================== -->
       <article class="project" id="emjive" aria-labelledby="emjive-title">
-        <header class="project__header">
-          <p class="project__num secondary-title">01</p>
-          <h2 id="emjive-title" class="main-title">em·ji·ve</h2>
-          <p class="project__summary">
-            Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.
-          </p>
-          <dl class="project__meta">
-            <div><dt class="secondary-title">Role</dt><dd>Co-founder · Designer &amp; developer</dd></div>
-            <div><dt class="secondary-title">When</dt><dd>Since July 2026</dd></div>
-            <div><dt class="secondary-title">Tools</dt><dd>Affinity</dd></div>
-            <div><dt class="secondary-title">Live</dt><dd><a href="https://emjive.eu">emjive.eu</a></dd></div>
+        <header class="row">
+          <dl class="row__meta">
+            <div><dt class="visually-hidden">When</dt><dd>Since July 2026</dd></div>
+            <div><dt class="visually-hidden">Role</dt><dd>Co-founder · Designer &amp; developer</dd></div>
+            <div><dt class="visually-hidden">Tools</dt><dd>Affinity</dd></div>
+            <div><dt class="visually-hidden">Live</dt><dd><a href="https://emjive.eu">emjive.eu</a></dd></div>
           </dl>
+          <div class="row__content">
+            <h2 id="emjive-title" class="main-title">em·ji·ve</h2>
+            <p>Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.</p>
+          </div>
         </header>
 
         <figure class="media todo">
           <div class="media__frame">Hero visual: the site on desktop and mobile</div>
         </figure>
 
-        <div class="project__body">
+        <div class="steps">
           <section class="step">
             <h3 class="secondary-title">Context</h3>
             <p class="todo">The brand, its audience, and why the website matters for it.</p>
@@ -76,27 +91,26 @@
         </div>
       </article>
 
-      <!-- ===================== 02 · GUISARDE ===================== -->
+      <!-- ===================== GUISARDE ===================== -->
       <article class="project" id="guisarde" aria-labelledby="guisarde-title">
-        <header class="project__header">
-          <p class="project__num secondary-title">02</p>
-          <h2 id="guisarde-title" class="main-title">Guisarde add-on</h2>
-          <p class="project__summary">
-            A Google Drive add-on for a creative agency that turns one form into a full project folder tree.
-          </p>
-          <dl class="project__meta">
-            <div><dt class="secondary-title">Role</dt><dd>Project manager (intern) · Designer &amp; developer</dd></div>
-            <div><dt class="secondary-title">When</dt><dd>January – July 2026</dd></div>
-            <div><dt class="secondary-title">Tools</dt><dd>Google Drive</dd></div>
-            <div><dt class="secondary-title">Users</dt><dd class="todo">Who used it at the agency</dd></div>
+        <header class="row">
+          <dl class="row__meta">
+            <div><dt class="visually-hidden">When</dt><dd>January – July 2026</dd></div>
+            <div><dt class="visually-hidden">Role</dt><dd>Project manager (intern) · Designer &amp; developer</dd></div>
+            <div><dt class="visually-hidden">Tools</dt><dd>Google Drive</dd></div>
+            <div><dt class="visually-hidden">Users</dt><dd class="todo">Who used it at the agency</dd></div>
           </dl>
+          <div class="row__content">
+            <h2 id="guisarde-title" class="main-title">Guisarde add-on</h2>
+            <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
+          </div>
         </header>
 
         <figure class="media todo">
           <div class="media__frame">Hero visual: the form and the folder tree it creates (no client data)</div>
         </figure>
 
-        <div class="project__body">
+        <div class="steps">
           <section class="step">
             <h3 class="secondary-title">Context</h3>
             <p class="todo">The agency, its production projects, and how project folders were set up before.</p>
@@ -120,26 +134,25 @@
         </div>
       </article>
 
-      <!-- ===================== 03 · ACE ===================== -->
+      <!-- ===================== ACE ===================== -->
       <article class="project" id="ace" aria-labelledby="ace-title">
-        <header class="project__header">
-          <p class="project__num secondary-title">03</p>
-          <h2 id="ace-title" class="main-title">ACE</h2>
-          <p class="project__summary">
-            A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.
-          </p>
-          <dl class="project__meta">
-            <div><dt class="secondary-title">Role</dt><dd>Personal project · Designer &amp; developer</dd></div>
-            <div><dt class="secondary-title">When</dt><dd>September – December 2025</dd></div>
-            <div><dt class="secondary-title">Tools</dt><dd>Blender, Python</dd></div>
+        <header class="row">
+          <dl class="row__meta">
+            <div><dt class="visually-hidden">When</dt><dd>September – December 2025</dd></div>
+            <div><dt class="visually-hidden">Role</dt><dd>Personal project · Designer &amp; developer</dd></div>
+            <div><dt class="visually-hidden">Tools</dt><dd>Blender, Python</dd></div>
           </dl>
+          <div class="row__content">
+            <h2 id="ace-title" class="main-title">ACE</h2>
+            <p>A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.</p>
+          </div>
         </header>
 
         <figure class="media todo">
           <div class="media__frame">Hero visual: the node interface driving an animation from audio</div>
         </figure>
 
-        <div class="project__body">
+        <div class="steps">
           <section class="step">
             <h3 class="secondary-title">Context</h3>
             <p class="todo">Audio-reactive animation in Blender, and who it is for.</p>

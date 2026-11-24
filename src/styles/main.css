@@ -375,7 +375,7 @@ main {
    content's edge (--bleed-end): to the screen's edge on phones, out to
    the page's margin on wider screens. */
 .media {
-  margin-inline-start: calc(var(--meta-column-end) - var(--gutter) + var(--column-gap));
+  margin-inline-start: var(--content-column-start);
   margin-inline-end: calc(-1 * var(--bleed-end));
 }
 
@@ -572,10 +572,12 @@ div.screen__media {
   padding-inline-end: var(--bleed-end);
 }
 
-/* On phones the device is centred in the right column, above its text:
-   the journey stops at the content's right edge, and the scroll bar's
-   room is kept on both sides of the device, so the device itself sits
-   in the middle and the bar to its right. */
+/* On phones the device is centred on the screen, above its text: the
+   journey stops at the content's right edge, the scroll bar's room is
+   kept on both sides of the device, so the device itself sits in the
+   middle and the bar to its right, and the device is shifted left by
+   half the left column, out of the right column's middle into the
+   content's. */
 @media screen and (width < 48rem) {
   .journey {
     padding-inline-end: var(--bleed-end);
@@ -587,7 +589,8 @@ div.screen__media {
 
   .journey__device {
     justify-self: center;
-    max-width: calc(100% - 2 * (var(--space-3) + var(--scrubber-width)));
+    left: calc(-1 * var(--content-column-start) / 2);
+    max-width: calc(100% + var(--content-column-start) - 2 * (var(--space-3) + var(--scrubber-width)));
     margin-inline: calc(var(--space-3) + var(--scrubber-width));
   }
 }
@@ -1017,20 +1020,14 @@ html:has(.lightbox[open]) {
   }
 }
 
-/* The section title on the left, the toggle after it on the same
-   line. */
+/* The section title on the left, the toggle on the same line, against
+   the right margin of the content. */
 .device-switch .row__content {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   gap: var(--space-2) var(--space-5);
-}
-
-/* On phones the toggle goes to the right margin. */
-@media screen and (width < 48rem) {
-  .device-switch .row__content {
-    justify-content: space-between;
-  }
 }
 
 .device-switch__control {
@@ -1289,11 +1286,11 @@ html:has(.lightbox[open]) {
 
   .project {
     break-before: page;
-    gap: var(--space-4);
+    gap: calc(2 * var(--space-4));
   }
 
   .steps {
-    gap: var(--space-3);
+    gap: calc(2 * var(--space-3));
   }
 
   /* Closer than the sub-sections, so each list reads as one block

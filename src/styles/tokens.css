@@ -94,7 +94,7 @@
   /* Space between a project's sections (its header, visuals, Challenge,
      Prototype, Result, Decisions..., metadata) on the website; the PDF
      keeps its own, tighter (see Print in main.css). */
-  --section-gap: var(--space-6);
+  --section-gap: calc(2 * var(--space-6));
   /* Space above and below each project. */
   --project-padding-y: var(--space-7);
   --cover-height: 100svh;
@@ -190,6 +190,9 @@
   /* Where the left column ends, measured from a section's left edge.
      Must follow --layout-columns. */
   --meta-column-end: calc(var(--gutter) + var(--meta-icon-size));
+  /* Where the right column starts, measured from the content's left
+     edge (past the left column and the gap). */
+  --content-column-start: calc(var(--meta-column-end) - var(--gutter) + var(--column-gap));
   /* Gap between project metadata rows: as close as lines of one
      paragraph. */
   --details-gap: 0;

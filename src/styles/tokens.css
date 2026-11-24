@@ -108,6 +108,8 @@
   /* ---------- Site header (website only, hidden in the PDF) ---------- */
   --header-height: var(--space-6);
   --header-layer: 10;
+  /* The monogram fading in once the cover title has scrolled away. */
+  --logo-fade: 0.2s ease;
 
   /* Floating fade under the header: three stacked layers, each an
      off-white-to-transparent gradient over a Gaussian blur of what

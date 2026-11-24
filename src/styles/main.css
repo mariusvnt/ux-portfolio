@@ -75,8 +75,9 @@ main {
 }
 
 /* ---------- Site header (website only) ----------
-   A fixed off-white band with the monogram on the left and the PDF
-   link on the right, followed by a floating fade (.site-header__fade). */
+   A fixed off-white band with the monogram on the left (shown once the
+   cover title is gone) and the PDF link on the right, followed by a
+   floating fade (.site-header__fade). */
 .site-header {
   position: fixed;
   inset: 0 0 auto;
@@ -100,8 +101,28 @@ main {
   white-space: nowrap;
 }
 
+/* The monogram only shows once the cover title ("Marius Viennot") has
+   scrolled away under the header: src/main.js then adds
+   .site-header--logo-shown and it fades in (and out on the way back).
+   Hidden, it can be neither clicked nor tabbed to. */
 .site-header .logo {
   text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--logo-fade),
+    visibility var(--logo-fade);
+}
+
+.site-header--logo-shown .logo {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header .logo {
+    transition: none;
+  }
 }
 
 /* Three stacked layers: each blurs what scrolls beneath it and lays an

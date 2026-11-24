@@ -57,3 +57,18 @@ for (const label of document.querySelectorAll('.row__meta[data-icon]')) {
     `<svg class="row__meta-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">${ICONS[label.dataset.icon]}</svg>`,
   );
 }
+
+// The header's monogram shows only once the cover title has gone: it
+// fades in when the title has fully scrolled away under the header,
+// and out again when it comes back. The observed area is the viewport
+// below the header (the header's height comes off the top).
+const header = document.querySelector('.site-header');
+const coverTitle = document.getElementById('cover-title');
+
+if (header && coverTitle) {
+  const observer = new IntersectionObserver(
+    ([entry]) => header.classList.toggle('site-header--logo-shown', !entry.isIntersecting),
+    { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` },
+  );
+  observer.observe(coverTitle);
+}

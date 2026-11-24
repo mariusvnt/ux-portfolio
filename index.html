@@ -97,11 +97,11 @@
                the portfolio's would point to itself). -->
           <div class="row screen-only">
             <dt class="row__meta" data-icon="document">Resume</dt>
-            <dd class="row__content"><a href="/marius-viennot-uxdesign-cv.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-cv.pdf</a></dd>
+            <dd class="row__content"><a href="marius-viennot-uxdesign-cv.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-cv.pdf</a></dd>
           </div>
           <div class="row screen-only">
             <dt class="row__meta" data-icon="document">Portfolio</dt>
-            <dd class="row__content"><a href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-portfolio.pdf</a></dd>
+            <dd class="row__content"><a href="marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-portfolio.pdf</a></dd>
           </div>
         </dl>
       </section>
@@ -131,19 +131,19 @@
             <h3 class="secondary-title">Prototype</h3>
             <div class="prototype">
               <figure class="screen">
-                <img class="screen__media screen__media--concept" src="/media/emjive/concept-home-page.webp" data-full="/media/emjive/concept-home-page-full.webp" width="708" height="1534" alt="First concept of the home page: one ring at a time, named under it, the next one below, and a black bar reading No selected item." loading="lazy" />
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-home-page.webp" data-full="media/emjive/concept-home-page-full.webp" width="708" height="1534" alt="First concept of the home page: one ring at a time, named under it, the next one below, and a black bar reading No selected item." loading="lazy" />
                 <figcaption>Home page</figcaption>
               </figure>
               <figure class="screen">
-                <img class="screen__media screen__media--concept" src="/media/emjive/concept-menu.webp" data-full="/media/emjive/concept-menu-full.webp" width="708" height="1534" alt="First concept of the menu: two links, Why / how we create and Archives." loading="lazy" />
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-menu.webp" data-full="media/emjive/concept-menu-full.webp" width="708" height="1534" alt="First concept of the menu: two links, Why / how we create and Archives." loading="lazy" />
                 <figcaption>Menu</figcaption>
               </figure>
               <figure class="screen">
-                <img class="screen__media screen__media--concept" src="/media/emjive/concept-product-page.webp" data-full="/media/emjive/concept-product-page-full.webp" width="708" height="1534" alt="First concept of a ring's page: the 3D ring, its name and price in a black band, and the metal chosen on a gradient from steel to bronze." loading="lazy" />
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-product-page.webp" data-full="media/emjive/concept-product-page-full.webp" width="708" height="1534" alt="First concept of a ring's page: the 3D ring, its name and price in a black band, and the metal chosen on a gradient from steel to bronze." loading="lazy" />
                 <figcaption>Ring page</figcaption>
               </figure>
               <figure class="screen">
-                <img class="screen__media screen__media--concept" src="/media/emjive/concept-selection-drawer.webp" data-full="/media/emjive/concept-selection-drawer-full.webp" width="708" height="1534" alt="First concept of the order drawer: two rings, each with an Unselect button, and an Order (2) button." loading="lazy" />
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-selection-drawer.webp" data-full="media/emjive/concept-selection-drawer-full.webp" width="708" height="1534" alt="First concept of the order drawer: two rings, each with an Unselect button, and an Order (2) button." loading="lazy" />
                 <figcaption>Order</figcaption>
               </figure>
               <!-- The pointer: its two versions, thumb closed above thumb
@@ -159,30 +159,32 @@
           </div>
         </section>
 
-        <!-- The finished website, in one phone (or one MacBook): its
-             screens are the steps of the buying journey, one at a time.
-             Each screen's data-title (what the step is) and
-             data-caption (a short description) are shown beside the
-             device, with
-             the decisions and user feedback whose data-steps name its
-             data-step, each point with one step only; the button (src/main.js) moves to the next
-             step (from the last, to the first), Back to the one before
-             (from the first, to the last); a progress bar above shows
-             where the visitor is;
-             they flank the step's title, which slides in from the side
-             of the button pressed. Recordings, in
-             public/media/emjive/, don't play by themselves: a bar on
-             the right of the device, like a scroll bar (src/main.js),
-             moves through the one shown, back and forth. Each opens at
-             its beginning, its poster being its first frame. The PDF
-             shows the first step, with every decision and feedback
-             point beside it.
+        <!-- The finished website, in a phone or a MacBook: its screens
+             are the steps of the buying journey, one at a time. Both
+             devices hold the same steps, in the same order, each screen
+             named by its data-step; the toggle (src/main.js) swaps the
+             device and keeps the step, so a step can be seen in both
+             versions in turn. Each screen's data-title (what the step
+             is) and data-caption (a short description, which may differ
+             between devices) are shown beside the device, with the
+             decisions and user feedback whose data-steps name its
+             data-step, each point with one step only. Next moves to the
+             next step (from the last, to the first), Back to the one
+             before (from the first, to the last); a progress bar above
+             shows where the visitor is; they flank the step's title,
+             which slides in from the side of the button pressed.
+             Recordings, in public/media/emjive/ (named after the page
+             and the device, iphone-16 or macbook-pro), fill the device's
+             whole screen and don't play by themselves: a bar on the
+             right of the device, like a scroll bar (src/main.js), moves
+             through the one shown, back and forth. Each opens at its
+             beginning, its poster being its first frame. The PDF shows
+             the phone and the first step, with every decision and
+             feedback point beside it.
              The section title, Result, sits on one line with the toggle,
-             left of it. The toggle shows the phone (off, the default,
-             and the one in the PDF) or the MacBook (on): src/main.js
-             reveals it and swaps the two [data-device-panel] blocks. The
-             words beside it are for the eye and the mouse; screen
-             readers get the switch itself. -->
+             left of it. The toggle shows the phone (off, the default)
+             or the MacBook (on). The words beside it are for the eye and
+             the mouse; screen readers get the switch itself. -->
         <section class="result" aria-labelledby="emjive-result">
           <div class="row device-switch">
             <div class="row__content">
@@ -195,23 +197,33 @@
             </div>
           </div>
 
-          <div class="media journey" data-device-panel="phone">
-            <div class="journey__device">
+          <div class="media journey">
+            <div class="journey__device" data-device-panel="phone">
               <div class="device">
                 <div class="device__screen">
-                  <video class="screen__media" data-step="home" src="/media/emjive/main-page.mp4" poster="/media/emjive/main-page.webp" width="708" height="1436" data-title="Home page" data-caption="The hand is scanned as the page is scrolled, then the rings are browsed on a wheel." muted playsinline preload="metadata"></video>
-                  <img class="screen__media" data-step="menu" src="/media/emjive/header-menu.webp" width="708" height="1436" data-title="Header menu" data-caption="The shop and the brand's own pages are listed apart." alt="The em·ji·ve menu on a phone: Shop (Bones study, Past studies) and Info (Intent, 3D printing, Environment)." hidden />
-                  <video class="screen__media" data-step="grid" src="/media/emjive/gallery-grid-view.mp4" poster="/media/emjive/gallery-grid-view.webp" width="708" height="1436" data-title="Grid view" data-caption="All the rings are laid out as a grid, to be compared side by side." muted playsinline preload="metadata" hidden></video>
-                  <video class="screen__media" data-step="ring" src="/media/emjive/product-page.mp4" poster="/media/emjive/product-page.webp" width="708" height="1436" data-title="Ring page" data-caption="The 3D model is shown above a dial for the material and one for the size." muted playsinline preload="metadata" hidden></video>
-                  <img class="screen__media" data-step="choose" src="/media/emjive/product-personalization.webp" width="708" height="1436" data-title="Ring personalization" data-caption="The material and size are set on their dials, the size settled with the slider." alt="A ring's page on a phone: the 3D ring, a material dial and a size dial reading 57." hidden />
-                  <img class="screen__media" data-step="unsure" src="/media/emjive/unsure-about-size.webp" width="708" height="1436" data-title="Unsure about size" data-caption="Three ways to find a size are offered." alt="The sizing options on a phone: a sizing strip for 5 euros, an online tool, and a size chart." hidden />
-                  <video class="screen__media" data-step="measure" src="/media/emjive/measure-ring-on-screen.mp4" poster="/media/emjive/measure-ring-on-screen.webp" width="708" height="1436" data-title="Measuring tool" data-caption="A ring already owned is measured on the phone's screen." muted playsinline preload="metadata" hidden></video>
-                  <video class="screen__media" data-step="quick-add" src="/media/emjive/quick-add-shortcut.mp4" poster="/media/emjive/quick-add-shortcut.webp" width="708" height="1436" data-title="Quick add" data-caption="The material and size are typed in, and the ring is added to the order once confirmed." muted playsinline preload="metadata" hidden></video>
-                  <video class="screen__media" data-step="order" src="/media/emjive/selection-drawer.mp4" poster="/media/emjive/selection-drawer.webp" width="708" height="1436" data-title="Selection drawer" data-caption="The order is opened from the bar at the bottom of the screen." muted playsinline preload="metadata" hidden></video>
-                  <video class="screen__media" data-step="undo" src="/media/emjive/undo-behavior.mp4" poster="/media/emjive/undo-behavior.webp" width="708" height="1436" data-title="Undo" data-caption="A removed ring is replaced by an Undo." muted playsinline preload="metadata" hidden></video>
-                  <img class="screen__media" data-step="summary" src="/media/emjive/order-summary.webp" width="708" height="1436" data-title="Order summary" data-caption="The rings, shipping and returns are summed up before checkout." alt="The order summary on a phone: the rings chosen, shipping and returns, the terms of sale to accept, and a Proceed to checkout button." hidden />
+                  <video class="screen__media" data-step="home" src="/media/emjive/landing-iphone-16.mp4" poster="/media/emjive/landing-iphone-16.webp" width="708" height="1536" data-title="Home page" data-caption="The hand is scanned as the page is scrolled, then the rings are browsed on a wheel." muted playsinline preload="metadata"></video>
+                  <img class="screen__media" data-step="menu" src="/media/emjive/hero-menu-open-iphone-16.webp" width="708" height="1536" data-title="Header menu" data-caption="The shop and the brand's own pages are listed apart." alt="The em·ji·ve menu open on a phone, over the hand: Shop (Bones study, Past studies), Info (Intent, 3D printing, Environment), then a contact line and Who are we?" hidden />
+                  <video class="screen__media" data-step="grid" src="/media/emjive/grid-iphone-16.mp4" poster="/media/emjive/grid-iphone-16.webp" width="708" height="1536" data-title="Grid view" data-caption="All the rings are laid out as a grid, to be compared side by side." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="ring" src="/media/emjive/product-furcula-iphone-16.mp4" poster="/media/emjive/product-furcula-iphone-16.webp" width="708" height="1536" data-title="Ring page" data-caption="Photos of the ring being worn, then its 3D model above a dial for the material and one for the size, then its details and price." muted playsinline preload="metadata" hidden></video>
+                  <img class="screen__media" data-step="choose" src="/media/emjive/product-furcula-design-stage-iphone-16.webp" width="708" height="1536" data-title="Ring personalization" data-caption="The material and size are each set on a dial, under the 3D model." alt="The furcula ring's page on a phone: the 3D ring, a Material dial and a Size dial reading 60, Unsure about size? and an Add button." hidden />
+                  <img class="screen__media" data-step="unsure" src="/media/emjive/unsure-about-size-iphone-16.webp" width="708" height="1536" data-title="Unsure about size" data-caption="Three ways to find a size are offered." alt="The sizing options on a phone: a sizing strip for 5 euros, an online tool, and a size chart." hidden />
+                  <img class="screen__media" data-step="summary" src="/media/emjive/order-summary-iphone-16.webp" width="708" height="1536" data-title="Order summary" data-caption="The rings, shipping and returns are summed up before checkout." alt="The order summary on a phone: three rings with their prices, shipping and returns, the terms of sale to accept, and a Proceed to checkout button." hidden />
                 </div>
                 <img class="device__frame" src="/media/devices/iphone-16-pro-max.webp" width="388" height="800" alt="" />
+              </div>
+            </div>
+            <div class="journey__device journey__device--laptop" data-device-panel="desktop" hidden>
+              <div class="device device--laptop">
+                <div class="device__screen">
+                  <video class="screen__media" data-step="home" src="/media/emjive/landing-macbook-pro.mp4" poster="/media/emjive/landing-macbook-pro.webp" width="1512" height="982" data-title="Home page" data-caption="The hand is scanned as the page is scrolled, then the rings are browsed on a wheel." muted playsinline preload="metadata"></video>
+                  <img class="screen__media" data-step="menu" src="/media/emjive/hero-menu-open-macbook-pro.webp" width="1512" height="982" data-title="Header menu" data-caption="The shop and the brand's own pages are listed apart." alt="The em·ji·ve menu open on a desktop, over the hand: Shop (Bones study, Past studies), Info (Intent, 3D printing, Environment), then a contact line and Who are we?" loading="lazy" hidden />
+                  <video class="screen__media" data-step="grid" src="/media/emjive/grid-macbook-pro.mp4" poster="/media/emjive/grid-macbook-pro.webp" width="1512" height="982" data-title="Grid view" data-caption="All the rings are laid out as a grid, to be compared side by side." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="ring" src="/media/emjive/product-furcula-macbook-pro.mp4" poster="/media/emjive/product-furcula-macbook-pro.webp" width="1512" height="982" data-title="Ring page" data-caption="Photos of the ring being worn, then its 3D model above a dial for the material and one for the size, then its details and price." muted playsinline preload="metadata" hidden></video>
+                  <img class="screen__media" data-step="choose" src="/media/emjive/product-furcula-design-stage-macbook-pro.webp" width="1512" height="982" data-title="Ring personalization" data-caption="The material and size are each set on a dial, under the 3D model." alt="The furcula ring's page on a desktop: the 3D ring, a Material dial and a Size dial reading 60, and an Add button." loading="lazy" hidden />
+                  <img class="screen__media" data-step="unsure" src="/media/emjive/unsure-about-size-macbook-pro.webp" width="1512" height="982" data-title="Unsure about size" data-caption="Two ways to find a size are offered: a sizing strip and a size chart." alt="The sizing options on a desktop: a sizing strip for 5 euros and a size chart." loading="lazy" hidden />
+                  <img class="screen__media" data-step="summary" src="/media/emjive/order-summary-macbook-pro.webp" width="1512" height="982" data-title="Order summary" data-caption="The rings, shipping and returns are summed up before checkout." alt="The order summary on a desktop: the rings chosen, shipping and returns, the terms of sale to accept, and a Proceed to checkout button." loading="lazy" hidden />
+                </div>
+                <img class="device__frame" src="/media/devices/macbook-pro-16.webp" width="800" height="484" alt="" loading="lazy" />
               </div>
             </div>
             <div class="journey__side">
@@ -243,33 +255,6 @@
                   <li data-steps="choose">A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
                   <li data-steps="ring">A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
                 </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- The same journey on a desktop, in a MacBook Pro. -->
-          <div class="media journey journey--laptop" data-device-panel="desktop" hidden>
-            <div class="journey__device">
-              <div class="device device--laptop">
-                <div class="device__screen">
-                  <div class="screen__media todo" data-title="Home page" data-caption="">Desktop capture to come: home page</div>
-                  <div class="screen__media todo" data-title="Ring page" data-caption="" hidden>Desktop capture to come: a ring's page</div>
-                  <div class="screen__media todo" data-title="Header menu" data-caption="" hidden>Desktop capture to come: menu</div>
-                  <div class="screen__media todo" data-title="Order summary" data-caption="" hidden>Desktop capture to come: order</div>
-                </div>
-                <img class="device__frame" src="/media/devices/macbook-pro-16.webp" width="800" height="484" alt="" />
-              </div>
-            </div>
-            <div class="journey__side">
-              <div class="journey__text">
-                <div class="journey__head">
-                  <button type="button" class="journey__prev screen-only" hidden>Back</button>
-                  <div class="journey__slot">
-                    <p class="journey__title" aria-live="polite">Home page</p>
-                  </div>
-                  <button type="button" class="journey__next screen-only" hidden>Next</button>
-                </div>
-                <p class="journey__caption" aria-live="polite"></p>
               </div>
             </div>
           </div>

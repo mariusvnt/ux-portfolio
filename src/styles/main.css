@@ -75,8 +75,9 @@ main {
 }
 
 /* ---------- Site header (website only) ----------
-   A fixed off-white band with the monogram on the left (shown once the
-   cover title is gone) and the PDF link on the right, followed by a
+   A fixed off-white band with the monogram at the start of the right
+   column (shown once the cover title is gone) and the PDF link on the
+   right, followed by a
    floating fade (.site-header__fade). */
 .site-header {
   position: fixed;
@@ -90,9 +91,22 @@ main {
   height: var(--header-height);
   margin: 0 auto;
   padding: 0 var(--gutter);
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--layout-columns);
+  column-gap: var(--column-gap);
   align-items: center;
-  justify-content: space-between;
+}
+
+/* Same columns as the .rows below: both links live in the right
+   column, the monogram at its start (aligned with the titles and
+   text), the PDF link at its end. */
+.site-header__inner > a {
+  grid-row: 1;
+  grid-column: var(--content-column);
+}
+
+.site-header__inner > a:last-child {
+  justify-self: end;
 }
 
 /* Each link stays on one line, its arrow included. The PDF link is
@@ -310,9 +324,9 @@ main {
   background: var(--white);
 }
 
-/* The hero visual spans the full width. The sub-sections below it
-   (Context, Problem, Result) are .rows stacked under one another, each
-   with its section title and text in the right column. */
+/* The hero visual spans the full width, between the sub-sections
+   (Challenge above it, Result below it). Each is a .row with its
+   section title and text in the right column. */
 .steps {
   display: grid;
   gap: var(--space-5);

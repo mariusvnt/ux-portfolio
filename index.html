@@ -29,8 +29,8 @@
       project), one .row each: label on the left, value on the right.
       Each project sub-section (Challenge, Decisions, User feedback,
       Result) is a .row too, its section title and text in the right
-      column. The hero visual sits after Challenge and spans the full
-      width. Decisions and User feedback are .decisions lists of short
+      column. The hero visual comes first, right after the project's
+      header and before Challenge, and spans the full width. Decisions and User feedback are .decisions lists of short
       paragraphs with no titles, in dark grey, their important part in
       <strong> (black).
 
@@ -52,8 +52,10 @@
     -->
     <header class="site-header screen-only">
       <div class="site-header__inner">
-        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
-        <a class="text-body" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF</a>
+        <!-- The full name, whose folds src/main.js closes as the cover
+             title rises into the header, leaving "MV". -->
+        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top"><span>M</span><span class="logo__fold">arius</span><span class="logo__fold"> </span><span>V</span><span class="logo__fold">iennot</span></a>
+        <a class="site-header__pdf text-body" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF</a>
       </div>
       <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
     </header>
@@ -112,51 +114,163 @@
           </div>
         </header>
 
-        <div class="steps">
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Challenge</h3>
-              <p>em·ji·ve is the creative umbrella my brother and I co-lead: an effort to produce design stripped of the bloat of capitalist solicitations. Its first study is a dozen rings. The website has to be both a gallery for our studies and a shop, guiding each visitor to what they came for without compromising the brand's identity.</p>
-            </div>
-          </section>
-        </div>
+        <section class="row">
+          <div class="row__content step">
+            <h3 class="secondary-title">Challenge</h3>
+            <p>em·ji·ve is the creative umbrella my brother and I co-lead: an effort to produce design stripped of the bloat of capitalist solicitations. Its first study is a dozen rings. The website has to be both a gallery for our studies and a shop, guiding each visitor to what they came for without compromising the brand's identity.</p>
+          </div>
+        </section>
 
-        <figure class="media todo">
-          <div class="media__frame">Hero visual: the site on desktop and mobile</div>
-        </figure>
-
-        <div class="steps">
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Decisions</h3>
-              <ul class="decisions">
-                <li>On phones, shape, material and size each get a <strong>dial</strong>, so a visitor can <strong>configure the whole ring on one screen</strong>.</li>
-                <li>The size slider <strong>gets more precise as the visitor slows down</strong>: quick moves cover the whole range, slow ones settle on an exact size.</li>
-                <li>The ring wheel on the home page <strong>remembers the ring that was in focus</strong>, so a visitor who comes back finds their place instead of starting over.</li>
-                <li>Some buttons have <strong>hit areas larger than they look</strong>, so they stay small on screen and easy to hit.</li>
-                <li>Visitors <strong>unsure of their size</strong> get three ways out: order a sizing strip, with free shipping on the next order, measure a ring they already own on their phone's screen, or read the size chart.</li>
-                <li>Removing a piece from the order <strong>leaves an Undo in its place</strong>, so a slip of the finger costs nothing.</li>
-              </ul>
+        <!-- Prototype: the first design boards, small, before the
+             finished website. -->
+        <section class="row">
+          <div class="row__content step">
+            <h3 class="secondary-title">Prototype</h3>
+            <div class="prototype">
+              <figure class="screen">
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-home-page.webp" data-full="/media/emjive/concept-home-page-full.webp" width="708" height="1534" alt="First concept of the home page: one ring at a time, named under it, the next one below, and a black bar reading No selected item." loading="lazy" />
+                <figcaption>Home page</figcaption>
+              </figure>
+              <figure class="screen">
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-menu.webp" data-full="/media/emjive/concept-menu-full.webp" width="708" height="1534" alt="First concept of the menu: two links, Why / how we create and Archives." loading="lazy" />
+                <figcaption>Menu</figcaption>
+              </figure>
+              <figure class="screen">
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-product-page.webp" data-full="/media/emjive/concept-product-page-full.webp" width="708" height="1534" alt="First concept of a ring's page: the 3D ring, its name and price in a black band, and the metal chosen on a gradient from steel to bronze." loading="lazy" />
+                <figcaption>Ring page</figcaption>
+              </figure>
+              <figure class="screen">
+                <img class="screen__media screen__media--concept" src="/media/emjive/concept-selection-drawer.webp" data-full="/media/emjive/concept-selection-drawer-full.webp" width="708" height="1534" alt="First concept of the order drawer: two rings, each with an Unselect button, and an Order (2) button." loading="lazy" />
+                <figcaption>Order</figcaption>
+              </figure>
+              <!-- The pointer: its two versions, thumb closed above thumb
+                   open, on one board the size of the others, one label. -->
+              <figure class="screen">
+                <div class="prototype__pointers">
+                  <img src="/media/emjive/hand-pointer-thumb-closed.svg" width="224" height="360" alt="A pointing hand, index finger raised and thumb closed against the hand." loading="lazy" />
+                  <img src="/media/emjive/hand-pointer-thumb-opened.svg" width="224" height="360" alt="A pointing hand, index finger raised and thumb open." loading="lazy" />
+                </div>
+                <figcaption>Pointer</figcaption>
+              </figure>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">User feedback</h3>
-              <ul class="decisions">
-                <li>A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
-                <li>A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
-              </ul>
+        <!-- The finished website, in one phone (or one MacBook): its
+             screens are the steps of the buying journey, one at a time.
+             Each screen's data-title (what the step is) and
+             data-caption (a short description) are shown beside the
+             device, with
+             the decisions and user feedback whose data-steps name its
+             data-step, each point with one step only; the button (src/main.js) moves to the next
+             step (from the last, to the first), Back to the one before
+             (from the first, to the last); a progress bar above shows
+             where the visitor is;
+             they flank the step's title, which slides in from the side
+             of the button pressed. Recordings, in
+             public/media/emjive/, don't play by themselves: a bar on
+             the right of the device, like a scroll bar (src/main.js),
+             moves through the one shown, back and forth. Each opens at
+             its beginning, its poster being its first frame. The PDF
+             shows the first step, with every decision and feedback
+             point beside it.
+             The section title, Result, sits on one line with the toggle,
+             left of it. The toggle shows the phone (off, the default,
+             and the one in the PDF) or the MacBook (on): src/main.js
+             reveals it and swaps the two [data-device-panel] blocks. The
+             words beside it are for the eye and the mouse; screen
+             readers get the switch itself. -->
+        <section class="result" aria-labelledby="emjive-result">
+          <div class="row device-switch">
+            <div class="row__content">
+              <h3 id="emjive-result" class="secondary-title">Result</h3>
+              <p class="device-switch__control screen-only" hidden>
+                <span class="device-switch__label" data-device="phone" aria-hidden="true">Phone</span>
+                <button type="button" class="device-switch__toggle" role="switch" aria-checked="false" aria-label="Desktop version"><span class="device-switch__knob"></span></button>
+                <span class="device-switch__label" data-device="desktop" aria-hidden="true">Desktop</span>
+              </p>
             </div>
-          </section>
+          </div>
 
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Result</h3>
-              <p>A hybrid website that borrows from laboratories, clinical settings and small gallery exhibitions to form a minimalist home for the brand, with shortcuts for visitors who came to shop and have no interest in the brand itself.</p>
+          <div class="media journey" data-device-panel="phone">
+            <div class="journey__device">
+              <div class="device">
+                <div class="device__screen">
+                  <video class="screen__media" data-step="home" src="/media/emjive/main-page.mp4" poster="/media/emjive/main-page.webp" width="708" height="1436" data-title="Home page" data-caption="The hand is scanned as the page is scrolled, then the rings are browsed on a wheel." muted playsinline preload="metadata"></video>
+                  <img class="screen__media" data-step="menu" src="/media/emjive/header-menu.webp" width="708" height="1436" data-title="Header menu" data-caption="The shop and the brand's own pages are listed apart." alt="The em·ji·ve menu on a phone: Shop (Bones study, Past studies) and Info (Intent, 3D printing, Environment)." hidden />
+                  <video class="screen__media" data-step="grid" src="/media/emjive/gallery-grid-view.mp4" poster="/media/emjive/gallery-grid-view.webp" width="708" height="1436" data-title="Grid view" data-caption="All the rings are laid out as a grid, to be compared side by side." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="ring" src="/media/emjive/product-page.mp4" poster="/media/emjive/product-page.webp" width="708" height="1436" data-title="Ring page" data-caption="The 3D model is shown above a dial for the material and one for the size." muted playsinline preload="metadata" hidden></video>
+                  <img class="screen__media" data-step="choose" src="/media/emjive/product-personalization.webp" width="708" height="1436" data-title="Ring personalization" data-caption="The material and size are set on their dials, the size settled with the slider." alt="A ring's page on a phone: the 3D ring, a material dial and a size dial reading 57." hidden />
+                  <img class="screen__media" data-step="unsure" src="/media/emjive/unsure-about-size.webp" width="708" height="1436" data-title="Unsure about size" data-caption="Three ways to find a size are offered." alt="The sizing options on a phone: a sizing strip for 5 euros, an online tool, and a size chart." hidden />
+                  <video class="screen__media" data-step="measure" src="/media/emjive/measure-ring-on-screen.mp4" poster="/media/emjive/measure-ring-on-screen.webp" width="708" height="1436" data-title="Measuring tool" data-caption="A ring already owned is measured on the phone's screen." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="quick-add" src="/media/emjive/quick-add-shortcut.mp4" poster="/media/emjive/quick-add-shortcut.webp" width="708" height="1436" data-title="Quick add" data-caption="The material and size are typed in, and the ring is added to the order once confirmed." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="order" src="/media/emjive/selection-drawer.mp4" poster="/media/emjive/selection-drawer.webp" width="708" height="1436" data-title="Selection drawer" data-caption="The order is opened from the bar at the bottom of the screen." muted playsinline preload="metadata" hidden></video>
+                  <video class="screen__media" data-step="undo" src="/media/emjive/undo-behavior.mp4" poster="/media/emjive/undo-behavior.webp" width="708" height="1436" data-title="Undo" data-caption="A removed ring is replaced by an Undo." muted playsinline preload="metadata" hidden></video>
+                  <img class="screen__media" data-step="summary" src="/media/emjive/order-summary.webp" width="708" height="1436" data-title="Order summary" data-caption="The rings, shipping and returns are summed up before checkout." alt="The order summary on a phone: the rings chosen, shipping and returns, the terms of sale to accept, and a Proceed to checkout button." hidden />
+                </div>
+                <img class="device__frame" src="/media/devices/iphone-16-pro-max.webp" width="388" height="800" alt="" />
+              </div>
             </div>
-          </section>
-        </div>
+            <div class="journey__side">
+              <div class="journey__text">
+                <div class="journey__head">
+                  <button type="button" class="journey__prev screen-only" hidden>Back</button>
+                  <div class="journey__slot">
+                    <p class="journey__title" aria-live="polite">Home page</p>
+                  </div>
+                  <button type="button" class="journey__next screen-only" hidden>Next</button>
+                </div>
+                <p class="journey__caption" aria-live="polite">The hand is scanned as the page is scrolled, then the rings are browsed on a wheel.</p>
+              </div>
+              <div class="journey__notes">
+                <h3 class="secondary-title">Decisions</h3>
+                <ul class="decisions">
+                  <li data-steps="home">The ring wheel on the home page <strong>remembers the ring that was in focus</strong>, so a visitor who comes back finds their place instead of starting over.</li>
+                  <li data-steps="ring">On phones, shape, material and size each get a <strong>dial</strong>, so a visitor can <strong>configure the whole ring on one screen</strong>.</li>
+                  <li data-steps="ring">When a 3D model sits untouched for three seconds, a hand <strong>nudges it to show it can be turned</strong>. Once a visitor has turned any model, no model nudges again for the rest of the visit.</li>
+                  <li data-steps="choose">The size slider <strong>gets more precise as the visitor slows down</strong>: quick moves cover the whole range, slow ones settle on an exact size.</li>
+                  <li data-steps="unsure">Visitors <strong>unsure of their size</strong> get three ways out: order a sizing strip, with free shipping on the next order, measure a ring they already own on their phone's screen, or read the size chart.</li>
+                  <li data-steps="undo">Removing a piece from the order <strong>leaves an Undo in its place</strong>, so a slip of the finger costs nothing.</li>
+                  <li data-steps="menu">Some buttons have <strong>hit areas larger than they look</strong>, so they stay small on screen and easy to hit.</li>
+                </ul>
+              </div>
+              <div class="journey__notes">
+                <h3 class="secondary-title">User feedback</h3>
+                <ul class="decisions">
+                  <li data-steps="choose">A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
+                  <li data-steps="ring">A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- The same journey on a desktop, in a MacBook Pro. -->
+          <div class="media journey journey--laptop" data-device-panel="desktop" hidden>
+            <div class="journey__device">
+              <div class="device device--laptop">
+                <div class="device__screen">
+                  <div class="screen__media todo" data-title="Home page" data-caption="">Desktop capture to come: home page</div>
+                  <div class="screen__media todo" data-title="Ring page" data-caption="" hidden>Desktop capture to come: a ring's page</div>
+                  <div class="screen__media todo" data-title="Header menu" data-caption="" hidden>Desktop capture to come: menu</div>
+                  <div class="screen__media todo" data-title="Order summary" data-caption="" hidden>Desktop capture to come: order</div>
+                </div>
+                <img class="device__frame" src="/media/devices/macbook-pro-16.webp" width="800" height="484" alt="" />
+              </div>
+            </div>
+            <div class="journey__side">
+              <div class="journey__text">
+                <div class="journey__head">
+                  <button type="button" class="journey__prev screen-only" hidden>Back</button>
+                  <div class="journey__slot">
+                    <p class="journey__title" aria-live="polite">Home page</p>
+                  </div>
+                  <button type="button" class="journey__next screen-only" hidden>Next</button>
+                </div>
+                <p class="journey__caption" aria-live="polite"></p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <dl class="details">
           <div class="row">
@@ -185,6 +299,10 @@
           </div>
         </header>
 
+        <figure class="media todo">
+          <div class="media__frame">Hero visual: the add-on's form (no client data)</div>
+        </figure>
+
         <div class="steps">
           <section class="row">
             <div class="row__content step">
@@ -192,13 +310,7 @@
               <p>The team built and moved every Google Drive project folder by hand, from sales through production. They lost time repeating the same tasks, and inconsistencies crept in: naming conventions not followed, missing sub-folders.</p>
             </div>
           </section>
-        </div>
 
-        <figure class="media todo">
-          <div class="media__frame">Hero visual: the add-on's form (no client data)</div>
-        </figure>
-
-        <div class="steps">
           <section class="row">
             <div class="row__content step">
               <h3 class="secondary-title">Decisions</h3>
@@ -293,6 +405,10 @@
           </div>
         </header>
 
+        <figure class="media todo">
+          <div class="media__frame">Hero visual: the node interface driving an animation from audio</div>
+        </figure>
+
         <div class="steps">
           <section class="row">
             <div class="row__content step">
@@ -300,13 +416,7 @@
               <p>I wanted to merge two hobbies, 3D animation and music production, by making audio-reactive animations for my music. But Blender's only audio workflow bakes an audio file into keyframes: I can't test the result in real time, and I can barely split the audio to drive different parts of the animation.</p>
             </div>
           </section>
-        </div>
 
-        <figure class="media todo">
-          <div class="media__frame">Hero visual: the node interface driving an animation from audio</div>
-        </figure>
-
-        <div class="steps">
           <section class="row">
             <div class="row__content step">
               <h3 class="secondary-title">Decisions</h3>

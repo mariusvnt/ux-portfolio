@@ -58,6 +58,11 @@ video {
   height: auto;
 }
 
+/* Hidden means hidden, whatever display a component gives itself. */
+[hidden] {
+  display: none !important;
+}
+
 /* A size container, so the sections' width can be given in cqw
    (--section-width). */
 main {
@@ -84,7 +89,7 @@ main {
 
 /* ---------- Site header (website only) ----------
    A fixed off-white band with the monogram at the start of the right
-   column (shown once the cover title is gone) and the PDF link on the
+   column (the cover title, shrunk into it) and the PDF link on the
    right, followed by a
    floating fade (.site-header__fade). */
 .site-header {
@@ -123,28 +128,72 @@ main {
   white-space: nowrap;
 }
 
-/* The monogram only shows once the cover title ("Marius Viennot") has
-   scrolled away under the header: src/main.js then adds
-   .site-header--logo-shown and it fades in (and out on the way back).
-   Hidden, it can be neither clicked nor tabbed to. */
+/* The monogram is the cover title ("Marius Viennot") reduced: once the
+   title nears the header, src/main.js swaps it for this copy, laid
+   exactly over it, then, as the page scrolls, lifts it into the header,
+   shrinks it to its own size and closes its folds ("arius", the space,
+   "iennot") until only "MV" is left. The letters are flex items so the
+   folds can be narrowed; all in one face, aligning their tops lines up
+   their baselines. Until the title gets there, the copy is hidden (the
+   script shows it) and can be neither clicked nor tabbed to. Likewise,
+   the script fades the PDF link out once the cover has scrolled away
+   under the header. */
 .site-header .logo {
+  display: flex;
+  align-items: flex-start;
+  justify-self: start;
+  position: relative;
+  z-index: var(--logo-layer);
+  transform-origin: 0 0;
   text-decoration: none;
-  opacity: 0;
   visibility: hidden;
-  transition:
-    opacity var(--logo-fade),
-    visibility var(--logo-fade);
 }
 
-.site-header--logo-shown .logo {
-  opacity: 1;
-  visibility: visible;
+/* Each project's title, reduced the same way, docks under the
+   monogram: the copies (made by src/main.js) stand in a box laid over
+   the monogram's line, each just below it. A copy is hidden until its
+   title gets there, and again once the next project's title has pushed
+   it out. The box lets clicks through to the PDF link beside it. */
+.site-header__projects {
+  grid-row: 1;
+  grid-column: var(--content-column);
+  position: relative;
+  z-index: var(--logo-layer);
+  height: 1lh;
+  font: var(--logo);
+  pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .site-header .logo {
-    transition: none;
+.site-header .header-project {
+  position: absolute;
+  top: calc(100% + var(--header-project-gap));
+  left: 0;
+  transform-origin: 0 0;
+  text-decoration: none;
+  visibility: hidden;
+  pointer-events: auto;
+}
+
+/* A title, while its copy stands in for it: the script switches
+   --title-fill to transparent. Transparent rather than hidden: its
+   ::before still masks the column line. Screen only, so the PDF always
+   prints the titles. */
+@media screen {
+  .main-title {
+    -webkit-text-fill-color: var(--title-fill, currentcolor);
   }
+}
+
+/* As a fold narrows, its right edge fades to transparent over
+   --logo-fold-fade, never wider than what has already closed
+   (--fold-closed, set by script): fully open, the last letter is
+   whole. */
+.logo__fold {
+  --fold-edge: min(var(--logo-fold-fade), var(--fold-closed, 0px));
+  overflow: hidden;
+  white-space: pre;
+  -webkit-mask-image: linear-gradient(to right, var(--black) calc(100% - var(--fold-edge)), transparent);
+  mask-image: linear-gradient(to right, var(--black) calc(100% - var(--fold-edge)), transparent);
 }
 
 /* Three stacked layers: each blurs what scrolls beneath it and lays an
@@ -319,7 +368,18 @@ main {
   margin: 0 auto;
   padding: var(--project-padding-y) var(--gutter);
   display: grid;
-  gap: var(--space-5);
+  gap: var(--section-gap);
+}
+
+/* ---------- Visuals ----------
+   Every visual stays in the right column: the hero (.media) starts
+   where the text starts, past the left column and the gap, so the
+   column line runs on beside it. On the right, it may run past the
+   content's edge (--bleed-end): to the screen's edge on phones, out to
+   the page's margin on wider screens. */
+.media {
+  margin-inline-start: calc(var(--meta-column-end) - var(--gutter) + var(--column-gap));
+  margin-inline-end: calc(-1 * var(--bleed-end));
 }
 
 .media__frame {
@@ -332,13 +392,704 @@ main {
   background: var(--white);
 }
 
-/* The hero visual spans the full width, between the sub-sections
-   (Challenge above it; Decisions, User feedback and Result below it).
-   Each is a .row with its section title and text in the right
-   column. */
-.steps {
+/* ---------- Screens ----------
+   A screen (a recording, a screenshot or a design board) with, when
+   it stands alone, a short caption below. */
+.screen {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  break-inside: avoid;
+}
+
+.screen__media {
+  width: 100%;
+  aspect-ratio: var(--screen-ratio);
+  object-fit: cover;
+  background: var(--white);
+  /* A recording's poster, set behind it by src/main.js, fills it the
+     way the video does. */
+  background-position: center;
+  background-size: cover;
+}
+
+.screen figcaption {
+  font: var(--text-small);
+  color: var(--dark-grey);
+}
+
+/* A placeholder for a file still to come (class="todo" too). */
+div.screen__media {
+  display: grid;
+  place-items: center;
+  padding: var(--space-2);
+  text-align: center;
+  overflow-wrap: anywhere;
+  /* Kept to its cell's shape however long the text: its size ignores
+     its content, so only its width and shape set it. */
+  overflow: hidden;
+  contain: size;
+  font: var(--text-small);
+}
+
+/* ---------- Prototype ----------
+   The first design boards, small, side by side, wrapping onto more
+   lines when the column is narrow. A board keeps its exported shape,
+   uncropped. */
+.prototype {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--prototype-width));
+  gap: var(--space-3) var(--space-2);
+  margin-block-start: var(--space-2);
+}
+
+/* Each board's label close under it. */
+.prototype .screen {
+  gap: var(--space-1);
+}
+
+/* On phones, a single line instead, running out past the screen's
+   right edge and scrolling sideways. */
+@media screen and (width < 48rem) {
+  .prototype {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--prototype-width);
+    overflow-x: auto;
+    margin-inline-end: calc(-1 * var(--bleed-end));
+    padding-inline-end: var(--bleed-end);
+  }
+}
+
+.screen__media--concept {
+  aspect-ratio: var(--concept-ratio);
+}
+
+/* The pointer's two versions, one above the other on one white board
+   the size and shape of a design board, so it takes no more room than
+   one and its label lines up with theirs. Each hand fills half the
+   board, kept to its own shape (the SVGs are cropped to the hands). */
+.prototype__pointers {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  aspect-ratio: var(--concept-ratio);
+  padding: var(--space-3);
+  background: var(--white);
+}
+
+.prototype__pointers img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Device ----------
+   A final design shown in an iPhone, or a MacBook (.device--laptop):
+   the frame is an image with a transparent screen, laid over it. The
+   screen runs a little under the bezel, so no sliver of the page
+   shows through the frame's soft inner edge. The phone's screen is
+   white: the exported screens have no status bar, so they sit at its
+   foot and a white band takes the status bar's place, under the
+   Dynamic Island. */
+.device {
+  position: relative;
+  aspect-ratio: var(--device-ratio);
+}
+
+.device__screen {
+  position: absolute;
+  inset: var(--device-screen-top) var(--device-screen-right) var(--device-screen-bottom) var(--device-screen-left);
+  display: grid;
+  align-content: end;
+  overflow: hidden;
+  border-radius: var(--device-screen-radius);
+  background: var(--white);
+}
+
+.device__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* A desktop capture in the MacBook: it fills the screen below a band
+   as tall as the camera notch, from its top edge down. */
+.device--laptop {
+  --device-ratio: var(--laptop-ratio);
+  --device-screen-top: var(--laptop-screen-top);
+  --device-screen-right: var(--laptop-screen-right);
+  --device-screen-bottom: var(--laptop-screen-bottom);
+  --device-screen-left: var(--laptop-screen-left);
+  --device-screen-radius: var(--laptop-screen-radius);
+}
+
+.device--laptop .device__screen {
+  grid-template-rows: minmax(0, 1fr);
+  align-content: stretch;
+  padding-block-start: var(--laptop-notch-band);
+}
+
+.device--laptop .screen__media {
+  height: 100%;
+  aspect-ratio: auto;
+  object-position: top;
+}
+
+/* ---------- Journey ----------
+   The finished website in one device: its screens are the steps of the
+   buying journey, one shown at a time (src/main.js). Beside the device,
+   the step's caption, the decisions about it, and the button to the
+   next step. On phones the side follows below the device. */
+.journey {
+  display: grid;
+  grid-template-columns: var(--journey-columns);
+  column-gap: var(--journey-gap);
+  row-gap: var(--space-4);
+  align-items: start;
+  /* On paper, the device and its decisions stay on one page. */
+  break-inside: avoid;
+}
+
+/* Room on the right for the scroll bar (see Scrubber). */
+.journey__device {
+  position: relative;
+  width: var(--journey-device-width);
+  max-width: calc(100% - var(--space-3) - var(--scrubber-width));
+  margin-inline-end: calc(var(--space-3) + var(--scrubber-width));
+}
+
+.journey--laptop {
+  --journey-device-width: var(--journey-laptop-width);
+}
+
+.journey__side {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-4);
+  /* The row may run past the content's right edge (--bleed-end, see
+     Visuals); the text and its buttons stop at that edge. */
+  padding-inline-end: var(--bleed-end);
+}
+
+/* On phones the device is centred in the right column, above its text:
+   the journey stops at the content's right edge, and the scroll bar's
+   room is kept on both sides of the device, so the device itself sits
+   in the middle and the bar to its right. */
+@media screen and (width < 48rem) {
+  .journey {
+    padding-inline-end: var(--bleed-end);
+  }
+
+  .journey__side {
+    padding-inline-end: 0;
+  }
+
+  .journey__device {
+    justify-self: center;
+    max-width: calc(100% - 2 * (var(--space-3) + var(--scrubber-width)));
+    margin-inline: calc(var(--space-3) + var(--scrubber-width));
+  }
+}
+
+/* The step: its title, naming what it is, set apart in the body's
+   SemiBold (like the CV's entry names), then a short description in
+   the decisions' dark grey. */
+.journey__text {
+  display: grid;
+  gap: var(--space-1);
+  justify-self: stretch;
+  max-width: var(--measure);
+}
+
+/* Where the visitor is, like a story's progress bar (.stories, made by
+   src/main.js): a thin segment per step, dark up to the one shown,
+   white beyond. Above the journey's title, and at the top of the
+   full-screen view. Website only. */
+.stories {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.stories > span {
+  flex: 1;
+  height: var(--journey-progress-height);
+  border-radius: var(--journey-progress-height);
+  background: var(--white);
+}
+
+.stories > .is-done {
+  background: var(--off-black);
+}
+
+.journey__progress {
+  margin-block-end: var(--space-2);
+}
+
+/* Back, the title, Next: the buttons at the line's two ends, so they
+   keep their place whatever the title's length, the title between
+   them. */
+.journey__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--space-4);
+}
+
+/* The title slides into its slot from the side of the button pressed,
+   clipped to the slot so it never runs over the buttons. */
+.journey__slot {
+  overflow: hidden;
+}
+
+.journey__title {
+  font: var(--text-body-strong);
+}
+
+.journey__title.is-from-right {
+  animation: journey-title-from-right var(--journey-title-slide);
+}
+
+.journey__title.is-from-left {
+  animation: journey-title-from-left var(--journey-title-slide);
+}
+
+@keyframes journey-title-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--journey-title-shift));
+  }
+}
+
+@keyframes journey-title-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--journey-title-shift)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey__title.is-from-right,
+  .journey__title.is-from-left {
+    animation: none;
+  }
+}
+
+.journey__caption {
+  color: var(--dark-grey);
+}
+
+.journey__notes {
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* Once src/main.js runs the journey, only the decisions about the step
+   shown are listed; the title goes when none is. Without it, and in
+   the PDF, they are all listed. */
+@media screen {
+  .journey--live .decisions > li:not(.is-current),
+  .journey--live .journey__notes:not(:has(li.is-current)) {
+    display: none;
+  }
+}
+
+/* On paper every decision and feedback point is listed: the caption
+   and both lists flow through two columns, so the text is no taller
+   than the device beside it and the two share a page. A point never
+   splits, and a title stays with its first point. */
+@media print {
+  .journey__side {
+    display: block;
+    columns: 2;
+    column-gap: var(--space-5);
+  }
+
+  .journey__side > * + * {
+    margin-block-start: var(--space-2);
+  }
+
+  .journey__notes h3 {
+    break-after: avoid;
+  }
+
+  .journey .decisions > li {
+    break-inside: avoid;
+  }
+}
+
+/* Back and Next: underlined like links, each with the arrow of a link
+   within the portfolio (added by src/main.js), Back's turned to point
+   left and set before its word. */
+.journey__prev,
+.journey__next {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--text-body);
+  color: var(--black);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  /* Quick taps step through the journey: a double tap never zooms the
+     page (pinching still does). */
+  touch-action: manipulation;
+}
+
+.journey__prev .arrow {
+  margin-inline: 0 var(--icon-gap);
+}
+
+/* ---------- Scrubber (website only) ----------
+   A vertical bar on the right of the device, as tall as its screen,
+   like a scroll bar: its thumb's place is the recording's place, top
+   to bottom from start to end; dragging it, or clicking along the bar,
+   moves through the recording (src/main.js). Hidden while the step
+   shown is a still screenshot. The element is wider than the bar it
+   draws, so it is easy to grab. */
+.scrubber {
+  position: absolute;
+  top: var(--device-screen-top);
+  bottom: var(--device-screen-bottom);
+  left: calc(100% + var(--space-3));
+  width: var(--scrubber-width);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.journey--laptop .scrubber {
+  top: var(--laptop-screen-top);
+  bottom: var(--laptop-screen-bottom);
+}
+
+.scrubber::before,
+.scrubber__thumb {
+  position: absolute;
+  left: calc((var(--scrubber-width) - var(--scrubber-bar)) / 2);
+  width: var(--scrubber-bar);
+  border-radius: var(--scrubber-bar);
+}
+
+.scrubber::before {
+  content: "";
+  inset-block: 0;
+  background: var(--white);
+}
+
+.scrubber__thumb {
+  top: calc(var(--progress, 0) * (100% - var(--scrubber-thumb)));
+  height: var(--scrubber-thumb);
+  background: var(--off-black);
+}
+
+/* ---------- Full-screen view (website only) ----------
+   Opened by clicking a prototype board or the Result device's screen
+   (src/main.js), on the page's off-white: a story's progress bar at
+   the top, a cross at the top right, the board or screen as large as
+   the room allows (a recording with its scroll bar on its right), and
+   on the bottom line the arrows at the corners with the label centred
+   between them. The page beneath doesn't scroll while it is open. */
+.prototype__open,
+.journey__zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+/* Over the device's screen, so a click on the screen opens it. */
+.journey__zoom {
+  position: absolute;
+  inset: var(--device-screen-top) var(--device-screen-right) var(--device-screen-bottom) var(--device-screen-left);
+  width: auto;
+}
+
+html:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--lightbox-padding);
+  border: 0;
+  background: var(--off-white);
+  color: var(--black);
+}
+
+/* One row the window's height (less the room around), so everything
+   inside has a height to fit into. */
+.lightbox[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.lightbox::backdrop {
+  background: var(--off-white);
+}
+
+/* Focused itself on opening (src/main.js), with no outline around the
+   whole window; its buttons keep theirs for the keyboard. */
+.lightbox:focus {
+  outline: none;
+}
+
+/* The progress bar, the stage taking all the height left, and the
+   bottom line. */
+.lightbox__figure {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.lightbox__progress {
+  justify-self: center;
+  width: 100%;
+  max-width: var(--lightbox-progress-width);
+}
+
+.lightbox__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 0;
+}
+
+/* The board or screen with, when it is a recording, the scroll bar on
+   its right (positioned like beside the device, see Scrubber). */
+.lightbox__screen {
+  position: relative;
+  display: flex;
+  height: 100%;
+  max-width: calc(100% - 2 * (var(--space-3) + var(--scrubber-width)));
+}
+
+.lightbox__screen .scrubber {
+  top: 0;
+  bottom: 0;
+}
+
+/* The board or screen, as tall as the room allows, in its own shape,
+   never wider than the window. */
+.lightbox__screen > :not(.scrubber, button) {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Desktop screens are wide: they fill the width instead. */
+.lightbox__screen[data-kind="desktop"] {
+  width: 100%;
+  height: auto;
+}
+
+.lightbox__screen[data-kind="desktop"] > :not(.scrubber, button) {
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--desktop-screen-ratio);
+}
+
+/* Wider screens: the buttons sit beside the board or screen (moved
+   there by src/main.js). Back halfway down its left side; Next halfway
+   down its right side and the cross level with its top, both beyond
+   the scroll bar's place, so they never move whether it shows or not.
+   The frame leaves room for them on both sides. */
+@media (width >= 48rem) {
+  .lightbox__screen {
+    max-width: calc(100% - 2 * var(--lightbox-beside));
+  }
+
+  .lightbox__screen > .lightbox__prev,
+  .lightbox__screen > .lightbox__next,
+  .lightbox__screen > .lightbox__close {
+    position: absolute;
+  }
+
+  .lightbox__screen > .lightbox__prev {
+    top: 50%;
+    right: calc(100% + var(--space-3));
+    transform: translateY(-50%);
+  }
+
+  .lightbox__screen > .lightbox__next {
+    top: 50%;
+    left: calc(100% + 2 * var(--space-3) + var(--scrubber-width));
+    transform: translateY(-50%);
+  }
+
+  .lightbox__screen > .lightbox__close {
+    top: 0;
+    right: auto;
+    left: calc(100% + 2 * var(--space-3) + var(--scrubber-width));
+  }
+}
+
+/* The bottom line: Back at its start, Next at its end, the label
+   centred between them. */
+.lightbox__bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.lightbox__caption {
+  grid-column: 2;
+  font: var(--text-small);
+  color: var(--dark-grey);
+  text-align: center;
+}
+
+.lightbox__close,
+.lightbox__prev,
+.lightbox__next {
+  padding: var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--black);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* With no previous or next (a single board), the label stays centred. */
+.lightbox__prev[hidden],
+.lightbox__next[hidden] {
+  display: block !important;
+  visibility: hidden;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+}
+
+.lightbox__icon {
+  display: block;
+  width: var(--lightbox-icon);
+  height: var(--lightbox-icon);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--arrow-stroke);
+  stroke-linecap: square;
+  vector-effect: non-scaling-stroke;
+  overflow: visible;
+}
+
+.lightbox__icon path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---------- Device switch ----------
+   Above a hero that exists for phones and for desktops (em·ji·ve), on
+   the line of its section title: an on/off toggle (website only) in
+   the right column, "Phone" on its left, "Desktop" on
+   its right. Off, its knob sits on the left, by Phone; on, it slides
+   to the right, by Desktop. The word for the version shown is black,
+   the other grey; clicking a word sets it too (src/main.js). Set close
+   to the hero it controls. */
+.device-switch {
+  margin-block-end: calc(var(--space-3) - var(--space-5));
+}
+
+/* The Result section: its title line, then the device(s), spaced like
+   the project's sections. On paper it opens a page, so its title and
+   the device with its text stay together, unsplit. */
+.result {
   display: grid;
   gap: var(--space-5);
+}
+
+@media print {
+  .result {
+    break-before: page;
+    gap: var(--space-4);
+  }
+}
+
+/* The section title on the left, the toggle after it on the same
+   line. */
+.device-switch .row__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+}
+
+/* On phones the toggle goes to the right margin. */
+@media screen and (width < 48rem) {
+  .device-switch .row__content {
+    justify-content: space-between;
+  }
+}
+
+.device-switch__control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.device-switch__label {
+  font: var(--text-small);
+  color: var(--dark-grey);
+  cursor: pointer;
+}
+
+.device-switch__label.is-current {
+  color: var(--black);
+}
+
+.device-switch__toggle {
+  position: relative;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  padding: 0;
+  border: 0;
+  border-radius: var(--toggle-height);
+  background: var(--off-black);
+  cursor: pointer;
+}
+
+.device-switch__knob {
+  position: absolute;
+  top: var(--toggle-inset);
+  left: var(--toggle-inset);
+  width: calc(var(--toggle-height) - 2 * var(--toggle-inset));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--white);
+  transition: transform var(--toggle-slide);
+}
+
+.device-switch__toggle[aria-checked="true"] .device-switch__knob {
+  transform: translateX(calc(var(--toggle-width) - var(--toggle-height)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-switch__knob {
+    transition: none;
+  }
+}
+
+/* The sub-sections (Challenge, Decisions, User feedback, Result),
+   after the hero visual. Each is a .row with its section title and
+   text in the right column. */
+.steps {
+  display: grid;
+  gap: var(--section-gap);
 }
 
 .step {
@@ -404,7 +1155,8 @@ main {
    the title's horizontal line, down to the end of the section's last
    element, the metadata.
    The line sits behind the content: left-column labels' off-white
-   background cuts a hole in it, and the hero visual hides it.
+   background cuts a hole in it. Visuals sit in the right column, so
+   it runs on beside them.
    A horizontal hairline sits on the baseline of each big title, in the
    left column only, running out to the screen or paper edge. */
 

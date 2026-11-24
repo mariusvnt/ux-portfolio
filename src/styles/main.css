@@ -50,6 +50,12 @@ video {
   height: auto;
 }
 
+/* A size container, so the sections' width can be given in cqw
+   (--section-width). */
+main {
+  container-type: inline-size;
+}
+
 /* Hidden on screen and paper, still read by screen readers. */
 .visually-hidden {
   position: absolute;
@@ -92,14 +98,6 @@ video {
 .site-header a {
   text-decoration: none;
   white-space: nowrap;
-}
-
-/* The monogram with the email link beside it, centred like the PDF link
-   so both small links sit on the same line. */
-.site-header__start {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
 }
 
 /* Three stacked layers: each blurs what scrolls beneath it and lays an
@@ -221,17 +219,23 @@ video {
 
 /* ---------- Masthead ----------
    Opens the cover and each project: a title row (title, then the pitch
-   or description alone below it), followed by the details list. */
+   or description alone below it). */
 .masthead {
   display: grid;
   gap: var(--space-4);
 }
 
-/* Metadata: one .row per item, the label in the left column and the
-   value in the right one. */
+/* Metadata, at the end of the cover and of each project: one .row per
+   item, the label in the left column and the value in the right one.
+   Labels, values, links and their arrows are all in the lines' grey. */
 .details {
   display: grid;
   gap: var(--details-gap);
+}
+
+.details,
+.details .row__meta {
+  color: var(--grey);
 }
 
 /* ---------- Cover ---------- */
@@ -266,7 +270,7 @@ video {
 .project {
   max-width: var(--page-max);
   margin: 0 auto;
-  padding: var(--space-7) var(--gutter);
+  padding: var(--project-padding-y) var(--gutter);
   display: grid;
   gap: var(--space-5);
 }
@@ -331,99 +335,108 @@ video {
   color: var(--off-black);
 }
 
-/* ---------- Column lines (test, website only) ----------
+/* ---------- Column lines (test; website and PDF) ----------
    A vertical hairline on the right edge of the left column, one
    segment per section: from the big title's baseline, where it meets
-   the title's horizontal line, down past the pitch and the metadata to
-   the end of the section's last element.
+   the title's horizontal line, down to the end of the section's last
+   element, the metadata.
    The line sits behind the content: left-column labels' off-white
    background cuts a hole in it, and the hero visual hides it.
    A horizontal hairline sits on the baseline of each big title, in the
-   left column only. */
-@media screen {
-  /* Each section clips the masks drawn past its top or bottom. */
-  .cover,
-  .project {
-    position: relative;
-    isolation: isolate;
-    overflow-y: clip;
-  }
+   left column only, running out to the screen or paper edge. */
 
-  /* The line over the section's full height... */
-  .cover::before,
-  .project::before {
-    content: "";
-    position: absolute;
-    inset-block: 0;
-    left: calc(var(--meta-column-end) - var(--line-width));
-    width: var(--line-width);
-    background: var(--line-color);
-    z-index: -1;
-  }
+/* The line over the section's full height, drawn by two inset
+   shadows: a line-coloured band from the section's left edge to the
+   left column's end, under an off-white band that stops --line-width
+   short of it. Shadows are solid fills, which every PDF viewer draws
+   however thin, and a section running over several pages repeats them
+   on each page, edge to edge (absolutely positioned boxes would drift
+   there). The section's stacking context keeps the title's mask
+   (z-index -1) above them. */
+.cover,
+.project {
+  isolation: isolate;
+  box-shadow:
+    inset calc(var(--meta-column-end) - var(--line-width)) 0 0 var(--off-white),
+    inset var(--meta-column-end) 0 0 var(--line-color);
+}
 
-  /* ...masked from the section's top down to the title's baseline. The
-     mask is an empty inline-block at the start of the title: its
-     baseline is its bottom edge, so it stands on the title's baseline,
-     and the negative margins keep it from taking room in the line.
-     Shifted left across the column gap, it spans the line with half a
-     gap on each side. Painted with the line, behind the content. */
-  .row__title.main-title::before {
-    content: "";
-    display: inline-block;
-    position: relative;
-    z-index: -1;
-    left: calc(-1.5 * var(--column-gap));
-    width: var(--column-gap);
-    height: var(--line-reach);
-    margin-block-start: calc(-1 * var(--line-reach));
-    margin-inline-end: calc(-1 * var(--column-gap));
-    vertical-align: baseline;
-    background: var(--off-white);
-  }
+/* ...masked from the section's top down to the title's baseline. The
+   mask is an empty inline-block at the start of the title: its
+   baseline is its bottom edge, so it stands on the title's baseline,
+   and the negative margins keep it from taking room in the line.
+   Shifted left across the column gap, it spans the line with half a
+   gap on each side. Painted with the line, behind the content. It is
+   as tall as the space above the title plus 1em, which is more than
+   the title's height above its baseline: it overshoots the section's
+   top a little, into the previous section's masked end. The cover has
+   nothing above it. */
+.row__title.main-title::before {
+  --title-mask: calc(var(--project-padding-y) + 1em);
+  content: "";
+  display: inline-block;
+  position: relative;
+  z-index: -1;
+  left: calc(-1.5 * var(--column-gap));
+  width: var(--column-gap);
+  height: var(--title-mask);
+  margin-block-start: calc(-1 * var(--title-mask));
+  margin-inline-end: calc(-1 * var(--column-gap));
+  vertical-align: baseline;
+  background: var(--off-white);
+}
 
-  /* ...and from the end of the last element to the section's bottom. */
-  .cover > :last-child,
-  .project > :last-child {
-    position: relative;
-  }
+.cover .row__title.main-title::before {
+  --title-mask: var(--line-reach);
+}
 
-  .cover > :last-child::after,
-  .project > :last-child::after {
-    content: "";
-    position: absolute;
-    inset: 100% 0 calc(-1 * var(--line-reach));
-    background: var(--off-white);
-    z-index: -1;
-  }
+/* ...and from the end of the last element to the section's bottom, by
+   an off-white shadow of that element. An outer shadow is never
+   painted under its own box, only around it: offset and spread, it
+   covers everything below the box (and its sides, which are empty),
+   past the section's end; the next section paints over it. */
+.cover > :last-child,
+.project > :last-child {
+  box-shadow: 0 var(--line-reach) 0 var(--line-reach) var(--off-white);
+}
 
-  /* The background reaches half a gap past the column's edge (the text
-     stays put), so the hole is cut whatever the pixel rounding. */
-  .row__meta {
-    margin-inline-end: calc(-1 * var(--column-gap) / 2);
-    padding-inline-end: calc(var(--column-gap) / 2);
-    background: var(--off-white);
-  }
+/* The background reaches half a gap past the column's edge (the text
+   stays put), so the hole is cut whatever the pixel rounding. */
+.row__meta {
+  margin-inline-end: calc(-1 * var(--column-gap) / 2);
+  padding-inline-end: calc(var(--column-gap) / 2);
+  background: var(--off-white);
+}
 
-  /* The cover's down arrows sit in their label's hole with their shaft
-     (the middle of the box) on the line: moved right by half the box,
-     back by half the line. */
-  .cover__index .arrow {
-    position: relative;
-    left: calc(var(--icon-size) / 2 - var(--line-width) / 2);
-  }
+/* In the metadata, the rows cut the hole: they touch one another, so
+   the list makes a single gap in the line, whatever the labels' smaller
+   size does to their position in the row. */
+.details .row {
+  background: var(--off-white);
+}
 
-  /* A grid item in the title's row, left column. Having no text, its
-     baseline is its bottom edge, so baseline alignment puts the line's
-     bottom on the title's baseline. The negative margin stretches it
-     left out to the screen edge. */
-  .row:has(> .main-title)::before {
-    content: "";
-    grid-column: 1;
-    grid-row: 1;
-    height: var(--line-width);
-    margin-inline-start: calc(-1 * var(--line-bleed));
-    background: var(--line-color);
-  }
+/* The cover's down arrows sit in their label's hole with their shaft
+   (the middle of the box) on the line: moved right by half the box,
+   back by half the line. They keep the size of the other arrows, which
+   follow body text: --icon-size is in em, so the arrow takes the body
+   font rather than the labels' small one. */
+.cover__index .arrow {
+  position: relative;
+  left: calc(var(--icon-size) / 2 - var(--line-width) / 2);
+  font: var(--text-body);
+}
+
+/* A grid item in the title's row, left column. Having no text, its
+   baseline is its bottom edge, so baseline alignment puts the line's
+   bottom on the title's baseline. The negative margin stretches it
+   left out to the screen edge. */
+.row:has(> .main-title)::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1;
+  height: var(--line-width);
+  margin-inline-start: calc(-1 * var(--line-bleed));
+  background: var(--line-color);
 }
 
 /* ---------- PDF-only elements ----------
@@ -446,10 +459,13 @@ video {
     print-color-adjust: exact;
   }
 
+  /* The page margins, kept on each page a project runs over. */
   .cover,
   .project {
     max-width: none;
-    padding: 0;
+    padding: var(--page-margin-y) var(--gutter);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .project {

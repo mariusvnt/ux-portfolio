@@ -43,6 +43,8 @@ const ICONS = {
   // A chain link: two half circles facing each other, joined by a line.
   link: '<path d="M5 4.5A3.5 3.5 0 0 0 5 11.5M11 4.5a3.5 3.5 0 0 1 0 7M5 8h6" />',
   person: '<circle cx="8" cy="5" r="3" /><path d="M2.5 14.5a5.5 5.5 0 0 1 11 0" />',
+  // A page with a folded corner and two lines of text.
+  document: '<path d="M3 1.5h6.5l3.5 3.5v9.5H3zM9.5 1.5V5H13M5.5 8.5h5M5.5 11.5h5" />',
 };
 
 for (const label of document.querySelectorAll('.row__meta[data-icon]')) {

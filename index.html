@@ -23,16 +23,17 @@
       .row__meta column (metadata) lines up with the text in the right
       .row__content column. Metadata never sits next to a title.
       In the cover and each project header (.masthead), the pitch or
-      description sits alone under the title;
-      all metadata (dates included) goes in the .details list below it,
-      one .row each: label on the left, value on the right.
+      description sits alone under the title. All metadata (dates and
+      contact included) goes in the .details list at the end of the
+      section (after the project index on the cover, after Result in a
+      project), one .row each: label on the left, value on the right.
       Each project sub-section (Context, Problem, Result) is a .row too,
       its section title and text in the right column. The hero visual
       spans the full width.
 
       Elements with .screen-only exist on the website only and are
       not printed in the PDF; elements with .print-only exist in the
-      PDF only (the cover's email, which the site has in its header).
+      PDF only.
 
       Arrows are added after links by src/main.js: a top-right arrow
       for links that leave the portfolio (other sites, email, the PDF),
@@ -42,16 +43,13 @@
       down arrow in the left column instead (data-arrow="down").
 
       On phones the labels in the left column switch to a compact form.
-      A label with data-icon="mail|calendar|tools|link|person" is shown
-      as that icon (added by src/main.js). Screen readers always get
+      A label with data-icon="mail|calendar|tools|link|person|document"
+      is shown as that icon (added by src/main.js). Screen readers always get
       the full label.
     -->
     <header class="site-header screen-only">
       <div class="site-header__inner">
-        <div class="site-header__start">
-          <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
-          <a class="text-body" href="mailto:marius.viennot@essec.edu">marius.viennot@essec.edu</a>
-        </div>
+        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top">MV</a>
         <a class="text-body" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF</a>
       </div>
       <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -67,13 +65,6 @@
               <p>Designing and building bloatless tools.</p>
             </div>
           </div>
-          <!-- The PDF has no site header, so it keeps the address here. -->
-          <dl class="details print-only">
-            <div class="row">
-              <dt class="row__meta" data-icon="mail">Contact</dt>
-              <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot<wbr>@essec.edu</a></dd>
-            </div>
-          </dl>
         </div>
 
         <nav aria-label="Projects">
@@ -92,6 +83,19 @@
             </li>
           </ul>
         </nav>
+
+        <dl class="details">
+          <div class="row">
+            <dt class="row__meta" data-icon="mail">Contact</dt>
+            <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot<wbr>@essec.edu</a></dd>
+          </div>
+          <!-- Website only until the site has a public address: in the
+               PDF, a link to the site's own files would be broken. -->
+          <div class="row screen-only">
+            <dt class="row__meta" data-icon="document">Resume</dt>
+            <dd class="row__content"><a href="/marius-viennot-uxdesign-cv.pdf" target="_blank" rel="noopener">PDF</a></dd>
+          </div>
+        </dl>
       </section>
 
       <!-- ===================== EMJIVE ===================== -->
@@ -103,20 +107,6 @@
               <p>Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.</p>
             </div>
           </div>
-          <dl class="details">
-            <div class="row">
-              <dt class="row__meta" data-icon="calendar">Dates</dt>
-              <dd class="row__content">Since July 2026</dd>
-            </div>
-            <div class="row">
-              <dt class="row__meta" data-icon="tools">Tools</dt>
-              <dd class="row__content">HTML, CSS, JavaScript, Affinity, Blender</dd>
-            </div>
-            <div class="row">
-              <dt class="row__meta" data-icon="link">Website</dt>
-              <dd class="row__content"><a href="https://emjive.eu">emjive.eu</a></dd>
-            </div>
-          </dl>
         </header>
 
         <figure class="media todo">
@@ -143,6 +133,21 @@
             </div>
           </section>
         </div>
+
+        <dl class="details">
+          <div class="row">
+            <dt class="row__meta" data-icon="calendar">Dates</dt>
+            <dd class="row__content">Since July 2026</dd>
+          </div>
+          <div class="row">
+            <dt class="row__meta" data-icon="tools">Tools</dt>
+            <dd class="row__content">HTML, CSS, JavaScript, Affinity, Blender</dd>
+          </div>
+          <div class="row">
+            <dt class="row__meta" data-icon="link">Website</dt>
+            <dd class="row__content"><a href="https://emjive.eu">emjive.eu</a></dd>
+          </div>
+        </dl>
       </article>
 
       <!-- ===================== GUISARDE ===================== -->
@@ -154,20 +159,6 @@
               <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
             </div>
           </div>
-          <dl class="details">
-            <div class="row">
-              <dt class="row__meta" data-icon="calendar">Dates</dt>
-              <dd class="row__content">April – June 2026</dd>
-            </div>
-            <div class="row">
-              <dt class="row__meta" data-icon="tools">Tools</dt>
-              <dd class="row__content">Google Apps Script, Google Drive</dd>
-            </div>
-            <div class="row">
-              <dt class="row__meta" data-icon="person">Users</dt>
-              <dd class="row__content">The agency's two CEOs</dd>
-            </div>
-          </dl>
         </header>
 
         <figure class="media todo">
@@ -234,6 +225,21 @@
             </div>
           </section>
         </div>
+
+        <dl class="details">
+          <div class="row">
+            <dt class="row__meta" data-icon="calendar">Dates</dt>
+            <dd class="row__content">April – June 2026</dd>
+          </div>
+          <div class="row">
+            <dt class="row__meta" data-icon="tools">Tools</dt>
+            <dd class="row__content">Google Apps Script, Google Drive</dd>
+          </div>
+          <div class="row">
+            <dt class="row__meta" data-icon="person">Users</dt>
+            <dd class="row__content">The agency's two CEOs</dd>
+          </div>
+        </dl>
       </article>
 
       <!-- ===================== ACE ===================== -->
@@ -245,16 +251,6 @@
               <p>A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.</p>
             </div>
           </div>
-          <dl class="details">
-            <div class="row">
-              <dt class="row__meta" data-icon="calendar">Dates</dt>
-              <dd class="row__content">September – December 2025</dd>
-            </div>
-            <div class="row">
-              <dt class="row__meta" data-icon="tools">Tools</dt>
-              <dd class="row__content">Python, Blender API</dd>
-            </div>
-          </dl>
         </header>
 
         <figure class="media todo">
@@ -281,6 +277,17 @@
             </div>
           </section>
         </div>
+
+        <dl class="details">
+          <div class="row">
+            <dt class="row__meta" data-icon="calendar">Dates</dt>
+            <dd class="row__content">September – December 2025</dd>
+          </div>
+          <div class="row">
+            <dt class="row__meta" data-icon="tools">Tools</dt>
+            <dd class="row__content">Python, Blender API</dd>
+          </div>
+        </dl>
       </article>
     </main>
   </body>

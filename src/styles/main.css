@@ -43,6 +43,14 @@ a {
   text-underline-offset: 0.2em;
 }
 
+/* The important part of a sentence: a 475 weight in black, so it
+   stands out from the dark grey text around it mostly by tone, never
+   competing with the SemiBold section titles. */
+strong {
+  font: var(--text-body-emphasis);
+  color: var(--black);
+}
+
 img,
 video {
   display: block;
@@ -325,8 +333,9 @@ main {
 }
 
 /* The hero visual spans the full width, between the sub-sections
-   (Challenge above it, Result below it). Each is a .row with its
-   section title and text in the right column. */
+   (Challenge above it; Decisions, User feedback and Result below it).
+   Each is a .row with its section title and text in the right
+   column. */
 .steps {
   display: grid;
   gap: var(--space-5);
@@ -340,6 +349,21 @@ main {
 
 .step p {
   max-width: var(--measure);
+}
+
+/* ---------- Decisions ----------
+   Decisions and user feedback: an unnumbered list of short paragraphs
+   with no titles, spaced like paragraphs, in dark grey. The important
+   part of each is in <strong> (black, see Base). */
+.decisions {
+  list-style: none;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.decisions > li {
+  max-width: var(--measure);
+  color: var(--dark-grey);
 }
 
 /* ---------- Folder tree ----------
@@ -523,9 +547,16 @@ main {
     gap: var(--space-3);
   }
 
+  /* Closer than the sub-sections, so each list reads as one block
+     under its section title. */
+  .decisions {
+    gap: var(--space-2);
+  }
+
   .row,
   .step,
-  .tree {
+  .tree,
+  .decisions > li {
     break-inside: avoid;
   }
 

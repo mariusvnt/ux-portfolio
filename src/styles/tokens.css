@@ -14,6 +14,10 @@
   --black: #000000;
   /* The midpoint of the scale: a 50% grey. */
   --grey: #808080;
+  /* A 67% grey: the text of the Decisions and User feedback points, so
+     their important phrase stands out in black. 6.6:1 on off-white
+     (WCAG AA). */
+  --dark-grey: #545454;
 
   /* Dev-only marker for placeholder content (class="todo"). */
   --todo: #c2410c;
@@ -25,6 +29,9 @@
   --text-body: 400 1.0625rem / 1.55 "DINish", sans-serif;
   /* Body size in SemiBold, like the entry names in the CV. */
   --text-body-strong: 600 1.0625rem / 1.55 "DINish", sans-serif;
+  /* The important part of a sentence: a 475 weight, a touch firmer
+     than the body, well below the SemiBold section titles. */
+  --text-body-emphasis: 475 1.0625rem / 1.55 "DINish", sans-serif;
   /* Small text, for every label in the left column: as in the CV (9pt
      labels beside 11pt text), 9/11 of the body size, on the body's
      line height so labels keep the rhythm of the text beside them. */
@@ -163,6 +170,7 @@
     --secondary-title: 600 7.5pt / 1.3 "DINish", sans-serif;
     --text-body: 400 10pt / 1.5 "DINish", sans-serif;
     --text-body-strong: 600 10pt / 1.5 "DINish", sans-serif;
+    --text-body-emphasis: 475 10pt / 1.5 "DINish", sans-serif;
     --text-small: 400 calc(10pt * 9 / 11) / calc(10pt * 1.5) "DINish", sans-serif;
 
     --gutter: var(--page-margin-x);

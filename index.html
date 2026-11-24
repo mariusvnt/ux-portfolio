@@ -27,9 +27,12 @@
       contact included) goes in the .details list at the end of the
       section (after the project index on the cover, after Result in a
       project), one .row each: label on the left, value on the right.
-      Each project sub-section (Challenge, Result) is a .row too, its
-      section title and text in the right column. The hero visual sits
-      between them and spans the full width.
+      Each project sub-section (Challenge, Decisions, User feedback,
+      Result) is a .row too, its section title and text in the right
+      column. The hero visual sits after Challenge and spans the full
+      width. Decisions and User feedback are .decisions lists of short
+      paragraphs with no titles, in dark grey, their important part in
+      <strong> (black).
 
       Elements with .screen-only exist on the website only and are
       not printed in the PDF; elements with .print-only exist in the
@@ -125,6 +128,30 @@
         <div class="steps">
           <section class="row">
             <div class="row__content step">
+              <h3 class="secondary-title">Decisions</h3>
+              <ul class="decisions">
+                <li>On phones, shape, material and size each get a <strong>dial</strong>, so a visitor can <strong>configure the whole ring on one screen</strong>.</li>
+                <li>The size slider <strong>gets more precise as the visitor slows down</strong>: quick moves cover the whole range, slow ones settle on an exact size.</li>
+                <li>The ring wheel on the home page <strong>remembers the ring that was in focus</strong>, so a visitor who comes back finds their place instead of starting over.</li>
+                <li>Some buttons have <strong>hit areas larger than they look</strong>, so they stay small on screen and easy to hit.</li>
+                <li>Visitors <strong>unsure of their size</strong> get three ways out: order a sizing strip, with free shipping on the next order, measure a ring they already own on their phone's screen, or read the size chart.</li>
+                <li>Removing a piece from the order <strong>leaves an Undo in its place</strong>, so a slip of the finger costs nothing.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">User feedback</h3>
+              <ul class="decisions">
+                <li>A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
+                <li>A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="row">
+            <div class="row__content step">
               <h3 class="secondary-title">Result</h3>
               <p>A hybrid website that borrows from laboratories, clinical settings and small gallery exhibitions to form a minimalist home for the brand, with shortcuts for visitors who came to shop and have no interest in the brand itself.</p>
             </div>
@@ -172,6 +199,25 @@
         </figure>
 
         <div class="steps">
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Decisions</h3>
+              <ul class="decisions">
+                <li>The team already works in Google Drive, so the tool lives there <strong>as an add-on instead of a separate web app</strong> they would have to open.</li>
+                <li>The add-on reads the folder structure and the templates from <strong>a single source of truth</strong>, so changing the agency's conventions means editing one place.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">User feedback</h3>
+              <ul class="decisions">
+                <li>One of the CEOs asked for a quick way to reach a folder once the add-on had created or moved it, so I added a <strong>&quot;Go to folder&quot; button</strong> at the end of both actions.</li>
+              </ul>
+            </div>
+          </section>
+
           <section class="row">
             <div class="row__content step">
               <h3 class="secondary-title">Result</h3>
@@ -261,6 +307,19 @@
         </figure>
 
         <div class="steps">
+          <section class="row">
+            <div class="row__content step">
+              <h3 class="secondary-title">Decisions</h3>
+              <ul class="decisions">
+                <li>I built a <strong>node-based system on top of the add-on's UI panels</strong>, so the engine slots into Geometry Nodes workflows, which already run on nodes.</li>
+                <li><strong>Each feature appears when the typical workflow reaches it</strong>, so new users learn the tool by using it instead of facing every option at once.</li>
+                <li>An <strong>Audio Preview node</strong> plays the sound as the node chain filters it, so the user can hear which part of the music an animation is reacting to.</li>
+                <li>The audio analysis <strong>runs in separate processes</strong>, away from Blender's interface, so the viewport doesn't stall while the music plays.</li>
+                <li>The add-on's preferences list the libraries it needs and <strong>install the missing ones with one button</strong>.</li>
+              </ul>
+            </div>
+          </section>
+
           <section class="row">
             <div class="row__content step">
               <h3 class="secondary-title">Result</h3>

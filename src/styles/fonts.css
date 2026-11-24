@@ -9,26 +9,25 @@
   font-display: swap;
 }
 
+/* Every upright DINish weight from one file: the DINish variable font
+   (4.007, the CV's version), cut down to its weight axis from 400 to
+   600, at normal width. Regular (400) and SemiBold (600) render as the
+   CV's static fonts; the weights between them, like the 475 of the
+   important part of a sentence, come for free. */
 @font-face {
   font-family: "DINish";
-  src: url("../assets/fonts/dinish-regular.woff2") format("woff2");
-  font-weight: 400;
+  src: url("../assets/fonts/dinish-variable.woff2") format("woff2");
+  font-weight: 400 600;
   font-style: normal;
   font-display: swap;
 }
 
+/* The static Italic: the variable font's slant axis renders more
+   slanted and lighter than it. Only the placeholders use it. */
 @font-face {
   font-family: "DINish";
   src: url("../assets/fonts/dinish-italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DINish";
-  src: url("../assets/fonts/dinish-semibold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
   font-display: swap;
 }

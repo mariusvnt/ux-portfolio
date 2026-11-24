@@ -43,7 +43,9 @@ type (`--main-title`, `--secondary-title`, `--text-body`), spacing and layout al
 [Syne](https://gitlab.com/bonjour-monde/fonderie/syne-typeface) and [DINish](https://github.com/playbeing/dinish)
 are licensed under the SIL Open Font License 1.1. Their license files sit next to the fonts in
 `src/assets/fonts/` (`OFL-Syne.txt`, `OFL-DINish.txt`). `syne-bold.woff2` is a static Bold instance
-of the Syne variable font; the DINish files are converted to woff2 unchanged.
+of the Syne variable font. `dinish-variable.woff2` is the DINish variable font cut down to its weight
+axis (400 to 600) at normal width: it gives every upright weight, Regular, SemiBold and the 475 in between.
+`dinish-italic.woff2` is the static Italic converted to woff2 unchanged.
 
 ## Website-only elements
 

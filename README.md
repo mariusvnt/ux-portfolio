@@ -1,6 +1,6 @@
 # UX Portfolio — Marius Viennot
 
-One-page portfolio: a cover, then three projects (em·ji·ve, the Guisarde Drive add-on, ACE).
+One-page portfolio: a cover, then three projects (em·ji·ve, Folder manager (a Google Drive add-on), ACE).
 The same page is published as a static website and printed to PDF.
 
 ## Commands

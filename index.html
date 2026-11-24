@@ -11,7 +11,7 @@
     <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon-dark.png" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="description" content="UX portfolio of Marius Viennot: em·ji·ve, the Guisarde Drive add-on, and ACE." />
+    <meta name="description" content="UX portfolio of Marius Viennot: em·ji·ve, Folder manager (a Google Drive add-on), and ACE." />
     <meta name="author" content="Marius Viennot" />
     <script type="module" src="/src/main.js"></script>
   </head>
@@ -51,12 +51,10 @@
       the full label.
     -->
     <header class="site-header screen-only">
-      <div class="site-header__inner">
-        <!-- The full name, whose folds src/main.js closes as the cover
-             title rises into the header, leaving "MV". -->
-        <a class="logo" href="#cover" data-no-arrow aria-label="Marius Viennot, back to top"><span>M</span><span class="logo__fold">arius</span><span class="logo__fold"> </span><span>V</span><span class="logo__fold">iennot</span></a>
-        <a class="site-header__pdf text-body" href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">PDF</a>
-      </div>
+      <!-- The "MV" monogram and the docked project titles are not here:
+           src/main.js makes them from the page's titles (.title-dock),
+           which shrink into the header as they scroll up. -->
+      <div class="site-header__cap" aria-hidden="true"></div>
       <div class="site-header__fade" aria-hidden="true"><span></span><span></span><span></span></div>
     </header>
 
@@ -80,7 +78,7 @@
             </li>
             <li class="row">
               <span class="row__meta" data-arrow="down" aria-hidden="true"></span>
-              <a class="row__content" href="#guisarde" data-no-arrow><span class="text-body-strong">Guisarde add-on</span></a>
+              <a class="row__content" href="#folder-manager" data-no-arrow><span class="text-body-strong">Folder manager</span></a>
             </li>
             <li class="row">
               <span class="row__meta" data-arrow="down" aria-hidden="true"></span>
@@ -95,10 +93,15 @@
             <dd class="row__content"><a href="mailto:marius.viennot@essec.edu">marius.viennot<wbr>@essec.edu</a></dd>
           </div>
           <!-- Website only until the site has a public address: in the
-               PDF, a link to the site's own files would be broken. -->
+               PDF, a link to the site's own files would be broken (and
+               the portfolio's would point to itself). -->
           <div class="row screen-only">
             <dt class="row__meta" data-icon="document">Resume</dt>
             <dd class="row__content"><a href="/marius-viennot-uxdesign-cv.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-cv.pdf</a></dd>
+          </div>
+          <div class="row screen-only">
+            <dt class="row__meta" data-icon="document">Portfolio</dt>
+            <dd class="row__content"><a href="/marius-viennot-uxdesign-portfolio.pdf" target="_blank" rel="noopener">marius-viennot-uxdesign-portfolio.pdf</a></dd>
           </div>
         </dl>
       </section>
@@ -288,11 +291,11 @@
         </dl>
       </article>
 
-      <!-- ===================== GUISARDE ===================== -->
-      <article class="project" id="guisarde" aria-labelledby="guisarde-title">
+      <!-- ===================== FOLDER MANAGER ===================== -->
+      <article class="project" id="folder-manager" aria-labelledby="folder-manager-title">
         <header class="masthead">
           <div class="row">
-            <h2 id="guisarde-title" class="row__title main-title">Guisarde add-on</h2>
+            <h2 id="folder-manager-title" class="row__title main-title">Folder manager</h2>
             <div class="row__content">
               <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
             </div>

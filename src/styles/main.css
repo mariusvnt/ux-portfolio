@@ -15,6 +15,11 @@ html {
   scroll-behavior: smooth;
   /* Anchor jumps land below the fixed header, not under it. */
   scroll-padding-top: var(--header-height);
+  /* A title's copy, laid out in one line, may run past the screen's
+     edge (its words placed back on the title's lines, see .title-dock):
+     never scrollable sideways. On the root, so it clips the viewport
+     rather than any box (a clipped box would also clip the copies). */
+  overflow-x: hidden;
 }
 
 body {
@@ -88,90 +93,70 @@ main {
 }
 
 /* ---------- Site header (website only) ----------
-   A fixed off-white band with the monogram at the start of the right
-   column (the cover title, shrunk into it) and the PDF link on the
-   right, followed by a
-   floating fade (.site-header__fade). */
-.site-header {
+   Fixed at the top, in layers, from the bottom up:
+   - an off-white band, the header's height (.site-header::before),
+     followed by a floating fade (.site-header__fade);
+   - the project titles docked under the monogram (.title-dock);
+   - the cap (.site-header__cap): off-white again, down to just below
+     the monogram, so a docked title pushed up out of its place slides
+     under it, never over the monogram;
+   - the monogram (.title-dock--monogram).
+   Each is fixed (or sticky) on its own, so the titles can go between
+   them. */
+.site-header::before {
+  content: "";
   position: fixed;
   inset: 0 0 auto;
   z-index: var(--header-layer);
+  height: var(--header-height);
   background: var(--off-white);
 }
 
-.site-header__inner {
-  max-width: var(--page-max);
-  height: var(--header-height);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-  display: grid;
-  grid-template-columns: var(--layout-columns);
-  column-gap: var(--column-gap);
-  align-items: center;
-}
-
-/* Same columns as the .rows below: both links live in the right
-   column, the monogram at its start (aligned with the titles and
-   text), the PDF link at its end. */
-.site-header__inner > a {
-  grid-row: 1;
-  grid-column: var(--content-column);
-}
-
-.site-header__inner > a:last-child {
-  justify-self: end;
-}
-
-/* Each link stays on one line, its arrow included. The PDF link is
-   underlined like every other link; the monogram is not. */
-.site-header a {
-  white-space: nowrap;
-}
-
-/* The monogram is the cover title ("Marius Viennot") reduced: once the
-   title nears the header, src/main.js swaps it for this copy, laid
-   exactly over it, then, as the page scrolls, lifts it into the header,
-   shrinks it to its own size and closes its folds ("arius", the space,
-   "iennot") until only "MV" is left. The letters are flex items so the
-   folds can be narrowed; all in one face, aligning their tops lines up
-   their baselines. Until the title gets there, the copy is hidden (the
-   script shows it) and can be neither clicked nor tabbed to. Likewise,
-   the script fades the PDF link out once the cover has scrolled away
-   under the header. */
-.site-header .logo {
-  display: flex;
-  align-items: flex-start;
-  justify-self: start;
-  position: relative;
-  z-index: var(--logo-layer);
-  transform-origin: 0 0;
-  text-decoration: none;
-  visibility: hidden;
-}
-
-/* Each project's title, reduced the same way, docks under the
-   monogram: the copies (made by src/main.js) stand in a box laid over
-   the monogram's line, each just below it. A copy is hidden until its
-   title gets there, and again once the next project's title has pushed
-   it out. The box lets clicks through to the PDF link beside it. */
-.site-header__projects {
-  grid-row: 1;
-  grid-column: var(--content-column);
-  position: relative;
-  z-index: var(--logo-layer);
-  height: 1lh;
-  font: var(--logo);
+.site-header__cap {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--header-cap-layer);
+  height: var(--header-cap-height);
+  background: var(--off-white);
   pointer-events: none;
 }
 
-.site-header .header-project {
+/* ---------- Title docks (website only) ----------
+   The cover title reduces into the "MV" monogram, and each project's
+   title into a smaller label docked under it. src/main.js gives each
+   title a copy (.title-dock__copy), laid exactly over it, in a dock
+   (.title-dock): an empty, sticky box at the top of the page, a child
+   of the body so the copies can paint over the header's band. The dock
+   is placed so that its copy scrolls with the page, exactly with its
+   title, and sticks once the copy's middle reaches its place in the
+   header: the browser moves it, in step with the scroll on every
+   device. The script only shrinks it on the way (and closes the cover
+   title's folds), turns the title transparent while the copy stands
+   in for it, and pushes a docked project title out as the next one
+   arrives. A copy is hidden until its title gets there, and can then
+   be neither clicked nor tabbed to. */
+.title-dock {
+  position: sticky;
+  z-index: var(--title-dock-layer);
+  height: 0;
+}
+
+.title-dock--monogram {
+  z-index: var(--monogram-layer);
+}
+
+/* The letters are flex items so the folds can be narrowed; all in one
+   face, aligning their tops lines up their baselines. Shrinks around
+   its middle, which stays on the line the browser moves it along. */
+.title-dock__copy {
   position: absolute;
-  top: calc(100% + var(--header-project-gap));
-  left: 0;
-  transform-origin: 0 0;
+  display: flex;
+  align-items: flex-start;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+  color: inherit;
   text-decoration: none;
   visibility: hidden;
-  pointer-events: auto;
 }
 
 /* A title, while its copy stands in for it: the script switches
@@ -184,11 +169,22 @@ main {
   }
 }
 
+/* A word of a copy, moved by the script to where the title's lines put
+   it; in the monogram, its initial and its fold. */
+.title-dock__word {
+  display: flex;
+  align-items: flex-start;
+}
+
+.title-dock__space {
+  white-space: pre;
+}
+
 /* As a fold narrows, its right edge fades to transparent over
    --logo-fold-fade, never wider than what has already closed
    (--fold-closed, set by script): fully open, the last letter is
    whole. */
-.logo__fold {
+.title-dock__fold {
   --fold-edge: min(var(--logo-fold-fade), var(--fold-closed, 0px));
   overflow: hidden;
   white-space: pre;
@@ -199,8 +195,9 @@ main {
 /* Three stacked layers: each blurs what scrolls beneath it and lays an
    off-white-to-transparent gradient on top, both fading out downwards. */
 .site-header__fade {
-  position: absolute;
-  inset: 100% 0 auto;
+  position: fixed;
+  inset: var(--header-height) 0 auto;
+  z-index: var(--header-layer);
   height: var(--fade-height);
   pointer-events: none;
 }

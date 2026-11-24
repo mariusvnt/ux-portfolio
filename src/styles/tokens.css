@@ -37,7 +37,8 @@
      line height so labels keep the rhythm of the text beside them. */
   --text-small: 400 calc(1.0625rem * 9 / 11) / calc(1.0625rem * 1.55) "DINish", sans-serif;
   /* The "MV" monogram in the site header: the title face, smaller. */
-  --logo: 700 1.5rem / 1 "Syne", sans-serif;
+  --logo-size: 1.5rem;
+  --logo: 700 var(--logo-size) / 1 "Syne", sans-serif;
   /* A project's title, docked under the monogram while the project
      scrolls by: the title face, smaller still. */
   --header-project: 700 1rem / 1 "Syne", sans-serif;
@@ -195,13 +196,18 @@
 
   /* ---------- Site header (website only, hidden in the PDF) ---------- */
   --header-height: var(--space-6);
+  /* From the bottom up: the header's band and fade, the docked project
+     titles, the cap over the band (down to just below the monogram, so
+     a pushed-out title slides under it), the monogram. The titles paint
+     over the fade they pass through as they shrink into the header. */
   --header-layer: 10;
-  /* The monogram paints over the fade below the header, which the cover
-     title passes through as it shrinks into it. */
-  --logo-layer: 1;
-  /* How much scroll the cover title takes to reduce into the monogram.
-     The handover starts this far below the monogram's place, or where
-     the title stands at the top of the page if that is higher. */
+  --title-dock-layer: 11;
+  --header-cap-layer: 12;
+  --monogram-layer: 13;
+  --header-cap-height: calc(var(--header-height) / 2 + var(--logo-size) / 2 + var(--header-project-gap) / 2);
+  /* How much scroll a title takes to reduce into the header: it starts
+     shrinking when its middle is this far below its place there, or
+     where it stands at the top of the page if that is higher. */
   --logo-morph-distance: 18rem;
   /* Width of the soft right edge that erases the folded letters of the
      name ("arius", "iennot") as it reduces to the monogram. */
@@ -316,14 +322,4 @@
 .row__meta,
 .details .row__content {
   font: var(--text-small);
-}
-
-.logo {
-  font: var(--logo);
-  letter-spacing: -0.01em;
-}
-
-.header-project {
-  font: var(--header-project);
-  letter-spacing: -0.01em;
 }

@@ -60,176 +60,215 @@ for (const label of document.querySelectorAll('.row__meta[data-icon]')) {
   );
 }
 
-// The header's scroll-linked motion: the cover title reducing into the
-// monogram, each project's title reducing to a label under it, and the
-// PDF link leaving with the cover. All of it follows the scroll
-// position, frame by frame, and runs back on the way up.
+// The titles that shrink into the header (see .title-dock in main.css):
+// the cover title into the "MV" monogram, each project's title into a
+// label docked under it.
 //
-// A title morphs into its copy in the header: until the title is
-// --logo-morph-distance below the copy's place, it scrolls as usual.
-// From there, the copy is laid exactly over it, at its size, and the
-// title turns transparent. Over the next stretch of scroll, as long as
-// the copy's way up into the header, the copy rises, shrinks to its own
-// size and slides to its own place. Progress runs from 0 (the title) to
-// 1 (the copy in place). With reduced motion, or when the title wraps
-// (a single-line copy could not match it), there is no morph: the copy
-// just appears once the title has scrolled away under the header.
-//
-// The cover title's copy is the monogram (.logo): as it shrinks, it
-// also closes its folds ("arius", the space, "iennot"), each narrowing
-// from the right and erasing its letters behind a soft edge rather than
-// a hard cut (see .logo__fold).
-//
-// Each project's title docks under the monogram (.header-project, made
-// here from the project's h2). As the next project's title rises into
-// that place, it pushes the docked one up, out of the header, fading it
-// out as it goes.
-//
-// The PDF link: as the cover's bottom rises through the fade under the
-// header, the link fades out with it.
-//
-// Anything gone can be neither clicked nor tabbed to.
-const header = document.querySelector('.site-header');
-const logo = header?.querySelector('.logo');
-const pdfLink = header?.querySelector('.site-header__pdf');
-const cover = document.getElementById('cover');
+// Each title gets a copy in a sticky dock, placed so that the copy
+// scrolls with the page exactly over its title, and sticks once its
+// middle reaches its place in the header. The browser moves it, in step
+// with the scroll; what is set here, on each scroll frame, is only what
+// may trail the scroll by a frame without showing:
+// - the copy's size. It starts shrinking when its middle is
+//   --logo-morph-distance above its place, or where the title stands at
+//   the top of the page if that is higher (the page never opens on a
+//   half-shrunk title). Progress runs from 0
+//   (the title) to 1 (the copy in place), easing in and out, and back on
+//   the way up. The copy shrinks around its middle, which so rises in
+//   step with the scroll;
+// - the cover title's folds ("arius", the space, "iennot"), closing in
+//   step with the shrinking, each narrowing from the right and erasing
+//   its letters behind a soft edge rather than a hard cut;
+// - which of the title and its copy shows: the copy, laid exactly over
+//   the title, from the start of the way;
+// - where a wrapped title's words go: the copy is a single line, its
+//   words starting where the title's lines put them and sliding into
+//   that line as the copy shrinks;
+// - a docked project title being pushed up, out of its place, by the
+//   next one arriving under the monogram: kept a gap above it, fading
+//   out as it goes, gone once the next one is in place.
+// With reduced motion, there is no shrinking: the copy, already at its
+// docked size, appears once the title has scrolled away under the
+// header.
+const main = document.querySelector('main');
 const coverTitle = document.getElementById('cover-title');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 // Cubic ease-in-out: slow at both ends, from 0 to 1.
 const easeInOut = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (2 - 2 * t) ** 3 / 2);
 const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
 
-if (header && logo && pdfLink && cover && coverTitle) {
-  const folds = [...logo.querySelectorAll('.logo__fold')];
-  const fade = header.querySelector('.site-header__fade');
-
-  // The projects' copies, docked one at a time under the monogram.
-  const dock = document.createElement('div');
-  dock.className = 'site-header__projects';
-  logo.after(dock);
-  const projects = [...document.querySelectorAll('.project')].flatMap((project) => {
-    const title = project.querySelector('.main-title');
-    if (!title || !project.id) return [];
+if (main && coverTitle) {
+  // A dock and its copy, before <main>: a child of the body, sticky over
+  // the whole page.
+  const makeDock = (title, href, label, monogram) => {
+    const dock = document.createElement('div');
+    dock.className = `title-dock screen-only${monogram ? ' title-dock--monogram' : ''}`;
     const copy = document.createElement('a');
-    copy.className = 'header-project';
-    copy.href = `#${project.id}`;
+    copy.className = 'title-dock__copy main-title';
+    copy.href = href;
     copy.dataset.noArrow = '';
-    copy.textContent = title.textContent;
-    copy.setAttribute('aria-label', `${title.textContent}, back to the top of the project`);
+    copy.setAttribute('aria-label', label);
+    const span = (className, text) => {
+      const element = document.createElement('span');
+      element.className = className;
+      element.textContent = text;
+      return element;
+    };
+    // Word by word, so a wrapped title's words can be placed. In the
+    // monogram, each word's first letter stays; the rest, and the
+    // spaces, fold.
+    const words = [];
+    const folds = [];
+    const fold = (text) => {
+      const element = span('title-dock__fold', text);
+      folds.push(element);
+      return element;
+    };
+    title.textContent.trim().split(/\s+/).forEach((text, i) => {
+      if (i) copy.append(monogram ? fold(' ') : span('title-dock__space', ' '));
+      const word = span('title-dock__word', monogram ? '' : text);
+      if (monogram) word.append(span('', text[0]), fold(text.slice(1)));
+      words.push(word);
+      copy.append(word);
+    });
     dock.append(copy);
-    return [{ title, copy }];
-  });
-  const morphs = [{ title: coverTitle, copy: logo }, ...projects];
+    main.before(dock);
+    return { title, dock, copy, words, folds, monogram };
+  };
 
-  // Reads a length token in pixels.
-  const tokenPx = (name) => {
-    const probe = document.createElement('div');
-    probe.style.cssText = `position:absolute;visibility:hidden;height:var(${name})`;
-    document.body.append(probe);
-    const px = probe.offsetHeight;
-    probe.remove();
+  const docks = [
+    makeDock(coverTitle, '#cover', `${coverTitle.textContent}, back to top`, true),
+    ...[...document.querySelectorAll('.project')].flatMap((project) => {
+      const title = project.querySelector('.main-title');
+      if (!title || !project.id) return [];
+      return [makeDock(title, `#${project.id}`, `${title.textContent}, back to the top of the project`, false)];
+    }),
+  ];
+
+  // Reads a length token, or a font token's size, in pixels.
+  const probe = (style, read) => {
+    const element = document.createElement('div');
+    element.style.cssText = `position:absolute;visibility:hidden;${style}`;
+    document.body.append(element);
+    const px = read(element);
+    element.remove();
     return px;
+  };
+  const lengthPx = (name) => probe(`height:var(${name})`, (element) => element.offsetHeight);
+  const fontPx = (name) => probe(`font:var(${name})`, (element) => parseFloat(getComputedStyle(element).fontSize));
+
+  // Each word's box in an element's text, as its lines place it.
+  const wordBoxes = (element) => {
+    const boxes = [];
+    const range = document.createRange();
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      for (const match of walker.currentNode.data.matchAll(/\S+/g)) {
+        range.setStart(walker.currentNode, match.index);
+        range.setEnd(walker.currentNode, match.index + match[0].length);
+        boxes.push(range.getBoundingClientRect());
+      }
+    }
+    return boxes;
   };
 
   let m;
 
-  // Sizes and the copies' places in the viewport, all constant while
-  // scrolling: the header is fixed, so the copies' places in it are too.
+  // Places and sizes, all constant while scrolling: the titles' in the
+  // page, their copies' places in the (fixed) header.
   const measure = () => {
-    for (const { copy } of morphs) copy.style.transform = '';
-    for (const fold of folds) fold.style.width = 'auto';
-    const widths = folds.map((fold) => fold.getBoundingClientRect().width);
-    for (const fold of folds) fold.style.width = '0px';
-    const headerHeight = header.offsetHeight;
+    const headerHeight = lengthPx('--header-height');
+    const gap = lengthPx('--header-project-gap');
+    const logoSize = fontPx('--logo');
+    const labelSize = fontPx('--header-project');
+    // Where the docks stand unstuck: at the top of <main>.
+    const origin = main.getBoundingClientRect().top + scrollY;
     m = {
-      widths,
       headerHeight,
-      belowFade: headerHeight + (fade?.offsetHeight ?? 0),
-      distance: tokenPx('--logo-morph-distance'),
-      gap: tokenPx('--header-project-gap'),
-      items: morphs.map(({ title, copy }) => {
-        const box = copy.getBoundingClientRect();
-        const titleFont = parseFloat(getComputedStyle(title).fontSize);
+      distance: lengthPx('--logo-morph-distance'),
+      // A docked project title goes up by its height and the gap.
+      out: labelSize + gap,
+      items: docks.map(({ title, dock, copy, words, folds, monogram }) => {
+        // The copy as laid out, unshrunk, its words in one line.
+        copy.style.transform = '';
+        for (const word of words) word.style.transform = '';
+        for (const fold of folds) fold.style.width = 'auto';
+        const box = title.getBoundingClientRect();
+        const size = parseFloat(getComputedStyle(title).fontSize);
+        const top = box.top + scrollY;
+        // The middle of the copy, docked: the monogram centred in the
+        // header, a project title under it.
+        const place = monogram ? headerHeight / 2 : headerHeight / 2 + logoSize / 2 + gap + labelSize / 2;
+        copy.style.top = `${top - origin}px`;
+        copy.style.left = `${box.left + scrollX}px`;
+        dock.style.top = `${place - size / 2 - (top - origin)}px`;
+        const widths = folds.map((fold) => fold.getBoundingClientRect().width);
+        // Where the title's lines put each word, against the copy's single
+        // line, both from the first word.
+        const placed = wordBoxes(title);
+        const laid = words.map((word) => word.getBoundingClientRect());
+        const shifts = words.map((_, k) =>
+          placed.length === words.length
+            ? {
+                x: placed[k].left - placed[0].left - (laid[k].left - laid[0].left),
+                y: placed[k].top - placed[0].top - (laid[k].top - laid[0].top),
+              }
+            : { x: 0, y: 0 },
+        );
         return {
-          top: box.top,
-          height: box.height,
-          dx: title.getBoundingClientRect().left - box.left,
-          ratio: titleFont / parseFloat(getComputedStyle(copy).fontSize),
-          wraps: title.offsetHeight > titleFont * 1.5,
+          size,
+          place,
+          widths,
+          shifts,
+          // From the title's size to the docked one.
+          ratio: (monogram ? logoSize : labelSize) / size,
+          // The copy's middle with the page unscrolled.
+          middle: top + size / 2,
         };
       }),
     };
   };
 
-  // Where a copy stands for its title's current place: progress (p),
-  // eased progress (e), shift (x, y) and scale, and whether it morphs.
-  // The rise is linear: the middle of the copy goes from the title's to
-  // its place's in step with the scroll (the copy scales from its top,
-  // so the top is placed to keep the middle on that line). The shrinking
-  // and the sideways slide ease in and out.
-  const place = (item, title) => {
-    const morph = !reducedMotion.matches && !item.wraps;
-    if (!morph) {
-      const p = Number(title.bottom <= m.headerHeight);
-      return { morph, p, e: p, x: 0, y: 0, scale: 1 };
+  // Where a title's copy stands for the title's current place.
+  const state = (item, box) => {
+    const middle = box.top + item.size / 2;
+    if (reducedMotion.matches) {
+      const p = Number(middle <= item.place && box.bottom <= m.headerHeight);
+      return { morph: false, middle, p, e: 1, scale: item.ratio };
     }
-    // The handover never starts above the fade (the title would already
-    // be blurred under it) nor below where the title stands unscrolled
-    // (the page would open on a half-reduced title).
-    const start = Math.max(m.belowFade, Math.min(item.top + m.distance, title.top + scrollY));
-    const p = clamp01((start - title.top) / (start - item.top));
+    const start = Math.max(item.place + 1, Math.min(item.place + m.distance, item.middle));
+    const p = clamp01((start - middle) / (start - item.place));
     const e = easeInOut(p);
-    const scale = item.ratio + (1 - item.ratio) * e;
-    const middle = (start + (item.ratio * item.height) / 2) * (1 - p) + (item.top + item.height / 2) * p;
-    return { morph, p, e, x: item.dx * (1 - e), y: middle - (scale * item.height) / 2 - item.top, scale };
+    return { morph: true, middle, p, e, scale: 1 + (item.ratio - 1) * e };
   };
 
   const update = () => {
     // Every read before any write.
-    const titles = morphs.map(({ title }) => title.getBoundingClientRect());
-    const coverBottom = cover.getBoundingClientRect().bottom;
-    const places = m.items.map((item, i) => place(item, titles[i]));
+    const boxes = docks.map(({ title }) => title.getBoundingClientRect());
+    const states = m.items.map((item, i) => state(item, boxes[i]));
 
-    morphs.forEach(({ title, copy }, i) => {
-      const at = places[i];
-      let { x, y, scale } = at;
-      let opacity = 1;
-      let clip = '';
-      let shown = at.p > 0;
-      // A docked project title, pushed by the next: kept a gap above
-      // the next copy's top and faded out over the way up, gone once
-      // the next copy is in place. What rises above its docked line is
-      // cut off, so it never crosses the monogram.
-      const next = i > 0 ? places[i + 1] : undefined;
-      if (next && next.p > 0) {
-        const out = m.items[i].height + m.gap;
-        const pushed = next.morph ? Math.min(0, next.y - out) : -out;
-        x = 0;
-        y = pushed;
-        scale = 1;
-        opacity = 1 + pushed / out;
-        clip = `inset(${-pushed}px -1em -1em -1em)`;
-        shown = next.p < 1;
-      }
-      copy.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-      copy.style.opacity = opacity === 1 ? '' : opacity;
-      copy.style.clipPath = clip;
-      copy.style.visibility = shown ? 'visible' : '';
-      if (at.morph && at.p > 0) title.style.setProperty('--title-fill', 'transparent');
+    docks.forEach(({ title, copy, words, folds, monogram }, i) => {
+      const item = m.items[i];
+      const now = states[i];
+      // Pushed up by the next project's title, over the last stretch of
+      // its way in.
+      const next = monogram ? undefined : states[i + 1];
+      const pushed = !next || next.p === 0 ? 0 : next.morph ? clamp01((item.place + m.out - next.middle) / m.out) : 1;
+      copy.style.transform = `translateY(${-pushed * m.out}px) scale(${now.scale})`;
+      copy.style.opacity = pushed ? 1 - pushed : '';
+      copy.style.visibility = now.p > 0 && pushed < 1 ? 'visible' : '';
+      words.forEach((word, k) => {
+        const { x, y } = item.shifts[k];
+        const left = 1 - now.e;
+        word.style.transform = (x || y) && left ? `translate(${x * left}px, ${y * left}px)` : '';
+      });
+      folds.forEach((fold, f) => {
+        fold.style.width = now.e ? `${item.widths[f] * (1 - now.e)}px` : '';
+        fold.style.setProperty('--fold-closed', `${item.widths[f] * now.e}px`);
+      });
+      if (now.morph && now.p > 0) title.style.setProperty('--title-fill', 'transparent');
       else title.style.removeProperty('--title-fill');
     });
-
-    const e = places[0].morph ? places[0].e : 1;
-    folds.forEach((fold, i) => {
-      fold.style.width = `${m.widths[i] * (1 - e)}px`;
-      fold.style.setProperty('--fold-closed', `${m.widths[i] * e}px`);
-    });
-
-    // The PDF link fades out as the cover's bottom goes from the fade's
-    // bottom to the header's.
-    const pdf = clamp01((coverBottom - m.headerHeight) / (m.belowFade - m.headerHeight));
-    pdfLink.style.opacity = pdf === 1 ? '' : pdf;
-    pdfLink.style.visibility = pdf > 0 ? '' : 'hidden';
   };
 
   let frame = 0;
@@ -249,6 +288,9 @@ if (header && logo && pdfLink && cover && coverTitle) {
   refresh();
   document.fonts.ready.then(refresh);
   addEventListener('resize', refresh);
+  // The titles move in the page whenever something above them changes
+  // height (an image loading, the device toggle).
+  new ResizeObserver(refresh).observe(main);
   reducedMotion.addEventListener('change', update);
   addEventListener('scroll', schedule, { passive: true });
 }

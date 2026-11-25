@@ -485,10 +485,10 @@ div.screen__media {
    A final design shown in an iPhone, or a MacBook (.device--laptop):
    the frame is an image with a transparent screen, laid over it. The
    screen runs a little under the bezel, so no sliver of the page
-   shows through the frame's soft inner edge. The phone's screen is
-   white: the exported screens have no status bar, so they sit at its
-   foot and a white band takes the status bar's place, under the
-   Dynamic Island. */
+   shows through the frame's soft inner edge. The exported screens are
+   the device's whole screen, in its shape: each fills it, from its top
+   edge down, under the Dynamic Island or the camera notch, cropped by
+   the bezel's inner edge (its corners, see the tokens). */
 .device {
   position: relative;
   aspect-ratio: var(--device-ratio);
@@ -498,12 +498,18 @@ div.screen__media {
   position: absolute;
   inset: var(--device-screen-top) var(--device-screen-right) var(--device-screen-bottom) var(--device-screen-left);
   display: grid;
-  align-content: end;
+  grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
   border-radius: var(--device-screen-radius);
   background: var(--white);
 }
 
+.device__screen > .screen__media {
+  height: 100%;
+  aspect-ratio: auto;
+  object-position: top;
+  background-position: top;
+}
 .device__frame {
   position: absolute;
   inset: 0;
@@ -512,8 +518,6 @@ div.screen__media {
   pointer-events: none;
 }
 
-/* A desktop capture in the MacBook: it fills the screen below a band
-   as tall as the camera notch, from its top edge down. */
 .device--laptop {
   --device-ratio: var(--laptop-ratio);
   --device-screen-top: var(--laptop-screen-top);
@@ -523,23 +527,11 @@ div.screen__media {
   --device-screen-radius: var(--laptop-screen-radius);
 }
 
-.device--laptop .device__screen {
-  grid-template-rows: minmax(0, 1fr);
-  align-content: stretch;
-  padding-block-start: var(--laptop-notch-band);
-}
-
-.device--laptop .screen__media {
-  height: 100%;
-  aspect-ratio: auto;
-  object-position: top;
-}
-
 /* ---------- Journey ----------
    The finished website in one device: its screens are the steps of the
-   buying journey, one shown at a time (src/main.js). Beside the device,
-   the step's caption, the decisions about it, and the button to the
-   next step. On phones the side follows below the device. */
+   buying journey, one shown at a time (src/main.js). Beside the phone,
+   below the MacBook, the step's title between Back and Next, and the
+   decisions about it. On phones the side follows below either. */
 .journey {
   display: grid;
   grid-template-columns: var(--journey-columns);
@@ -550,16 +542,32 @@ div.screen__media {
   break-inside: avoid;
 }
 
-/* Room on the right for the scroll bar (see Scrubber). */
 .journey__device {
   position: relative;
   width: var(--journey-device-width);
-  max-width: calc(100% - var(--space-3) - var(--scrubber-width));
-  margin-inline-end: calc(var(--space-3) + var(--scrubber-width));
+  max-width: 100%;
 }
 
-.journey--laptop {
+.journey__device--laptop {
   --journey-device-width: var(--journey-laptop-width);
+}
+
+/* The MacBook takes the whole row, ending at the content's right edge
+   (the journey runs no further, unlike the phone's): the side follows
+   below it. */
+.journey:has(> .journey__device--laptop:not([hidden])) {
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline-end: var(--bleed-end);
+}
+
+.journey:has(> .journey__device--laptop:not([hidden])) .journey__side {
+  padding-inline-end: 0;
+}
+
+/* Under the MacBook, the progress bar and Back, title, Next run its
+   whole width, out to the content's right edge. */
+.journey:has(> .journey__device--laptop:not([hidden])) .journey__text {
+  max-width: none;
 }
 
 .journey__side {
@@ -573,11 +581,9 @@ div.screen__media {
 }
 
 /* On phones the device is centred on the screen, above its text: the
-   journey stops at the content's right edge, the scroll bar's room is
-   kept on both sides of the device, so the device itself sits in the
-   middle and the bar to its right, and the device is shifted left by
-   half the left column, out of the right column's middle into the
-   content's. */
+   journey stops at the content's right edge, and the device is shifted
+   left by half the left column, out of the right column's middle into
+   the content's. */
 @media screen and (width < 48rem) {
   .journey {
     padding-inline-end: var(--bleed-end);
@@ -590,14 +596,12 @@ div.screen__media {
   .journey__device {
     justify-self: center;
     left: calc(-1 * var(--content-column-start) / 2);
-    max-width: calc(100% + var(--content-column-start) - 2 * (var(--space-3) + var(--scrubber-width)));
-    margin-inline: calc(var(--space-3) + var(--scrubber-width));
+    max-width: calc(100% + var(--content-column-start));
   }
 }
 
 /* The step: its title, naming what it is, set apart in the body's
-   SemiBold (like the CV's entry names), then a short description in
-   the decisions' dark grey. */
+   SemiBold (like the CV's entry names). */
 .journey__text {
   display: grid;
   gap: var(--space-1);
@@ -605,24 +609,30 @@ div.screen__media {
   max-width: var(--measure);
 }
 
-/* Where the visitor is, like a story's progress bar (.stories, made by
-   src/main.js): a thin segment per step, dark up to the one shown,
-   white beyond. Above the journey's title, and at the top of the
-   full-screen view. Website only. */
+/* Where the visitor is (.stories, made by src/main.js): one thin,
+   continuous bar, a share per step, filled up to the one shown, in the
+   chrome's quiet greys. The fill glides, forward or back, to its new
+   length (none with reduced motion). Above the journey's title, and at
+   the top of the full-screen view. Website only. */
 .stories {
-  display: flex;
-  gap: var(--space-1);
+  overflow: hidden;
+  border-radius: var(--journey-progress-height);
+  background: var(--chrome-track);
 }
 
-.stories > span {
-  flex: 1;
+.stories__fill {
+  display: block;
+  width: calc(var(--stories-fill, 0) * 100%);
   height: var(--journey-progress-height);
   border-radius: var(--journey-progress-height);
-  background: var(--white);
+  background: var(--chrome-fill);
+  transition: width var(--journey-progress-slide);
 }
 
-.stories > .is-done {
-  background: var(--off-black);
+@media (prefers-reduced-motion: reduce) {
+  .stories__fill {
+    transition: none;
+  }
 }
 
 .journey__progress {
@@ -678,10 +688,6 @@ div.screen__media {
   }
 }
 
-.journey__caption {
-  color: var(--dark-grey);
-}
-
 .journey__notes {
   display: grid;
   gap: var(--space-2);
@@ -697,7 +703,7 @@ div.screen__media {
   }
 }
 
-/* On paper every decision and feedback point is listed: the caption
+/* On paper every decision and feedback point is listed: the title
    and both lists flow through two columns, so the text is no taller
    than the device beside it and the two share a page. A point never
    splits, and a title stays with its first point. */
@@ -721,9 +727,9 @@ div.screen__media {
   }
 }
 
-/* Back and Next: underlined like links, each with the arrow of a link
-   within the portfolio (added by src/main.js), Back's turned to point
-   left and set before its word. */
+/* Back and Next: plain words, each with the arrow of a link within the
+   portfolio (added by src/main.js), Back's turned to point left and set
+   before its word. */
 .journey__prev,
 .journey__next {
   padding: 0;
@@ -731,8 +737,6 @@ div.screen__media {
   background: none;
   font: var(--text-body);
   color: var(--black);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
   cursor: pointer;
   /* Quick taps step through the journey: a double tap never zooms the
      page (pinching still does). */
@@ -744,45 +748,99 @@ div.screen__media {
 }
 
 /* ---------- Scrubber (website only) ----------
-   A vertical bar on the right of the device, as tall as its screen,
-   like a scroll bar: its thumb's place is the recording's place, top
-   to bottom from start to end; dragging it, or clicking along the bar,
-   moves through the recording (src/main.js). Hidden while the step
-   shown is a still screenshot. The element is wider than the bar it
-   draws, so it is easy to grab. */
+   A vertical bar inside the device's screen, along its right edge,
+   like the overlay scroll bar of a phone or a Mac: its thumb's place
+   is the recording's place, top to bottom from start to end; dragging
+   it, or clicking along the bar, moves through the recording
+   (src/main.js). It stops short of the screen's rounded corners
+   (--scrubber-inset). In the chrome's greys, the thumb ringed light so it shows on
+   dark screens as on light ones. Hidden while the step shown is a
+   still screenshot. The element is wider than the bar it draws, so it
+   is easy to grab, and sits above the layer that opens the full-screen
+   view. */
 .scrubber {
   position: absolute;
-  top: var(--device-screen-top);
-  bottom: var(--device-screen-bottom);
-  left: calc(100% + var(--space-3));
+  z-index: 1;
+  top: calc(var(--device-screen-top) + var(--scrubber-inset));
+  bottom: calc(var(--device-screen-bottom) + var(--scrubber-inset));
+  right: var(--device-screen-right);
   width: var(--scrubber-width);
-  cursor: pointer;
+  cursor: grab;
   touch-action: none;
 }
 
-.journey--laptop .scrubber {
-  top: var(--laptop-screen-top);
-  bottom: var(--laptop-screen-bottom);
+.scrubber.is-dragging {
+  cursor: grabbing;
 }
 
-.scrubber::before,
-.scrubber__thumb {
-  position: absolute;
-  left: calc((var(--scrubber-width) - var(--scrubber-bar)) / 2);
-  width: var(--scrubber-bar);
-  border-radius: var(--scrubber-bar);
+.device--laptop .scrubber {
+  --scrubber-inset: var(--laptop-scrubber-inset);
 }
 
 .scrubber::before {
   content: "";
+  position: absolute;
+  right: var(--scrubber-gap);
   inset-block: 0;
-  background: var(--white);
+  width: var(--scrubber-bar);
+  border-radius: var(--scrubber-bar);
+  background: var(--chrome-track);
 }
 
+/* The thumb, centred on its place along the bar. Until a recording has
+   been moved through, it is grown into a pill that holds its own
+   label, "Drag to scroll" on two lines, growing leftwards from the bar into the
+   screen. Once the visitor starts to scroll on its device, phone or
+   desktop (.is-scrubbed on the bar, set by src/main.js for every bar
+   of that device, until the page is loaded again), it deflates
+   back to the slim thumb, narrowing only, at the same height, its label
+   fading out (src/main.js animates its width). */
 .scrubber__thumb {
-  top: calc(var(--progress, 0) * (100% - var(--scrubber-thumb)));
+  position: absolute;
+  right: var(--scrubber-gap);
+  top: calc(var(--progress, 0) * (100% - var(--scrubber-thumb)) + var(--scrubber-thumb) / 2);
+  width: var(--scrubber-bar);
   height: var(--scrubber-thumb);
-  background: var(--off-black);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--scrubber-thumb-radius);
+  background: var(--chrome-fill);
+  box-shadow: 0 0 0 var(--scrubber-ring) var(--chrome-ring);
+  transform: translateY(-50%);
+  transition: background-color var(--scrubber-deflate-duration) var(--scrubber-deflate-easing);
+}
+
+.scrubber:not(.is-scrubbed) .scrubber__thumb {
+  width: auto;
+  padding-inline: var(--scrubber-hint-padding);
+  background: var(--chrome-label);
+  box-shadow: none;
+  backdrop-filter: blur(var(--chrome-blur));
+  -webkit-backdrop-filter: blur(var(--chrome-blur));
+}
+
+.scrubber__label {
+  display: flex;
+  align-items: center;
+  gap: var(--icon-gap);
+  font: var(--text-hint);
+  color: var(--white);
+  white-space: nowrap;
+  transition: opacity var(--scrubber-hint-fade);
+}
+
+.scrubber__label .arrow {
+  flex: none;
+  align-self: flex-start;
+  width: var(--scrubber-arrow-width);
+  height: var(--scrubber-arrow-height);
+  margin: var(--scrubber-arrow-offset) 0 0;
+  stroke-width: var(--scrubber-arrow-stroke);
+}
+
+.scrubber.is-scrubbed .scrubber__label {
+  opacity: 0;
 }
 
 /* ---------- Full-screen view (website only) ----------
@@ -867,18 +925,13 @@ html:has(.lightbox[open]) {
   min-height: 0;
 }
 
-/* The board or screen with, when it is a recording, the scroll bar on
-   its right (positioned like beside the device, see Scrubber). */
+/* The board, or the screen in its device with, when it is a
+   recording, the scroll bar inside the screen (see Scrubber). */
 .lightbox__screen {
   position: relative;
   display: flex;
   height: 100%;
-  max-width: calc(100% - 2 * (var(--space-3) + var(--scrubber-width)));
-}
-
-.lightbox__screen .scrubber {
-  top: 0;
-  bottom: 0;
+  max-width: 100%;
 }
 
 /* The board or screen, as tall as the room allows, in its own shape,
@@ -891,23 +944,37 @@ html:has(.lightbox[open]) {
   object-fit: contain;
 }
 
-/* Desktop screens are wide: they fill the width instead. */
+/* A Result screen comes in its device, phone or MacBook, as large as
+   the room allows either way (the stage is a size container), in the
+   device's shape. The scroll bar, beside the device in the view's
+   markup, is placed inside its screen as on the page. */
+.lightbox__stage {
+  container-type: size;
+}
+
 .lightbox__screen[data-kind="desktop"] {
-  width: 100%;
+  --device-ratio: var(--laptop-ratio);
+  --device-screen-top: var(--laptop-screen-top);
+  --device-screen-right: var(--laptop-screen-right);
+  --device-screen-bottom: var(--laptop-screen-bottom);
+  --scrubber-inset: var(--laptop-scrubber-inset);
+}
+
+.lightbox__screen:is([data-kind="phone"], [data-kind="desktop"]) {
+  width: min(100%, 100cqh * var(--device-ratio));
   height: auto;
 }
 
-.lightbox__screen[data-kind="desktop"] > :not(.scrubber, button) {
+.lightbox__screen:is([data-kind="phone"], [data-kind="desktop"]) > .device {
   width: 100%;
   height: auto;
-  aspect-ratio: var(--desktop-screen-ratio);
+  max-height: none;
 }
 
 /* Wider screens: the buttons sit beside the board or screen (moved
    there by src/main.js). Back halfway down its left side; Next halfway
-   down its right side and the cross level with its top, both beyond
-   the scroll bar's place, so they never move whether it shows or not.
-   The frame leaves room for them on both sides. */
+   down its right side and the cross level with its top. The frame
+   leaves room for them on both sides. */
 @media (width >= 48rem) {
   .lightbox__screen {
     max-width: calc(100% - 2 * var(--lightbox-beside));
@@ -927,14 +994,14 @@ html:has(.lightbox[open]) {
 
   .lightbox__screen > .lightbox__next {
     top: 50%;
-    left: calc(100% + 2 * var(--space-3) + var(--scrubber-width));
+    left: calc(100% + var(--space-3));
     transform: translateY(-50%);
   }
 
   .lightbox__screen > .lightbox__close {
     top: 0;
     right: auto;
-    left: calc(100% + 2 * var(--space-3) + var(--scrubber-width));
+    left: calc(100% + var(--space-3));
   }
 }
 
@@ -997,7 +1064,7 @@ html:has(.lightbox[open]) {
    Above a hero that exists for phones and for desktops (em·ji·ve), on
    the line of its section title: an on/off toggle (website only) in
    the right column, "Phone" on its left, "Desktop" on
-   its right. Off, its knob sits on the left, by Phone; on, it slides
+   its right, in the chrome's quiet greys. Off, its knob sits on the left, by Phone; on, it slides
    to the right, by Desktop. The word for the version shown is black,
    the other grey; clicking a word sets it too (src/main.js). Set close
    to the hero it controls. */
@@ -1053,7 +1120,7 @@ html:has(.lightbox[open]) {
   padding: 0;
   border: 0;
   border-radius: var(--toggle-height);
-  background: var(--off-black);
+  background: var(--chrome-track);
   cursor: pointer;
 }
 
@@ -1064,7 +1131,7 @@ html:has(.lightbox[open]) {
   width: calc(var(--toggle-height) - 2 * var(--toggle-inset));
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--white);
+  background: var(--chrome-fill);
   transition: transform var(--toggle-slide);
 }
 

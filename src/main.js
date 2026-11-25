@@ -17,6 +17,11 @@ const ARROW_IN = svg('M0 6h11M6.5 1.5 11 6l-4.5 4.5');
 const ARROW_BACK = svg('M12 6H1M5.5 1.5 1 6l4.5 4.5');
 // The same arrow turned to point down, its shaft in the middle of the box.
 const ARROW_DOWN = svg('M6 0v11M1.5 6.5 6 11l4.5-4.5');
+// A shaft with a head at each end, up and down: scrolling. A long
+// shaft with small heads (6 by 24), drawn the arrows' way, sized by the
+// scroll bar's label (see main.css).
+const ARROW_SCROLL =
+  '<svg class="arrow" viewBox="0 0 6 24" aria-hidden="true" focusable="false"><path d="M3 0.5v23M0.75 2.75 3 0.5l2.25 2.25M0.75 21.25 3 23.5l2.25-2.25" /></svg>';
 const here = location.origin + location.pathname;
 
 for (const link of document.querySelectorAll('a[href]:not([data-no-arrow])')) {
@@ -297,7 +302,7 @@ if (main && coverTitle) {
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-// A scroll bar for recordings (.scrubber), used beside the Result device
+// A scroll bar for recordings (.scrubber), inside the Result device's screen
 // and in the full-screen view. Recordings never play by themselves: the
 // bar, like a scroll bar, moves through the one attached, back and
 // forth, top to bottom from start to end; drag it or click along it, or
@@ -307,7 +312,21 @@ const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 // way, the bar's latest place waits and is applied once the frame is
 // shown, so dragging fast never queues up a backlog of frames. With no
 // recording attached (a still screen), the bar hides.
-const createScrubber = () => {
+//
+// Until the visitor scrolls a recording on a device, phone or desktop,
+// that device's thumbs are grown into a pill holding its own label,
+// "Drag to scroll" (for the eye only: the slider is named for screen
+// readers). As soon as one is scrolled, by the pointer or the keys,
+// every thumb of that device, on the page and in the full-screen view,
+// deflates back to the slim thumb (.is-scrubbed on the bar), until the
+// page is loaded again; the other device's keep their pill, so it shows
+// again the first time the visitor switches to it.
+const scrubbedKinds = new Set();
+const allScrubbers = new Set();
+
+// kind: the device the bar's recordings are shown in, 'phone' or
+// 'desktop' (the full-screen view sets it per item, see setKind).
+const createScrubber = (kind) => {
   const bar = document.createElement('div');
   bar.className = 'scrubber screen-only';
   bar.tabIndex = 0;
@@ -317,6 +336,11 @@ const createScrubber = () => {
   bar.setAttribute('aria-label', 'Move through the recording');
   const thumb = document.createElement('div');
   thumb.className = 'scrubber__thumb';
+  const label = document.createElement('span');
+  label.className = 'scrubber__label';
+  label.setAttribute('aria-hidden', 'true');
+  label.innerHTML = `${ARROW_SCROLL}<span>Drag to<br />scroll</span>`;
+  thumb.append(label);
   bar.append(thumb);
 
   // Where each recording stands, in seconds.
@@ -349,26 +373,67 @@ const createScrubber = () => {
     if (!seeking) seek();
   };
 
+  // Whether this bar's thumb is slim: its device has been scrolled.
+  const update = () => bar.classList.toggle('is-scrubbed', scrubbedKinds.has(kind));
+  const self = { kind: () => kind, update };
+  allScrubbers.add(self);
+
+  // The first scroll on a device deflates its thumbs (see main.css).
+  // This one, the one in use, narrows from its pill to its slim width,
+  // at the same height, over --scrubber-deflate-duration; the others,
+  // unseen, just switch.
+  const deflate = () => {
+    if (scrubbedKinds.has(kind)) return;
+    const from = thumb.getBoundingClientRect();
+    scrubbedKinds.add(kind);
+    for (const other of allScrubbers) if (other.kind() === kind) other.update();
+    if (reducedMotion.matches || !from.width) return;
+    const to = thumb.getBoundingClientRect();
+    const tokens = getComputedStyle(document.documentElement);
+    thumb.animate(
+      [
+        { width: `${from.width}px` },
+        { width: `${to.width}px` },
+      ],
+      {
+        duration: parseFloat(tokens.getPropertyValue('--scrubber-deflate-duration')) * 1000,
+        easing: tokens.getPropertyValue('--scrubber-deflate-easing').trim(),
+      },
+    );
+  };
+
   const onSeeked = (event) => {
     if (event.target !== clip) return;
     seeking = false;
     if (pending !== null) seek();
   };
 
-  // The thumb's middle follows the pointer, from the moment it presses
-  // anywhere on the bar until it lets go.
+  // Pressed on the bar, the thumb's middle jumps to the pointer; pressed
+  // on the thumb (or its pill), the thumb is held where it was grabbed.
+  // Either way it then follows the pointer until it lets go.
   bar.addEventListener('pointerdown', (event) => {
     if (!clip) return;
     bar.setPointerCapture(event.pointerId);
+    bar.classList.add('is-dragging');
+    const held = thumb.getBoundingClientRect();
+    const grab = thumb.contains(event.target) ? event.clientY - (held.top + held.height / 2) : 0;
+    deflate();
     const follow = (e) => {
       const box = bar.getBoundingClientRect();
-      const reach = box.height - thumb.offsetHeight;
-      const share = clamp((e.clientY - box.top - thumb.offsetHeight / 2) / reach, 0, 1);
+      const length = thumb.offsetHeight;
+      const share = clamp((e.clientY - grab - box.top - length / 2) / (box.height - length), 0, 1);
       moveTo(share * clip.duration);
     };
     follow(event);
     bar.addEventListener('pointermove', follow);
-    bar.addEventListener('lostpointercapture', () => bar.removeEventListener('pointermove', follow), { once: true });
+    bar.addEventListener(
+      'lostpointercapture',
+      () => {
+        bar.removeEventListener('pointermove', follow);
+        bar.classList.remove('is-dragging');
+      },
+      { once: true },
+    );
   });
 
   bar.addEventListener('keydown', (event) => {
@@ -388,11 +453,20 @@ const createScrubber = () => {
     event.preventDefault();
     // Kept from the full-screen view's own arrow keys.
     event.stopPropagation();
+    deflate();
     moveTo(moves[event.key]);
   });
 
+  update();
+
   return {
     element: bar,
+    // The device the bar now serves (the full-screen view's changes with
+    // each item), its thumb grown or slim to match.
+    setKind(next) {
+      kind = next;
+      update();
+    },
     // video: the recording to move through, or null. start: where a
     // recording new to this bar stands at first, in seconds.
     attach(video, start = 0) {
@@ -414,64 +488,72 @@ const createScrubber = () => {
   };
 };
 
-// A progress bar like a story's (.stories): a thin segment per step,
-// dark up to the one shown, white beyond. For the eye only: a title
-// beside it always says where the visitor is.
+// A progress bar (.stories): one continuous bar, a share per step,
+// filled up to the one shown; the fill glides to its new length (see
+// main.css). For the eye only: a title beside it always says where the
+// visitor is.
 const createStories = (count) => {
   const element = document.createElement('div');
   element.className = 'stories screen-only';
   element.setAttribute('aria-hidden', 'true');
-  for (let s = 0; s < count; s++) element.append(document.createElement('span'));
-  const segments = [...element.children];
+  element.append(Object.assign(document.createElement('span'), { className: 'stories__fill' }));
   return {
     element,
-    fill: (i) => segments.forEach((segment, s) => segment.classList.toggle('is-done', s <= i)),
+    fill: (i) => element.style.setProperty('--stories-fill', (i + 1) / count),
   };
 };
 
-// The buying journey (.journey): the finished website in one device,
-// its screens the steps of the journey, one shown at a time. Above, a
-// story's progress bar; then Back, the step's title (data-title) and
-// Next, both ways round; its description (data-caption); then the
-// decisions and user feedback whose data-steps name its data-step (a
-// list with none for the step hides with its title). Recordings get the
-// scroll bar on the right of the device, and open at their beginning,
-// which is also their poster.
+// The buying journey (.journey): the finished website in a device (a
+// phone, or a MacBook: one .journey__device each, the other hidden by
+// the device switch below), its screens the steps of the journey, one
+// shown at a time. Every device holds the same steps in the same order,
+// and they share the step shown, so switching device keeps it. Above, a
+// progress bar; then Back, the step's title (data-title) and
+// Next, both ways round; then the decisions and user feedback whose
+// data-steps name its data-step (a list with none for the step hides
+// with its title).
+// Recordings get the scroll bar inside their device's screen, and open
+// at their beginning, which is also their poster.
 for (const journey of document.querySelectorAll('.journey')) {
-  const screens = [...journey.querySelectorAll('.device__screen > .screen__media')];
+  const devices = [...journey.querySelectorAll('.journey__device')].map((element) => {
+    const scrubber = createScrubber(element.classList.contains('journey__device--laptop') ? 'desktop' : 'phone');
+    element.querySelector('.device').append(scrubber.element);
+    return { element, scrubber, screens: [...element.querySelectorAll('.device__screen > .screen__media')] };
+  });
+  const count = devices[0].screens.length;
   const title = journey.querySelector('.journey__title');
-  const caption = journey.querySelector('.journey__caption');
   const notes = [...journey.querySelectorAll('.decisions > li[data-steps]')];
   const prev = journey.querySelector('.journey__prev');
   const next = journey.querySelector('.journey__next');
-  const scrubber = createScrubber();
-  journey.querySelector('.journey__device').append(scrubber.element);
-  const stories = createStories(screens.length);
+  const stories = createStories(count);
   stories.element.classList.add('journey__progress');
   journey.querySelector('.journey__head').before(stories.element);
   let index = 0;
+  const shown = () => devices.find((device) => !device.element.hidden) ?? devices[0];
 
-  for (const screen of screens) {
-    // The poster also painted behind the video: printing doesn't paint a
-    // video's frame, so this is what paper gets.
-    if (screen.tagName === 'VIDEO') screen.style.backgroundImage = `url("${screen.poster}")`;
+  for (const { screens } of devices) {
+    for (const screen of screens) {
+      // The poster also painted behind the video: printing doesn't paint
+      // a video's frame, so this is what paper gets.
+      if (screen.tagName === 'VIDEO') screen.style.backgroundImage = `url("${screen.poster}")`;
+    }
   }
 
   // from: the side the new title slides in from, 'right' after Next,
   // 'left' after Back; none otherwise.
   const show = (i, from) => {
     index = i;
-    const screen = screens[i];
-    for (const s of screens) s.hidden = s !== screen;
-    scrubber.attach(screen.tagName === 'VIDEO' ? screen : null);
+    for (const { screens, scrubber } of devices) {
+      for (const s of screens) s.hidden = s !== screens[i];
+      scrubber.attach(screens[i].tagName === 'VIDEO' ? screens[i] : null);
+    }
+    const screen = shown().screens[i];
     title.textContent = screen.dataset.title ?? '';
     title.classList.remove('is-from-left', 'is-from-right');
     if (from) {
       void title.offsetWidth; // restart the slide if one is under way
       title.classList.add(`is-from-${from}`);
     }
-    caption.textContent = screen.dataset.caption ?? '';
-    caption.hidden = !caption.textContent;
     const step = screen.dataset.step;
     for (const note of notes) {
       const about = note.dataset.steps.split(' ');
@@ -483,24 +565,25 @@ for (const journey of document.querySelectorAll('.journey')) {
   journey.classList.add('journey--live');
   prev.innerHTML = `${ARROW_BACK}Back`;
   next.innerHTML = `Next${ARROW_IN}`;
-  prev.hidden = next.hidden = screens.length < 2;
-  prev.addEventListener('click', () => show((index - 1 + screens.length) % screens.length, 'left'));
-  next.addEventListener('click', () => show((index + 1) % screens.length, 'right'));
+  prev.hidden = next.hidden = count < 2;
+  prev.addEventListener('click', () => show((index - 1 + count) % count, 'left'));
+  next.addEventListener('click', () => show((index + 1) % count, 'right'));
   show(0);
 
   // For the full-screen view (see below): which step is shown, a way to
   // show another, so the two stay in step, and where a step's recording
-  // stands, so the view opens it there.
+  // stands on the device shown, so the view opens it there.
   journey.currentStep = () => index;
   journey.goToStep = (i) => show(i);
-  journey.placeOfStep = (i) => scrubber.placeOf(screens[i]);
+  journey.placeOfStep = (i) => shown().scrubber.placeOf(shown().screens[i]);
 }
 
 // Device switch: a hero that exists for phones and for desktops
 // (em·ji·ve) shows the phone one first. The toggle above it, hidden
-// until this script runs (it does nothing without it), swaps the two
+// until this script runs (it does nothing without it), swaps the
 // [data-device-panel] blocks of its project: off for the phone, on for
-// the desktop. The words on either side set it too.
+// the desktop. The words on either side set it too. A journey keeps its
+// step, its devices being in step.
 for (const deviceSwitch of document.querySelectorAll('.device-switch')) {
   const project = deviceSwitch.closest('.project');
   const toggle = deviceSwitch.querySelector('[role="switch"]');
@@ -518,11 +601,12 @@ for (const deviceSwitch of document.querySelectorAll('.device-switch')) {
 }
 
 // Full-screen view: a prototype board, or a screen of the Result
-// device, opened by clicking it, over the whole window. At the top, a
-// story's progress bar; a cross at the top right closes the view (Esc
+// device (shown in the device), opened by clicking it, over the whole
+// window. At the top, a
+// progress bar; a cross at the top right closes the view (Esc
 // too); arrows at the bottom left and right, or the arrow keys, move to
 // the previous or next one, both ways round. Recordings get the same
-// scroll bar as on the page, on their right. It is the browser's modal
+// scroll bar as on the page, inside the screen. It is the browser's modal
 // dialog, so focus stays inside while it is open and goes back to what
 // was clicked when it closes. Opened from the device, it moves through
 // the journey's steps and the device follows.
@@ -554,7 +638,7 @@ const lightbox = (() => {
   const prev = dialog.querySelector('.lightbox__prev');
   const next = dialog.querySelector('.lightbox__next');
   const close = dialog.querySelector('.lightbox__close');
-  const scrubber = createScrubber();
+  const scrubber = createScrubber('phone');
 
   // The board or screen's frame, kept for the view's life: only what it
   // shows changes, so a button inside it keeps its focus from one item
@@ -594,7 +678,9 @@ const lightbox = (() => {
     media.replaceWith(shown);
     media = shown;
     screen.dataset.kind = item.kind;
-    scrubber.attach(media.tagName === 'VIDEO' ? media : null, item.start?.() ?? 0);
+    scrubber.setKind(item.kind);
+    const clip = media.matches('video') ? media : media.querySelector('video');
+    scrubber.attach(clip, item.start?.() ?? 0);
     caption.textContent = item.label;
     stories.fill(index);
     onMove?.(index);
@@ -670,27 +756,40 @@ for (const prototype of document.querySelectorAll('.prototype')) {
   });
 }
 
-// Result devices: a layer over the device's screen opens the step shown;
-// a recording opens where it stands on the page.
+// Result devices: a layer over each device's screen opens the step
+// shown, in that device's version and in the device itself (a copy of
+// its frame holding that one screen); a recording opens where it stands
+// on the page.
 for (const journey of document.querySelectorAll('.journey')) {
-  const screens = [...journey.querySelectorAll('.device__screen > .screen__media')];
-  const desktop = journey.classList.contains('journey--laptop');
-  const items = screens.map((screen, i) => ({
-    label: screen.dataset.title ?? '',
-    kind: desktop ? 'desktop' : 'phone',
-    start: () => journey.placeOfStep(i),
-    view: () => {
-      const copy = screen.cloneNode(true);
-      copy.hidden = false;
-      copy.removeAttribute('loading');
-      if (copy.tagName === 'VIDEO') copy.preload = 'auto';
-      return copy;
-    },
-  }));
-  const button = opener('Current screen');
-  button.className = 'journey__zoom';
-  journey.querySelector('.device').append(button);
-  button.addEventListener('click', () =>
-    lightbox.open(items, journey.currentStep(), (i) => journey.goToStep(i)),
-  );
+  for (const device of journey.querySelectorAll('.journey__device')) {
+    const frame = device.querySelector('.device');
+    const screens = [...frame.querySelectorAll('.device__screen > .screen__media')];
+    const desktop = device.classList.contains('journey__device--laptop');
+    const items = screens.map((screen, i) => ({
+      label: screen.dataset.title ?? '',
+      kind: desktop ? 'desktop' : 'phone',
+      start: () => journey.placeOfStep(i),
+      view: () => {
+        const copy = frame.cloneNode(true);
+        // The page's own layer and scroll bar stay behind: the view has
+        // its own scroll bar.
+        copy.querySelector('.journey__zoom')?.remove();
+        copy.querySelector('.scrubber')?.remove();
+        copy.querySelectorAll('.screen__media').forEach((shot, k) => {
+          if (k !== i) shot.remove();
+        });
+        const shot = copy.querySelector('.screen__media');
+        shot.hidden = false;
+        for (const element of copy.querySelectorAll('[loading]')) element.removeAttribute('loading');
+        if (shot.tagName === 'VIDEO') shot.preload = 'auto';
+        return copy;
+      },
+    }));
+    const button = opener('Current screen');
+    button.className = 'journey__zoom';
+    frame.append(button);
+    button.addEventListener('click', () =>
+      lightbox.open(items, journey.currentStep(), (i) => journey.goToStep(i)),
+    );
+  }
 }

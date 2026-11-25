@@ -167,7 +167,7 @@
              versions in turn. Each screen's data-title (what the step
              is) is shown beside the device, with the decisions and user
              feedback whose data-steps name its data-step, each point
-             with one step only. Next moves to the
+             with one step only, listed in step order. Next moves to the
              next step (from the last, to the first), Back to the one
              before (from the first, to the last); a progress bar above
              shows where the visitor is; they flank the step's title,
@@ -178,8 +178,9 @@
              screen, along its right edge, like a scroll bar (src/main.js), moves
              through the one shown, back and forth. Each opens at its
              beginning, its poster being its first frame. The PDF shows
-             the phone and the first step, with every decision and
-             feedback point beside it.
+             every step at once: the phone's screens side by side,
+             numbered (src/main.js), with every decision and feedback
+             point below, numbered after its step.
              The section title, Result, sits on one line with the toggle,
              left of it. The toggle shows the phone (off, the default)
              or the MacBook (on). The words beside it are for the eye and
@@ -238,17 +239,19 @@
               <div class="journey__notes">
                 <ul class="decisions">
                   <li data-steps="home">The ring wheel on the home page <strong>remembers the ring that was in focus</strong>, so a visitor who comes back finds their place instead of starting over.</li>
-                  <li data-steps="choose">On phones, shape, material and size each get a <strong>dial</strong>, so a visitor can <strong>configure the whole ring on one screen</strong>.</li>
+                  <li data-steps="menu">Some buttons have <strong>hit areas larger than they look</strong>, so they stay small on screen and easy to hit.</li>
                   <li data-steps="ring">When a 3D model sits untouched for three seconds, a hand <strong>nudges it to show it can be turned</strong>. Once a visitor has turned any model, no model nudges again for the rest of the visit.</li>
+                  <li data-steps="choose">On phones, shape, material and size each get a <strong>dial</strong>, so a visitor can <strong>configure the whole ring on one screen</strong>.</li>
                   <li data-steps="choose">The size slider <strong>gets more precise as the visitor slows down</strong>: quick moves cover the whole range, slow ones settle on an exact size.</li>
                   <li data-steps="unsure">Visitors <strong>unsure of their size</strong> get three ways out: order a sizing strip, with free shipping on the next order, measure a ring they already own on their phone's screen, or read the size chart.</li>
-                  <li data-steps="undo">Removing a piece from the order <strong>leaves an Undo in its place</strong>, so a slip of the finger costs nothing.</li>
-                  <li data-steps="menu">Some buttons have <strong>hit areas larger than they look</strong>, so they stay small on screen and easy to hit.</li>
+                  <li data-steps="summary">Removing a piece from the order <strong>leaves an Undo in its place</strong>, so a slip of the finger costs nothing.</li>
                 </ul>
               </div>
               <div class="journey__notes">
                 <h3 class="secondary-title">User feedback</h3>
                 <ul class="decisions">
+                  <li data-steps="home">Testers arriving on the home page looked at the hand and did nothing, so I added a <strong>"Scroll to scan" tattoo</strong> on the hand to tell them what to do.</li>
+                  <li data-steps="grid">Testers going through the site asked to see the rings side by side, so I built the <strong>grid view</strong>.</li>
                   <li data-steps="choose">A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
                   <li data-steps="choose">A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
                 </ul>

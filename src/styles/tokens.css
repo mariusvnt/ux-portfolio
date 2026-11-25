@@ -49,6 +49,9 @@
      labels beside 11pt text), 9/11 of the body size, on the body's
      line height so labels keep the rhythm of the text beside them. */
   --text-small: 400 calc(1.0625rem * 9 / 11) / calc(1.0625rem * 1.55) "DINish", sans-serif;
+  /* The important part of a sentence in small text (the PDF's Result
+     points): the emphasis weight at the small size. */
+  --text-small-emphasis: 475 calc(1.0625rem * 9 / 11) / calc(1.0625rem * 1.55) "DINish", sans-serif;
   /* A hint over a screen (the scroll bar's "Drag to scroll", on two
      lines): smaller than the labels, its size and leading also kept
      apart, to size the pill that holds it. */
@@ -340,6 +343,7 @@
     --text-body-strong: 600 10pt / 1.5 "DINish", sans-serif;
     --text-body-emphasis: 475 10pt / 1.5 "DINish", sans-serif;
     --text-small: 400 calc(10pt * 9 / 11) / calc(10pt * 1.5) "DINish", sans-serif;
+    --text-small-emphasis: 475 calc(10pt * 9 / 11) / calc(10pt * 1.5) "DINish", sans-serif;
 
     --gutter: var(--page-margin-x);
     --project-padding-y: var(--page-margin-y);
@@ -349,8 +353,10 @@
     --media-height: 60mm;
     /* Small enough for a project to keep to a few pages. */
     --prototype-width: 15mm;
-    --journey-device-width: 38mm;
-    --journey-gap: var(--space-4);
+    /* Each screen of the Result's strip: the seven fit the content's
+       width, and are short enough to leave the page room for every
+       decision and feedback point and the project's details. */
+    --journey-strip-width: 22mm;
 
     --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
     --column-gap: var(--space-4);

@@ -703,18 +703,60 @@ div.screen__media {
   }
 }
 
-/* On paper every decision and feedback point is listed: the title
-   and both lists flow through two columns, so the text is no taller
-   than the device beside it and the two share a page. A point never
-   splits, and a title stays with its first point. */
+/* On paper every step shows at once: the phone's screens side by side
+   (.journey__strip, made by src/main.js), each numbered under it with
+   its title, then every decision and feedback point, numbered after
+   its step (hanging in the margin), in the small text of captions,
+   flowing through three columns, so the screens, the points and the
+   project's details share a page. The devices and the step's title are
+   website only. A point never splits, and a title stays with its first
+   point. */
 @media print {
-  .journey__side {
-    display: block;
-    columns: 2;
-    column-gap: var(--space-5);
+  .journey {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-4);
   }
 
-  .journey__side > * + * {
+  .journey__device,
+  .journey__text {
+    display: none;
+  }
+
+  .journey__strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--journey-strip-width);
+    gap: var(--space-3);
+  }
+
+  .journey__number {
+    margin-inline-end: var(--space-2);
+    color: var(--black);
+  }
+
+  .journey__side {
+    display: block;
+    columns: 3;
+    column-gap: var(--space-5);
+    padding-inline-end: 0;
+  }
+
+  .journey .decisions > li[data-number] {
+    position: relative;
+    padding-inline-start: var(--space-4);
+  }
+
+  .journey .decisions > li[data-number]::before {
+    content: attr(data-number);
+    position: absolute;
+    inset-inline-start: 0;
+    color: var(--black);
+  }
+
+  .journey__notes + .journey__notes {
     margin-block-start: var(--space-2);
   }
 
@@ -723,7 +765,12 @@ div.screen__media {
   }
 
   .journey .decisions > li {
+    font: var(--text-small);
     break-inside: avoid;
+  }
+
+  .journey .decisions strong {
+    font: var(--text-small-emphasis);
   }
 }
 

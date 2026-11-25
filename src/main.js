@@ -531,6 +531,26 @@ for (const journey of document.querySelectorAll('.journey')) {
   let index = 0;
   const shown = () => devices.find((device) => !device.element.hidden) ?? devices[0];
 
+  // For the PDF (.journey__strip, print only): every step at once, the
+  // phone's screens side by side, each numbered under it with its
+  // title; each decision and feedback point gets its step's number.
+  const phone = devices[0].screens;
+  const strip = document.createElement('ol');
+  strip.className = 'journey__strip print-only';
+  phone.forEach((screen, i) => {
+    const item = document.createElement('li');
+    item.innerHTML = `<figure class="screen"><img class="screen__media" alt="" /><figcaption><span class="journey__number">${i + 1}</span></figcaption></figure>`;
+    item.querySelector('img').src = screen.tagName === 'VIDEO' ? screen.poster : screen.src;
+    item.querySelector('figcaption').append(screen.dataset.title ?? '');
+    strip.append(item);
+  });
+  journey.querySelector('.journey__side').before(strip);
+  for (const note of notes) {
+    const about = note.dataset.steps.split(' ');
+    const i = phone.findIndex((screen) => about.includes(screen.dataset.step));
+    if (i >= 0) note.dataset.number = i + 1;
+  }
+
   for (const { screens } of devices) {
     for (const screen of screens) {
       // The poster also painted behind the video: printing doesn't paint

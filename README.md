@@ -47,6 +47,16 @@ of the Syne variable font. `dinish-variable.woff2` is the DINish variable font c
 axis (400 to 600) at normal width: it gives every upright weight, Regular, SemiBold and the 475 in between.
 `dinish-italic.woff2` is the static Italic converted to woff2 unchanged.
 
+## Recordings
+
+The em·ji·ve recordings in `public/media/emjive/` are scrubbed by dragging, never played, so they are
+encoded for seeking: no B-frames and a keyframe every 5 frames, so a seek decodes a few frames at most.
+From the 60 fps captures:
+
+```sh
+ffmpeg -i capture.mp4 -an -vf fps=30 -c:v libx264 -preset slow -crf 21 -g 5 -bf 0 -pix_fmt yuv420p -movflags +faststart out.mp4
+```
+
 ## Website-only elements
 
 Elements with the `screen-only` class (the fixed site header with the "MV" monogram, the

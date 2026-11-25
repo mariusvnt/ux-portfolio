@@ -62,7 +62,7 @@ ffmpeg -i capture.mp4 -an -vf fps=30 -c:v libx264 -preset slow -crf 21 -g 5 -bf 
 Elements with the `screen-only` class (the fixed site header with the "MV" monogram, the
 email and "PDF" links and the blurred fade beneath it) appear on the website only and are hidden in the PDF.
 Elements with the `print-only` class appear in the PDF only: the email address on the cover, since the PDF has no header,
-and the em·ji·ve Result's strip of numbered screens, built by `src/main.js` from the phone's screens.
+and each Result's strip of numbered screens, built by `src/main.js` from its first device's screens.
 `npm run pdf` copies the PDF into `public/` and `dist/` so the "PDF" link works.
 
 ## PDF on push

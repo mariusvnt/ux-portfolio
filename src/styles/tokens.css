@@ -120,7 +120,7 @@
      percentage cannot, like a shadow's offset. */
   --section-width: min(100cqw, var(--page-max));
   --gutter: clamp(1rem, 4vw, 3rem);
-  /* Space between a project's sections (its header, visuals, Challenge,
+  /* Space between a project's sections (its header, visuals,
      Prototype, Result, Decisions..., metadata) on the website; the PDF
      keeps its own, tighter (see Print in main.css). */
   --section-gap: calc(2 * var(--space-6));
@@ -164,6 +164,14 @@
      screen's margin (none in the PDF, whose page has no room beside
      it). */
   --bleed-end: var(--gutter);
+  /* A MacBook seen only by its right side (.peek: Folder manager,
+     whose add-on is a panel there): the share of the mockup's width
+     shown whole, and the short fade to transparency before it, where
+     the rest disappears; the shape of what shows; and its width. */
+  --peek-share: calc(1 / 3);
+  --peek-fade: 0.06;
+  --peek-ratio: calc(var(--laptop-ratio) * (var(--peek-share) + var(--peek-fade)));
+  --journey-panel-width: 20rem;
   /* The buying journey (.journey): the device's width, phone or
      MacBook, and the columns: the device alone on its line on phones,
      the side below it; from the breakpoint, the side beside the phone.
@@ -240,8 +248,11 @@
   --scrubber-deflate-duration: 0.35s;
   --scrubber-deflate-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --scrubber-hint-fade: 0.15s ease-out;
-  /* Indent of each level in a folder tree. */
-  --tree-indent: var(--space-4);
+  /* A folder tree: the indent of each level, and its text, small so
+     its long names keep to a line beside the device (tighter still
+     on paper, see Print). */
+  --tree-indent: var(--space-3);
+  --text-tree: var(--text-small);
 
   /* CV layout: a narrow metadata column on the left, a wide column for
      titles and content on the right, at every screen size. On small
@@ -309,6 +320,8 @@
     --column-gap: var(--space-4);
     --journey-columns: auto minmax(0, 1fr);
     --journey-device-width: min(24rem, (100svh - var(--journey-window-room)) * 388 / 800);
+    /* Never so wide that the text beside it gets cramped (40cqw). */
+    --journey-panel-width: min(28rem, 40cqw, (100svh - var(--journey-window-room)) * var(--peek-ratio));
     --lightbox-padding: var(--space-4);
     --bleed-end: calc((100cqw - var(--section-width)) / 2);
     /* 1 fr out of 8, after the gap. */
@@ -357,10 +370,17 @@
        width, and are short enough to leave the page room for every
        decision and feedback point and the project's details. */
     --journey-strip-width: 22mm;
+    /* The Folder manager's strip shows the add-on's panel alone, cut
+       from each capture (2549 by 1342): the part kept, and its shape. */
+    --journey-panel-strip-width: 22mm;
+    --panel-view-box: inset(4.69% 2.86% 51.94% 84.66%);
+    --panel-view-ratio: 318 / 582;
 
     --layout-columns: minmax(0, 1fr) minmax(0, 7fr);
     --column-gap: var(--space-4);
     --meta-column-end: calc(var(--gutter) + (var(--section-width) - 2 * var(--gutter) - var(--column-gap)) / 8);
+    --text-tree: 400 7pt / 1.3 "DINish", sans-serif;
+    --tree-indent: var(--space-3);
     /* Centred on the A4 landscape page at the print body size. */
     --measure: 110ch;
   }

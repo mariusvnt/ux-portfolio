@@ -527,6 +527,32 @@ div.screen__media {
   --device-screen-radius: var(--laptop-screen-radius);
 }
 
+/* ---------- Peek ----------
+   A MacBook of which only the right side shows: its last third
+   whole, then a short fade to transparency towards the left, over the
+   rest. The box has the shape of what shows; the device in it keeps its
+   own, wider than the box, held against its right edge. */
+.peek {
+  --peek-edge: calc(var(--peek-fade) / (var(--peek-share) + var(--peek-fade)) * 100%);
+  position: relative;
+  aspect-ratio: var(--peek-ratio);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, var(--black) var(--peek-edge));
+  mask-image: linear-gradient(to right, transparent, var(--black) var(--peek-edge));
+}
+
+.peek > .device {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(100% / (var(--peek-share) + var(--peek-fade)));
+}
+
+/* A capture wider than the MacBook's screen keeps its right side. */
+.peek .device__screen > .screen__media {
+  object-position: top right;
+}
+
 /* ---------- Journey ----------
    The finished website in one device: its screens are the steps of the
    buying journey, one shown at a time (src/main.js). Beside the phone,
@@ -550,6 +576,10 @@ div.screen__media {
 
 .journey__device--laptop {
   --journey-device-width: var(--journey-laptop-width);
+}
+
+.journey__device--panel {
+  --journey-device-width: var(--journey-panel-width);
 }
 
 /* The MacBook takes the whole row, ending at the content's right edge
@@ -730,6 +760,21 @@ div.screen__media {
     grid-auto-flow: column;
     grid-auto-columns: var(--journey-strip-width);
     gap: var(--space-3);
+  }
+
+  .journey__strip--panel {
+    --journey-strip-width: var(--journey-panel-strip-width);
+  }
+
+  .journey__strip--panel .screen__media {
+    aspect-ratio: var(--panel-view-ratio);
+    object-view-box: var(--panel-view-box);
+  }
+
+  /* The Folder manager's feedback is short: it stays whole in its
+     column, with its title. */
+  .journey__strip--panel ~ .journey__side > .journey__notes + .journey__notes {
+    break-inside: avoid;
   }
 
   .journey__number {
@@ -914,6 +959,13 @@ div.screen__media {
   width: auto;
 }
 
+/* Over what shows of a peeking MacBook, outside its clipping, so its
+   focus outline shows whole. */
+.journey__device--panel > .journey__zoom {
+  inset: 0;
+  height: 100%;
+}
+
 html:has(.lightbox[open]) {
   overflow: hidden;
 }
@@ -1013,6 +1065,19 @@ html:has(.lightbox[open]) {
 }
 
 .lightbox__screen:is([data-kind="phone"], [data-kind="desktop"]) > .device {
+  width: 100%;
+  height: auto;
+  max-height: none;
+}
+
+/* The Folder manager's screens come as on the page: the right side of
+   the MacBook, as large as the room allows. */
+.lightbox__screen[data-kind="panel"] {
+  width: min(100%, 100cqh * var(--peek-ratio));
+  height: auto;
+}
+
+.lightbox__screen[data-kind="panel"] > .peek {
   width: 100%;
   height: auto;
   max-height: none;
@@ -1192,7 +1257,7 @@ html:has(.lightbox[open]) {
   }
 }
 
-/* The sub-sections (Challenge, Decisions, User feedback, Result),
+/* The sub-sections (Decisions, User feedback, Result),
    after the hero visual. Each is a .row with its section title and
    text in the right column. */
 .steps {
@@ -1227,8 +1292,10 @@ html:has(.lightbox[open]) {
 
 /* ---------- Folder tree ----------
    A nested list of folders and documents. Levels are shown by
-   indentation only (no connector lines). Fields filled in from a form
-   sit in white slots; documents copied from a template get a tag. */
+   indentation only (no connector lines), and nothing is highlighted;
+   documents copied from a template get a tag. It
+   is one of the Decisions: its caption, first, reads as the point, in
+   the points' grey, and the tree below in black. */
 .tree {
   display: grid;
   gap: var(--space-3);
@@ -1238,13 +1305,13 @@ html:has(.lightbox[open]) {
   list-style: none;
 }
 
-.tree ul ul {
-  padding-inline-start: var(--tree-indent);
+.tree__list {
+  font: var(--text-tree);
+  color: var(--black);
 }
 
-.tree__field {
-  padding: 0 var(--space-1);
-  background: var(--white);
+.tree ul ul {
+  padding-inline-start: var(--tree-indent);
 }
 
 .tree__tag {
@@ -1254,7 +1321,6 @@ html:has(.lightbox[open]) {
 
 .tree__caption {
   max-width: var(--measure);
-  color: var(--off-black);
 }
 
 /* ---------- Column lines (test; website and PDF) ----------

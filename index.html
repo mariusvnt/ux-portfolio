@@ -27,10 +27,10 @@
       contact included) goes in the .details list at the end of the
       section (after the project index on the cover, after Result in a
       project), one .row each: label on the left, value on the right.
-      Each project sub-section (Challenge, Decisions, User feedback,
+      Each project sub-section (Decisions, User feedback,
       Result) is a .row too, its section title and text in the right
       column. The hero visual comes first, right after the project's
-      header and before Challenge, and spans the full width. Decisions and User feedback are .decisions lists of short
+      header, and spans the full width. Decisions and User feedback are .decisions lists of short
       paragraphs with no titles, in dark grey, their important part in
       <strong> (black).
 
@@ -112,17 +112,10 @@
           <div class="row">
             <h2 id="emjive-title" class="row__title main-title">em·ji·ve</h2>
             <div class="row__content">
-              <p>Designing and building the website of a jewellery brand I co-founded, then iterating on it with early test users.</p>
+              <p>My brother and I co-founded a jewelry brand. The challenge was for the website to serve both as a gallery and a shop. I prototyped it in Affinity to define the visual identity and main behaviors. Then I built it from scratch and iterated with a few test users.</p>
             </div>
           </div>
         </header>
-
-        <section class="row">
-          <div class="row__content step">
-            <h3 class="secondary-title">Challenge</h3>
-            <p>em·ji·ve is the creative umbrella my brother and I co-lead: an effort to produce design stripped of the bloat of capitalist solicitations. Its first study is a dozen rings. The website has to be both a gallery for our studies and a shop, guiding each visitor to what they came for without compromising the brand's identity.</p>
-          </div>
-        </section>
 
         <!-- Prototype: the first design boards, small, before the
              finished website. -->
@@ -252,8 +245,8 @@
                 <ul class="decisions">
                   <li data-steps="home">Testers arriving on the home page looked at the hand and did nothing, so I added a <strong>"Scroll to scan" tattoo</strong> on the hand to tell them what to do.</li>
                   <li data-steps="grid">Testers going through the site asked to see the rings side by side, so I built the <strong>grid view</strong>.</li>
-                  <li data-steps="choose">A tester confused the ring sizes, shown in millimetres, with the dimension lines on the 3D model, also in millimetres. Sizes now show as <strong>a number with no unit</strong>.</li>
-                  <li data-steps="choose">A tester didn't recognise a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
+                  <li data-steps="choose">A tester confused the ring sizes, shown in millimeters, with the dimension lines on the 3D model, also in millimeters. Sizes now show as <strong>a number with no unit</strong>.</li>
+                  <li data-steps="choose">A tester didn't recognize a button in one place on the site, so I <strong>moved it into a section of its own</strong>.</li>
                 </ul>
               </div>
             </div>
@@ -282,89 +275,110 @@
           <div class="row">
             <h2 id="folder-manager-title" class="row__title main-title">Folder manager</h2>
             <div class="row__content">
-              <p>A Google Drive add-on for a creative agency that turns one form into a full project folder tree.</p>
+              <p>During my internship as a project manager, I noticed that creating new projects' folder trees and moving them around was taking a lot of time. And doing it by hand left a fair amount of inconsistencies and naming errors in the folders.</p>
+              <p>So I built a Google Drive add-on to reduce the time spent creating and moving folders and to harmonize the naming and folder structures.</p>
             </div>
           </div>
         </header>
 
-        <figure class="media todo">
-          <div class="media__frame">Hero visual: the add-on's form (no client data)</div>
-        </figure>
-
-        <div class="steps">
-          <section class="row">
+        <!-- The add-on, in steps like em·ji·ve's journey: its panel,
+             one screen per step, in a MacBook of which only the right
+             side shows (.peek), where the panel sits in Google Drive;
+             the rest fades out, leaving the room to the text. -->
+        <section class="result" aria-labelledby="folder-manager-result">
+          <div class="row">
             <div class="row__content step">
-              <h3 class="secondary-title">Challenge</h3>
-              <p>The team built and moved every Google Drive project folder by hand, from sales through production. They lost time repeating the same tasks, and inconsistencies crept in: naming conventions not followed, missing sub-folders.</p>
+              <h3 id="folder-manager-result" class="secondary-title">Result</h3>
+              <p>Time spent on project folder admin cut by 92%, from 4.5 to 0.3 minutes, and no more inconsistencies in folder naming and structure.</p>
             </div>
-          </section>
+          </div>
 
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Decisions</h3>
-              <ul class="decisions">
-                <li>The team already works in Google Drive, so the tool lives there <strong>as an add-on instead of a separate web app</strong> they would have to open.</li>
-                <li>The add-on reads the folder structure and the templates from <strong>a single source of truth</strong>, so changing the agency's conventions means editing one place.</li>
-              </ul>
+          <div class="media journey">
+            <div class="journey__device journey__device--panel">
+              <div class="peek">
+                <div class="device device--laptop">
+                  <div class="device__screen">
+                    <img class="screen__media" data-step="home" src="/media/folder-manager/home.webp" width="2549" height="1342" data-title="Add-on home" alt="The add-on's panel in Google Drive, in French: New project, Mark as won, Close a project, and a collapsed Maintenance section." />
+                    <img class="screen__media" data-step="new" src="/media/folder-manager/new-project.webp" width="2549" height="1342" data-title="New project" alt="The new project form, filled in: client, project name, project type (Production selected), initial state (In negotiation selected), a project ID field and a Create the project button." hidden />
+                    <img class="screen__media" data-step="created" src="/media/folder-manager/project-created.webp" width="2549" height="1342" data-title="Project created" alt="The confirmation: Project created, the project's name, an Open the folder button and a Back to home button." hidden />
+                    <img class="screen__media" data-step="won" src="/media/folder-manager/mark-won.webp" width="2549" height="1342" data-title="Mark as won" alt="The Mark as won form: the project picked from a list, an empty project ID field, to fill in from the quoting software, and a Mark as won button." hidden />
+                    <img class="screen__media" data-step="close" src="/media/folder-manager/close-project.webp" width="2549" height="1342" data-title="Close a project" alt="The Close a project form: the project picked from a list, its outcome (Finished, selected, or Lost) and a Close the project button." hidden />
+                  </div>
+                  <img class="device__frame" src="/media/devices/macbook-pro-16.webp" width="800" height="484" alt="" />
+                </div>
+              </div>
             </div>
-          </section>
-
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">User feedback</h3>
-              <ul class="decisions">
-                <li>One of the CEOs asked for a quick way to reach a folder once the add-on had created or moved it, so I added a <strong>&quot;Go to folder&quot; button</strong> at the end of both actions.</li>
-              </ul>
-            </div>
-          </section>
-
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Result</h3>
-              <p>An agency-wide Google Drive add-on that builds and moves project folders according to the agency's conventions. It cuts the time spent on project folder admin by 92%, from 4.5 minutes to 20 seconds, and every folder it creates follows the same naming and structure.</p>
-              <figure class="tree">
-                <ul class="tree__list">
-                  <li>
-                    <span class="tree__field">Project ID</span> <span class="tree__field">Client</span> - <span class="tree__field">Type</span> - <span class="tree__field">Project Name</span>
-                    <ul>
-                      <li>0 - Comptabilité</li>
-                      <li>1 - Devis et factures</li>
-                      <li>2 - Behind the scenes</li>
-                      <li>
-                        <span class="tree__field">Project ID</span> <span class="tree__field">Client</span> x Guisarde - <span class="tree__field">Project Name</span>
-                        <ul>
-                          <li>
-                            0 - Juridique
-                            <ul>
-                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Droit à l'image <span class="tree__tag secondary-title">Template</span></li>
-                            </ul>
-                          </li>
-                          <li>
-                            1 - Gestion du projet
-                            <ul>
-                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Comptes rendus <span class="tree__tag secondary-title">Template</span></li>
-                              <li><span class="tree__field">Project ID</span> <span class="tree__field">Project Name</span> - Retroplanning <span class="tree__tag secondary-title">Template</span></li>
-                            </ul>
-                          </li>
-                          <li>
-                            2 - Ressources
-                            <ul>
-                              <li>0 - Documents</li>
-                              <li>1 - Images &amp; Videos</li>
-                              <li>2 - Charte graphique</li>
-                            </ul>
-                          </li>
-                          <li>3 - Livrables</li>
-                        </ul>
-                      </li>
-                    </ul>
+            <div class="journey__side">
+              <div class="journey__text">
+                <div class="journey__head">
+                  <button type="button" class="journey__prev screen-only" hidden>Back</button>
+                  <div class="journey__slot">
+                    <p class="journey__title" aria-live="polite">Add-on home</p>
+                  </div>
+                  <button type="button" class="journey__next screen-only" hidden>Next</button>
+                </div>
+              </div>
+              <div class="journey__notes">
+                <ul class="decisions">
+                  <li data-steps="home">The team already works in Google Drive, so the tool lives there <strong>as an add-on instead of a separate web app</strong> they would have to open.</li>
+                  <li data-steps="home">The home panel has one action for each turn in a project's life: <strong>New project</strong> creates its folder tree, either in negotiation or directly as a running project, <strong>Mark as won</strong> turns a project in negotiation into a running one, and <strong>Close a project</strong> marks it as finished or lost.</li>
+                  <li data-steps="home">Folders created before the add-on don't all follow the naming convention. A <strong>Maintenance section</strong> shows the ones that don't and lets the user fix them.</li>
+                  <li data-steps="new">The add-on reads the folder structure and the templates from <strong>a single source of truth</strong>, so changing the agency's conventions means editing one place.</li>
+                  <li data-steps="new">
+                    <figure class="tree">
+                      <figcaption class="tree__caption">Every new project gets <strong>the same folder tree</strong>. Project ID, Client, Type and Project Name come from the form; documents tagged Template are copied from the agency's templates.</figcaption>
+                      <ul class="tree__list">
+                        <li>
+                          Project ID Client - Type - Project Name
+                          <ul>
+                            <li>0 - Comptabilité</li>
+                            <li>1 - Devis et factures</li>
+                            <li>2 - Behind the scenes</li>
+                            <li>
+                              Project ID Client x Guisarde - Project Name
+                              <ul>
+                                <li>
+                                  0 - Juridique
+                                  <ul>
+                                    <li>Project ID Project Name - Droit à l'image <span class="tree__tag secondary-title">Template</span></li>
+                                  </ul>
+                                </li>
+                                <li>
+                                  1 - Gestion du projet
+                                  <ul>
+                                    <li>Project ID Project Name - Comptes rendus <span class="tree__tag secondary-title">Template</span></li>
+                                    <li>Project ID Project Name - Retroplanning <span class="tree__tag secondary-title">Template</span></li>
+                                  </ul>
+                                </li>
+                                <li>
+                                  2 - Ressources
+                                  <ul>
+                                    <li>0 - Documents</li>
+                                    <li>1 - Images &amp; Videos</li>
+                                    <li>2 - Charte graphique</li>
+                                  </ul>
+                                </li>
+                                <li>3 - Livrables</li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </figure>
                   </li>
+                  <li data-steps="won">A project in negotiation has no project ID: <strong>one is only generated once it is running</strong>. So Mark as won asks for it, from the quoting software.</li>
+                  <li data-steps="close">Closing a project asks whether it is finished or lost. <strong>The two are kept apart</strong>: each goes to its own parent folder.</li>
                 </ul>
-                <figcaption class="tree__caption">The folder tree created for every new project. Highlighted fields come from the form; documents tagged Template are copied from the agency's templates.</figcaption>
-              </figure>
+              </div>
+              <div class="journey__notes">
+                <h3 class="secondary-title">User feedback</h3>
+                <ul class="decisions">
+                  <li data-steps="created">One of the CEOs asked for a quick way to reach a folder once the add-on had created or moved it, so I added a <strong>&quot;Go to folder&quot; button</strong> at the end of both actions.</li>
+                </ul>
+              </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
 
         <dl class="details">
           <div class="row">
@@ -388,7 +402,7 @@
           <div class="row">
             <h2 id="ace-title" class="row__title main-title">ACE</h2>
             <div class="row__content">
-              <p>A Blender add-on that converts live audio into data, with a node-based alternative to Blender's add-on UI panels.</p>
+              <p>Blender add-on that turns live audio into animation data through a node-based interface. Blender alone only bakes audio files into keyframes.</p>
             </div>
           </div>
         </header>
@@ -398,13 +412,6 @@
         </figure>
 
         <div class="steps">
-          <section class="row">
-            <div class="row__content step">
-              <h3 class="secondary-title">Challenge</h3>
-              <p>I wanted to merge two hobbies, 3D animation and music production, by making audio-reactive animations for my music. But Blender's only audio workflow bakes an audio file into keyframes: I can't test the result in real time, and I can barely split the audio to drive different parts of the animation.</p>
-            </div>
-          </section>
-
           <section class="row">
             <div class="row__content step">
               <h3 class="secondary-title">Decisions</h3>

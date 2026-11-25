@@ -503,7 +503,8 @@ const createStories = (count) => {
   };
 };
 
-// The buying journey (.journey): the finished website in a device (a
+// A journey (.journey: em·ji·ve's buying journey, and the Folder
+// manager's steps, in a peeking MacBook): the work in a device (a
 // phone, or a MacBook: one .journey__device each, the other hidden by
 // the device switch below), its screens the steps of the journey, one
 // shown at a time. Every device holds the same steps in the same order,
@@ -537,6 +538,7 @@ for (const journey of document.querySelectorAll('.journey')) {
   const phone = devices[0].screens;
   const strip = document.createElement('ol');
   strip.className = 'journey__strip print-only';
+  if (devices[0].element.classList.contains('journey__device--panel')) strip.classList.add('journey__strip--panel');
   phone.forEach((screen, i) => {
     const item = document.createElement('li');
     item.innerHTML = `<figure class="screen"><img class="screen__media" alt="" /><figcaption><span class="journey__number">${i + 1}</span></figcaption></figure>`;
@@ -784,13 +786,15 @@ for (const journey of document.querySelectorAll('.journey')) {
   for (const device of journey.querySelectorAll('.journey__device')) {
     const frame = device.querySelector('.device');
     const screens = [...frame.querySelectorAll('.device__screen > .screen__media')];
-    const desktop = device.classList.contains('journey__device--laptop');
+    // A peeking MacBook (.peek) opens as it shows on the page.
+    const peek = device.querySelector('.peek');
+    const kind = peek ? 'panel' : device.classList.contains('journey__device--laptop') ? 'desktop' : 'phone';
     const items = screens.map((screen, i) => ({
       label: screen.dataset.title ?? '',
-      kind: desktop ? 'desktop' : 'phone',
+      kind,
       start: () => journey.placeOfStep(i),
       view: () => {
-        const copy = frame.cloneNode(true);
+        const copy = (peek ?? frame).cloneNode(true);
         // The page's own layer and scroll bar stay behind: the view has
         // its own scroll bar.
         copy.querySelector('.journey__zoom')?.remove();
@@ -807,7 +811,7 @@ for (const journey of document.querySelectorAll('.journey')) {
     }));
     const button = opener('Current screen');
     button.className = 'journey__zoom';
-    frame.append(button);
+    (peek ? device : frame).append(button);
     button.addEventListener('click', () =>
       lightbox.open(items, journey.currentStep(), (i) => journey.goToStep(i)),
     );
